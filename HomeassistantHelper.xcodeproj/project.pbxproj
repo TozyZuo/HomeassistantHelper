@@ -1,0 +1,401 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 46;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		BA8F98DD1F11BDF700D16523 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = BA8F98DC1F11BDF700D16523 /* AppDelegate.m */; };
+		BA8F98E01F11BDF700D16523 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = BA8F98DF1F11BDF700D16523 /* main.m */; };
+		BA8F98E51F11BDF700D16523 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = BA8F98E41F11BDF700D16523 /* Assets.xcassets */; };
+		BA8F98E81F11BDF700D16523 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = BA8F98E61F11BDF700D16523 /* Main.storyboard */; };
+		BA8F98F71F12451300D16523 /* GDataXMLNode.m in Sources */ = {isa = PBXBuildFile; fileRef = BA8F98F61F12451300D16523 /* GDataXMLNode.m */; };
+		BA8F98FD1F1245DC00D16523 /* libxml2.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = BA8F98F91F12456E00D16523 /* libxml2.tbd */; };
+		BA8F990C1F12688A00D16523 /* HAHEntityModel.m in Sources */ = {isa = PBXBuildFile; fileRef = BA8F99061F12688A00D16523 /* HAHEntityModel.m */; };
+		BA8F990E1F12688A00D16523 /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = BA8F990B1F12688A00D16523 /* ViewController.m */; };
+		BA8F99111F12690500D16523 /* HAHViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = BA8F99101F12690500D16523 /* HAHViewController.m */; };
+		BA8F99141F12691F00D16523 /* HAHHomeViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = BA8F99131F12691F00D16523 /* HAHHomeViewController.m */; };
+		BA8F99191F126F0700D16523 /* HAHDataManager.m in Sources */ = {isa = PBXBuildFile; fileRef = BA8F99181F126F0700D16523 /* HAHDataManager.m */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXFileReference section */
+		BA8F98D81F11BDF700D16523 /* HomeassistantHelper.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = HomeassistantHelper.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		BA8F98DB1F11BDF700D16523 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
+		BA8F98DC1F11BDF700D16523 /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
+		BA8F98DF1F11BDF700D16523 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
+		BA8F98E41F11BDF700D16523 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		BA8F98E71F11BDF700D16523 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
+		BA8F98E91F11BDF700D16523 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		BA8F98F51F12451300D16523 /* GDataXMLNode.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GDataXMLNode.h; sourceTree = "<group>"; };
+		BA8F98F61F12451300D16523 /* GDataXMLNode.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GDataXMLNode.m; sourceTree = "<group>"; };
+		BA8F98F91F12456E00D16523 /* libxml2.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libxml2.tbd; path = usr/lib/libxml2.tbd; sourceTree = SDKROOT; };
+		BA8F98FB1F12458C00D16523 /* libxml2.2.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libxml2.2.tbd; path = usr/lib/libxml2.2.tbd; sourceTree = SDKROOT; };
+		BA8F99051F12688A00D16523 /* HAHEntityModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HAHEntityModel.h; sourceTree = "<group>"; };
+		BA8F99061F12688A00D16523 /* HAHEntityModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HAHEntityModel.m; sourceTree = "<group>"; };
+		BA8F990A1F12688A00D16523 /* ViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ViewController.h; sourceTree = "<group>"; };
+		BA8F990B1F12688A00D16523 /* ViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ViewController.m; sourceTree = "<group>"; };
+		BA8F990F1F12690500D16523 /* HAHViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HAHViewController.h; sourceTree = "<group>"; };
+		BA8F99101F12690500D16523 /* HAHViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HAHViewController.m; sourceTree = "<group>"; };
+		BA8F99121F12691F00D16523 /* HAHHomeViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HAHHomeViewController.h; sourceTree = "<group>"; };
+		BA8F99131F12691F00D16523 /* HAHHomeViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HAHHomeViewController.m; sourceTree = "<group>"; };
+		BA8F99171F126F0700D16523 /* HAHDataManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HAHDataManager.h; sourceTree = "<group>"; };
+		BA8F99181F126F0700D16523 /* HAHDataManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HAHDataManager.m; sourceTree = "<group>"; };
+		BA8F991B1F12768300D16523 /* HAHDefine.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = HAHDefine.h; sourceTree = "<group>"; };
+		BA8F991C1F12769400D16523 /* PrefixHeader.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PrefixHeader.pch; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		BA8F98D51F11BDF700D16523 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				BA8F98FD1F1245DC00D16523 /* libxml2.tbd in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		BA8F98CF1F11BDF700D16523 = {
+			isa = PBXGroup;
+			children = (
+				BA8F98DA1F11BDF700D16523 /* HomeassistantHelper */,
+				BA8F98D91F11BDF700D16523 /* Products */,
+				BA8F98F81F12456E00D16523 /* Frameworks */,
+			);
+			sourceTree = "<group>";
+		};
+		BA8F98D91F11BDF700D16523 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				BA8F98D81F11BDF700D16523 /* HomeassistantHelper.app */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		BA8F98DA1F11BDF700D16523 /* HomeassistantHelper */ = {
+			isa = PBXGroup;
+			children = (
+				BA8F991A1F12766500D16523 /* Definitions */,
+				BA8F99161F126EE300D16523 /* Manager */,
+				BA8F99041F12688A00D16523 /* Model */,
+				BA8F99071F12688A00D16523 /* ViewController */,
+				BA8F98F41F12451300D16523 /* GDataXML */,
+				BA8F98E41F11BDF700D16523 /* Assets.xcassets */,
+				BA8F98E61F11BDF700D16523 /* Main.storyboard */,
+				BA8F98E91F11BDF700D16523 /* Info.plist */,
+				BA8F98DE1F11BDF700D16523 /* Supporting Files */,
+			);
+			path = HomeassistantHelper;
+			sourceTree = "<group>";
+		};
+		BA8F98DE1F11BDF700D16523 /* Supporting Files */ = {
+			isa = PBXGroup;
+			children = (
+				BA8F98DB1F11BDF700D16523 /* AppDelegate.h */,
+				BA8F991C1F12769400D16523 /* PrefixHeader.pch */,
+				BA8F98DC1F11BDF700D16523 /* AppDelegate.m */,
+				BA8F98DF1F11BDF700D16523 /* main.m */,
+			);
+			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		BA8F98F41F12451300D16523 /* GDataXML */ = {
+			isa = PBXGroup;
+			children = (
+				BA8F98F51F12451300D16523 /* GDataXMLNode.h */,
+				BA8F98F61F12451300D16523 /* GDataXMLNode.m */,
+			);
+			path = GDataXML;
+			sourceTree = "<group>";
+		};
+		BA8F98F81F12456E00D16523 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				BA8F98FB1F12458C00D16523 /* libxml2.2.tbd */,
+				BA8F98F91F12456E00D16523 /* libxml2.tbd */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		BA8F99041F12688A00D16523 /* Model */ = {
+			isa = PBXGroup;
+			children = (
+				BA8F99051F12688A00D16523 /* HAHEntityModel.h */,
+				BA8F99061F12688A00D16523 /* HAHEntityModel.m */,
+			);
+			path = Model;
+			sourceTree = "<group>";
+		};
+		BA8F99071F12688A00D16523 /* ViewController */ = {
+			isa = PBXGroup;
+			children = (
+				BA8F990F1F12690500D16523 /* HAHViewController.h */,
+				BA8F99101F12690500D16523 /* HAHViewController.m */,
+				BA8F99121F12691F00D16523 /* HAHHomeViewController.h */,
+				BA8F99131F12691F00D16523 /* HAHHomeViewController.m */,
+				BA8F990A1F12688A00D16523 /* ViewController.h */,
+				BA8F990B1F12688A00D16523 /* ViewController.m */,
+			);
+			path = ViewController;
+			sourceTree = "<group>";
+		};
+		BA8F99161F126EE300D16523 /* Manager */ = {
+			isa = PBXGroup;
+			children = (
+				BA8F99171F126F0700D16523 /* HAHDataManager.h */,
+				BA8F99181F126F0700D16523 /* HAHDataManager.m */,
+			);
+			path = Manager;
+			sourceTree = "<group>";
+		};
+		BA8F991A1F12766500D16523 /* Definitions */ = {
+			isa = PBXGroup;
+			children = (
+				BA8F991B1F12768300D16523 /* HAHDefine.h */,
+			);
+			path = Definitions;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		BA8F98D71F11BDF700D16523 /* HomeassistantHelper */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = BA8F98EC1F11BDF700D16523 /* Build configuration list for PBXNativeTarget "HomeassistantHelper" */;
+			buildPhases = (
+				BA8F98D41F11BDF700D16523 /* Sources */,
+				BA8F98D51F11BDF700D16523 /* Frameworks */,
+				BA8F98D61F11BDF700D16523 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = HomeassistantHelper;
+			productName = HomeassistantHelper;
+			productReference = BA8F98D81F11BDF700D16523 /* HomeassistantHelper.app */;
+			productType = "com.apple.product-type.application";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		BA8F98D01F11BDF700D16523 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				LastUpgradeCheck = 0830;
+				ORGANIZATIONNAME = TozyZuo;
+				TargetAttributes = {
+					BA8F98D71F11BDF700D16523 = {
+						CreatedOnToolsVersion = 8.3.3;
+						ProvisioningStyle = Automatic;
+					};
+				};
+			};
+			buildConfigurationList = BA8F98D31F11BDF700D16523 /* Build configuration list for PBXProject "HomeassistantHelper" */;
+			compatibilityVersion = "Xcode 3.2";
+			developmentRegion = English;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+			);
+			mainGroup = BA8F98CF1F11BDF700D16523;
+			productRefGroup = BA8F98D91F11BDF700D16523 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				BA8F98D71F11BDF700D16523 /* HomeassistantHelper */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		BA8F98D61F11BDF700D16523 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				BA8F98E51F11BDF700D16523 /* Assets.xcassets in Resources */,
+				BA8F98E81F11BDF700D16523 /* Main.storyboard in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		BA8F98D41F11BDF700D16523 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				BA8F99141F12691F00D16523 /* HAHHomeViewController.m in Sources */,
+				BA8F99191F126F0700D16523 /* HAHDataManager.m in Sources */,
+				BA8F99111F12690500D16523 /* HAHViewController.m in Sources */,
+				BA8F990E1F12688A00D16523 /* ViewController.m in Sources */,
+				BA8F98F71F12451300D16523 /* GDataXMLNode.m in Sources */,
+				BA8F990C1F12688A00D16523 /* HAHEntityModel.m in Sources */,
+				BA8F98E01F11BDF700D16523 /* main.m in Sources */,
+				BA8F98DD1F11BDF700D16523 /* AppDelegate.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXVariantGroup section */
+		BA8F98E61F11BDF700D16523 /* Main.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				BA8F98E71F11BDF700D16523 /* Base */,
+			);
+			name = Main.storyboard;
+			sourceTree = "<group>";
+		};
+/* End PBXVariantGroup section */
+
+/* Begin XCBuildConfiguration section */
+		BA8F98EA1F11BDF700D16523 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CODE_SIGN_IDENTITY = "-";
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 10.12;
+				MTL_ENABLE_DEBUG_INFO = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = macosx;
+			};
+			name = Debug;
+		};
+		BA8F98EB1F11BDF700D16523 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CODE_SIGN_IDENTITY = "-";
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 10.12;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				SDKROOT = macosx;
+			};
+			name = Release;
+		};
+		BA8F98ED1F11BDF700D16523 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				COMBINE_HIDPI_IMAGES = YES;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = HomeassistantHelper/PrefixHeader.pch;
+				HEADER_SEARCH_PATHS = "${SDK_ROOT}/usr/include/libxml2";
+				INFOPLIST_FILE = HomeassistantHelper/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks";
+				LIBRARY_SEARCH_PATHS = "";
+				PRODUCT_BUNDLE_IDENTIFIER = com.HomeassistantHelper;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Debug;
+		};
+		BA8F98EE1F11BDF700D16523 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				COMBINE_HIDPI_IMAGES = YES;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = HomeassistantHelper/PrefixHeader.pch;
+				HEADER_SEARCH_PATHS = "${SDK_ROOT}/usr/include/libxml2";
+				INFOPLIST_FILE = HomeassistantHelper/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks";
+				LIBRARY_SEARCH_PATHS = "";
+				PRODUCT_BUNDLE_IDENTIFIER = com.HomeassistantHelper;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		BA8F98D31F11BDF700D16523 /* Build configuration list for PBXProject "HomeassistantHelper" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				BA8F98EA1F11BDF700D16523 /* Debug */,
+				BA8F98EB1F11BDF700D16523 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		BA8F98EC1F11BDF700D16523 /* Build configuration list for PBXNativeTarget "HomeassistantHelper" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				BA8F98ED1F11BDF700D16523 /* Debug */,
+				BA8F98EE1F11BDF700D16523 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = BA8F98D01F11BDF700D16523 /* Project object */;
+}
