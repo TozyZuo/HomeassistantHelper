@@ -16,4 +16,6 @@
 
 - (void)requestEntitiesWithURL:(NSString *)url complete:(void (^)(NSArray<HAHEntityModel *> *models))completeBlock;
 
+- (void)startFileRequestWithURL:(NSString *)url user:(NSString *)user password:(NSString *)password;
+
 @end

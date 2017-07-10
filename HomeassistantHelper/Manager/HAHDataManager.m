@@ -7,8 +7,9 @@
 //
 
 #import "HAHDataManager.h"
-#import "GDataXMLNode.h"
 #import "HAHEntityModel.h"
+#import "GDataXMLNode.h"
+#import <NMSSH/NMSSH.h>
 #import <WebKit/WebKit.h>
 
 
@@ -23,11 +24,21 @@ NSString const * HAHFriendlyNameKey = @"friendly_name";
 @property (nonatomic, strong) NSString          *entitiesRequestURL;
 @property (nonatomic, strong) NSArray           *models;
 @property (nonatomic, strong) NSMutableArray    *unreadyModels;
+@property (nonatomic, strong) dispatch_queue_t  sshQueue;
 
 @property (nonatomic,  copy ) void (^requestEntitiesCompleteBlock)(NSArray<HAHEntityModel *> *);
 @end
 
 @implementation HAHDataManager
+
+- (instancetype)init
+{
+    self = [super init];
+    if (self) {
+        self.sshQueue = dispatch_queue_create("HAH.ssh.queue", DISPATCH_QUEUE_SERIAL);
+    }
+    return self;
+}
 
 #pragma mark Public
 
@@ -77,7 +88,31 @@ NSString const * HAHFriendlyNameKey = @"friendly_name";
     self.homeNavigation = [self.webView loadRequest:request];
 }
 
-- (void)parseResult:(NSString *)result
+- (void)startFileRequestWithURL:(NSString *)url user:(NSString *)user password:(NSString *)password
+{
+    dispatch_async(self.sshQueue, ^{
+
+        NMSSHSession *session = [NMSSHSession connectToHost:[NSURL URLWithString:url].host
+                                               withUsername:user];
+
+        if (session.isConnected) {
+            [session authenticateByPassword:password];
+
+            if (session.isAuthorized) {
+                NSLog(@"Authentication succeeded");
+
+                if ([session.channel downloadFile:@"/home/homeassistant/.homeassistant/groups.yaml" to:@"/tmp/HomeassistantHelper/groups.yaml"]) {
+                    NSString *string = [NSString stringWithContentsOfFile:@"/tmp/HomeassistantHelper/groups.yaml" encoding:NSUTF8StringEncoding error:nil];
+                    NSLog(@"%@", string);
+                }
+            }
+        }
+        
+        [session disconnect];
+    });
+}
+
+- (void)parseEntities:(NSString *)result
 {
 //    HAHLOG(@"%@", result);
     NSError *error;
@@ -106,7 +141,7 @@ NSString const * HAHFriendlyNameKey = @"friendly_name";
         // 同步解析失败，进行异步解析
         if (!nameNode) {
             HAHLOG(@"同步解析失败，进行异步解析");
-            [self parseResultAsync:result];
+            [self parseEntitiesAsync:result];
             return;
         }
 
@@ -136,7 +171,7 @@ NSString const * HAHFriendlyNameKey = @"friendly_name";
     [self parseEntitiesSuccessfullyWithModels:models];
 }
 
-- (void)parseResultAsync:(NSString *)result
+- (void)parseEntitiesAsync:(NSString *)result
 {
 //    HAHLOG(@"%@", result);
     NSError *error;
@@ -211,7 +246,7 @@ NSString const * HAHFriendlyNameKey = @"friendly_name";
                     // 取出设备数据
                     [self.webView evaluateJavaScript:@"document.querySelector(\".entities\").innerHTML" completionHandler:^(id _Nullable obj, NSError * _Nullable error) {
                         if (obj) {
-                            [self parseResult:obj];
+                            [self parseEntities:obj];
                         } else {
                             self.delayTime += 1;
                             [self startEntitiesRequestWithURL:self.entitiesRequestURL];

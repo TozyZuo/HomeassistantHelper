@@ -1,0 +1,10 @@
+
+*.xcworkspacedata
+
+*.xcuserstate
+
+*.xcbkptlist
+
+*.xcscheme
+
+HomeassistantHelper.xcodeproj/xcuserdata/Tozy.xcuserdatad/xcschemes/xcschememanagement.plist
