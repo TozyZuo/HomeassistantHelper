@@ -7,14 +7,7 @@
 //
 
 #import "HAHEntityModel.h"
-#import "GDataXMLNode.h"
-#import <WebKit/WebKit.h>
 
 @implementation HAHEntityModel
-
-- (NSString *)description
-{
-    return [[super description] stringByAppendingFormat:@"name:[%@] id:[%@]", self.name, self.id];
-}
 
 @end

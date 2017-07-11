@@ -6,11 +6,8 @@
 //  Copyright © 2017年 TozyZuo. All rights reserved.
 //
 
-#import <Foundation/Foundation.h>
+#import "HAHModel.h"
 
-@class GDataXMLElement, WKWebView;
+@interface HAHEntityModel : HAHModel
 
-@interface HAHEntityModel : NSObject
-@property (nonatomic, strong) NSString *id;
-@property (nonatomic, strong) NSString *name;
 @end

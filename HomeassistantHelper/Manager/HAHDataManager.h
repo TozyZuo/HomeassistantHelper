@@ -8,14 +8,12 @@
 
 #import <Foundation/Foundation.h>
 
-@class HAHEntityModel;
+@class HAHEntityModel, HAHPageModel;
 
 @interface HAHDataManager : NSObject
 
 + (instancetype)sharedManager;
 
-- (void)requestEntitiesWithURL:(NSString *)url complete:(void (^)(NSArray<HAHEntityModel *> *models))completeBlock;
-
-- (void)startFileRequestWithURL:(NSString *)url user:(NSString *)user password:(NSString *)password;
+- (void)requestDataWithURL:(NSString *)url user:(NSString *)user password:(NSString *)password complete:(void (^)(NSArray<HAHEntityModel *> *entities, NSArray<HAHPageModel *> *pages))completeBlock;
 
 @end

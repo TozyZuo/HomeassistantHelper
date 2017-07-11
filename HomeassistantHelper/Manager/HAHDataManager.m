@@ -8,12 +8,12 @@
 
 #import "HAHDataManager.h"
 #import "HAHEntityModel.h"
-#import "GDataXMLNode.h"
+#import "HAHPageModel.h"
+#import "HAHEntityParser.h"
+#import "HAHPageParser.h"
+#import "HAHConfigParser.h"
 #import <NMSSH/NMSSH.h>
 #import <WebKit/WebKit.h>
-
-
-NSString const * HAHFriendlyNameKey = @"friendly_name";
 
 
 @interface HAHDataManager ()
@@ -21,12 +21,13 @@ NSString const * HAHFriendlyNameKey = @"friendly_name";
 @property (nonatomic, strong) WKWebView         *webView;
 @property (nonatomic, strong) WKNavigation      *homeNavigation;
 @property (nonatomic, assign) NSInteger         delayTime;
-@property (nonatomic, strong) NSString          *entitiesRequestURL;
-@property (nonatomic, strong) NSArray           *models;
+@property (nonatomic, strong) NSString          *URL;
+@property (nonatomic, strong) NSArray           *entities;
+@property (nonatomic, strong) NSArray           *pages;
 @property (nonatomic, strong) NSMutableArray    *unreadyModels;
 @property (nonatomic, strong) dispatch_queue_t  sshQueue;
 
-@property (nonatomic,  copy ) void (^requestEntitiesCompleteBlock)(NSArray<HAHEntityModel *> *);
+@property (nonatomic,  copy ) void (^requestDataCompleteBlock)(NSArray<HAHEntityModel *> *, NSArray<HAHPageModel *> *);
 @end
 
 @implementation HAHDataManager
@@ -52,12 +53,18 @@ NSString const * HAHFriendlyNameKey = @"friendly_name";
     return _manager;
 }
 
-- (void)requestEntitiesWithURL:(NSString *)url complete:(void (^)(NSArray<HAHEntityModel *> *))completeBlock
+- (void)requestDataWithURL:(NSString *)url user:(NSString *)user password:(NSString *)password complete:(void (^)(NSArray<HAHEntityModel *> *, NSArray<HAHPageModel *> *))completeBlock
 {
     self.delayTime = 1;
-    self.entitiesRequestURL = url;
-    self.requestEntitiesCompleteBlock = completeBlock;
+    self.URL = url;
+    self.requestDataCompleteBlock = completeBlock;
 
+    [self requestEntitiesWithURL:url];
+    [self startFileRequestWithURL:url user:user password:password];
+}
+
+- (void)requestEntitiesWithURL:(NSString *)url
+{
     if (!self.webView) {
         WKWebViewConfiguration * config = [[WKWebViewConfiguration alloc] init];
         //The minimum font size in points default is 0;
@@ -69,7 +76,7 @@ NSString const * HAHFriendlyNameKey = @"friendly_name";
         self.webView = [[WKWebView alloc] initWithFrame:CGRectZero configuration:config];
         self.webView.navigationDelegate = self;
 
-        NSView *view = NSApp.keyWindow.contentView;
+        NSView *view = NSApp.windows.firstObject.contentView;
         CGRect frame = view.frame;
         frame.origin.x = frame.size.width;
         self.webView.frame = frame;
@@ -99,138 +106,30 @@ NSString const * HAHFriendlyNameKey = @"friendly_name";
             [session authenticateByPassword:password];
 
             if (session.isAuthorized) {
-                NSLog(@"Authentication succeeded");
+                HAHLOG(@"Authentication succeeded");
 
-                if ([session.channel downloadFile:@"/home/homeassistant/.homeassistant/groups.yaml" to:@"/tmp/HomeassistantHelper/groups.yaml"]) {
-                    NSString *string = [NSString stringWithContentsOfFile:@"/tmp/HomeassistantHelper/groups.yaml" encoding:NSUTF8StringEncoding error:nil];
-                    NSLog(@"%@", string);
+                if ([session.channel downloadFile:@"/home/homeassistant/.homeassistant/groups.yaml" to:@"/tmp/groups.yaml"]) {
+                    NSString *string = [NSString stringWithContentsOfFile:@"/tmp/groups.yaml" encoding:NSUTF8StringEncoding error:nil];
+//                    HAHLOG(@"groups.yaml\n%@", string);
+                    self.pages = [[[HAHPageParser alloc] init] parse:string];
                 }
+                if ([session.channel downloadFile:@"/home/homeassistant/.homeassistant/configuration.yaml" to:@"/tmp/configuration.yaml"]) {
+                    NSString *string = [NSString stringWithContentsOfFile:@"/tmp/configuration.yaml" encoding:NSUTF8StringEncoding error:nil];
+                    HAHLOG(@"configuration.yaml\n%@", string);
+                }
+                [self tryToCallBack];
             }
         }
-        
+
+        // TODO
         [session disconnect];
     });
 }
 
-- (void)parseEntities:(NSString *)result
+- (void)tryToCallBack
 {
-//    HAHLOG(@"%@", result);
-    NSError *error;
-    GDataXMLElement *xml = [[GDataXMLElement alloc] initWithXMLString:result error:&error];
-    if (error) {
-        HAHLOG(@"%@", error);
-        // TODO
-        return;
-    }
-
-    NSMutableArray *models = [[NSMutableArray alloc] init];
-    NSArray *elements = xml.children;
-    NSUInteger count = elements.count - 1;
-    // 第0个是标题行，略过，最后一个是template，略过
-    for (int i = 1; i < count; i++) {
-        GDataXMLElement *element = elements[i];
-
-        // 解析id
-        GDataXMLElement *idElement = element.children.firstObject;
-        GDataXMLElement *aElement = idElement.children.firstObject;
-        GDataXMLNode *idNode = aElement.children.firstObject;
-
-        // 解析name
-        GDataXMLElement *nameElement = element.children[2];
-        GDataXMLNode *nameNode = nameElement.children.firstObject;
-        // 同步解析失败，进行异步解析
-        if (!nameNode) {
-            HAHLOG(@"同步解析失败，进行异步解析");
-            [self parseEntitiesAsync:result];
-            return;
-        }
-
-        // 剥离friendly_name
-        NSArray *attributesArray = [nameNode.XMLString componentsSeparatedByString:@"\n"];
-        NSMutableDictionary *attributesDictionary = [[NSMutableDictionary alloc] init];
-        for (NSString *oneAttribute in attributesArray) {
-            NSArray *keyValueArray = [oneAttribute componentsSeparatedByString:@":"];
-
-            NSString *key = [keyValueArray.firstObject stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
-
-            NSString *value = [keyValueArray.lastObject stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
-
-            attributesDictionary[key] = value;
-        }
-
-        // 生成model
-        HAHEntityModel *model = [[HAHEntityModel alloc] init];
-        model.id = idNode.XMLString;
-        model.name = attributesDictionary[HAHFriendlyNameKey];
-
-        HAHLOG(@"%@", model);
-        [models addObject:model];
-    }
-
-    HAHLOG(@"同步解析成功");
-    [self parseEntitiesSuccessfullyWithModels:models];
-}
-
-- (void)parseEntitiesAsync:(NSString *)result
-{
-//    HAHLOG(@"%@", result);
-    NSError *error;
-    GDataXMLElement *xml = [[GDataXMLElement alloc] initWithXMLString:result error:&error];
-    if (error) {
-        HAHLOG(@"%@", error);
-        // TODO
-        return;
-    }
-    __weak typeof(self) weakSelf =self;
-    NSMutableArray *models = [[NSMutableArray alloc] init];
-    NSArray *elements = xml.children;
-    NSUInteger count = elements.count - 1;
-    // 第0个是标题行，略过，最后一个是template，略过
-    for (int i = 1; i < count; i++) {
-        GDataXMLElement *element = elements[i];
-        GDataXMLElement *idElement = element.children.firstObject;
-        GDataXMLElement *aElement = idElement.children.firstObject;
-        GDataXMLNode *textNode = aElement.children.firstObject;
-
-        HAHEntityModel *model = [[HAHEntityModel alloc] init];
-        model.id = textNode.XMLString;
-
-        // xml里没有解析出来friendly_name，还要在调用一遍js
-        NSString *js = [NSString stringWithFormat:@"document.querySelectorAll(\"table tr\")[%d].querySelectorAll(\"td\")[2].innerHTML", i];
-        [self.webView evaluateJavaScript:js completionHandler:^(NSString * _Nullable obj, NSError * _Nullable error)
-         {
-             NSArray *attributesArray = [textNode.XMLString componentsSeparatedByString:@"\n"];
-             NSMutableDictionary *attributesDictionary = [[NSMutableDictionary alloc] init];
-             for (NSString *oneAttribute in attributesArray) {
-                 NSArray *keyValueArray = [oneAttribute componentsSeparatedByString:@":"];
-
-                 NSString *key = [keyValueArray.firstObject stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
-
-                 NSString *value = [keyValueArray.lastObject stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
-
-                 attributesDictionary[key] = value;
-             }
-
-             model.name = attributesDictionary[HAHFriendlyNameKey];
-
-             [weakSelf.unreadyModels removeObject:model];
-             if (!weakSelf.unreadyModels.count) {
-                 HAHLOG(@"异步解析成功");
-                 [weakSelf parseEntitiesSuccessfullyWithModels:self.models];
-             }
-         }];
-        [models addObject:model];
-    }
-    self.models = models;
-    self.unreadyModels = models.mutableCopy;
-}
-
-- (void)parseEntitiesSuccessfullyWithModels:(NSArray<HAHEntityModel *> *)models
-{
-    [self.webView removeFromSuperview];
-    self.webView = nil;
-    if (self.requestEntitiesCompleteBlock) {
-        self.requestEntitiesCompleteBlock(models);
+    if (self.requestDataCompleteBlock && self.entities && self.pages) {
+        self.requestDataCompleteBlock(self.entities, self.pages);
     }
 }
 
@@ -246,10 +145,13 @@ NSString const * HAHFriendlyNameKey = @"friendly_name";
                     // 取出设备数据
                     [self.webView evaluateJavaScript:@"document.querySelector(\".entities\").innerHTML" completionHandler:^(id _Nullable obj, NSError * _Nullable error) {
                         if (obj) {
-                            [self parseEntities:obj];
+                            [self.webView removeFromSuperview];
+                            self.webView = nil;
+                            self.entities = [[[HAHEntityParser alloc] init] parse:obj];
+                            [self tryToCallBack];
                         } else {
                             self.delayTime += 1;
-                            [self startEntitiesRequestWithURL:self.entitiesRequestURL];
+                            [self startEntitiesRequestWithURL:self.URL];
                         }
                     }];
                 });
@@ -261,7 +163,7 @@ NSString const * HAHFriendlyNameKey = @"friendly_name";
 - (void)webView:(WKWebView *)webView didFailNavigation:(WKNavigation *)navigation withError:(NSError *)error
 {
     // TODO 错误处理
-    [self startEntitiesRequestWithURL:self.entitiesRequestURL];
+    [self startEntitiesRequestWithURL:self.URL];
 }
 
 @end

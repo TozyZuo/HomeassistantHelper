@@ -8,12 +8,20 @@
 
 #import "HAHHomeViewController.h"
 #import "HAHEntityModel.h"
+#import "HAHPageModel.h"
 #import "HAHDataManager.h"
+#import "HAHConsoleManager.h"
+
+#import "HAHPageParser.h"
 
 @interface HAHHomeViewController ()
+
 @property (weak) IBOutlet NSButton *readInfoButton;
 @property (weak) IBOutlet NSTextField *addressTextField;
-@property (nonatomic, strong) NSArray<HAHEntityModel *> *models;
+
+@property (nonatomic, strong) NSArray<HAHEntityModel *> *entities;
+@property (nonatomic, strong) NSArray<HAHPageModel *>   *pages;
+
 @end
 
 @implementation HAHHomeViewController
@@ -57,30 +65,34 @@
     self.view.frame = frame;
 
     self.addressTextField.stringValue =  [[NSUserDefaults standardUserDefaults] objectForKey:HAHUDAdressKey] ?: @"http://192.168.x.x:8123";
+
+    [[[HAHPageParser alloc] init] parse:[NSString stringWithContentsOfFile:@"/Users/Tozy/HomeAssistant/groups.yaml" encoding:NSUTF8StringEncoding error:nil]];
 }
 
 - (void)viewDidAppear
 {
     [super viewDidAppear];
 
+    [[HAHConsoleManager sharedManager] showConsole];
 }
 
 #pragma mark - Action
 
 - (IBAction)readInfoButtonAction:(NSButton *)sender
 {
-
-    [[HAHDataManager sharedManager] startFileRequestWithURL:self.addressTextField.stringValue user:@"pi" password:@"312358520"];
-    return;
     NSString *text = self.addressTextField.stringValue;
     self.addressTextField.enabled = NO;
     self.addressTextField.stringValue = text;
     sender.title = @"获取中";
+    sender.enabled = NO;
     __weak typeof(self) weakSelf = self;
-    [[HAHDataManager sharedManager] requestEntitiesWithURL:text complete:^(NSArray<HAHEntityModel *> *models) {
-        weakSelf.models = models;
-        HAHLOG(@"%@", models);
+    [[HAHDataManager sharedManager] requestDataWithURL:text user:@"pi" password:@"312358520" complete:^(NSArray<HAHEntityModel *> *entities, NSArray<HAHPageModel *> *pages)
+    {
+        weakSelf.entities = entities;
+        weakSelf.pages = pages;
+        HAHLOG(@"%@ \n\n\n%@", entities, pages);
         sender.title = @"获取";
+        sender.enabled = YES;
         weakSelf.addressTextField.enabled = YES;
         [[NSUserDefaults standardUserDefaults] setObject:weakSelf.addressTextField.stringValue forKey:HAHUDAdressKey];
     }];
