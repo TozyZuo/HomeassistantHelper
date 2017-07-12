@@ -7,7 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		BA23DB2D1F1356E300939AA8 /* HAHGlobalString.m in Sources */ = {isa = PBXBuildFile; fileRef = BA23DB2C1F1356E300939AA8 /* HAHGlobalString.m */; };
+		BA23DB2D1F1356E300939AA8 /* HAHGlobalExtern.m in Sources */ = {isa = PBXBuildFile; fileRef = BA23DB2C1F1356E300939AA8 /* HAHGlobalExtern.m */; };
 		BA23DB361F136E4100939AA8 /* GDataXMLNode.m in Sources */ = {isa = PBXBuildFile; fileRef = BA23DB311F136E4100939AA8 /* GDataXMLNode.m */; };
 		BA8F98DD1F11BDF700D16523 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = BA8F98DC1F11BDF700D16523 /* AppDelegate.m */; };
 		BA8F98E01F11BDF700D16523 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = BA8F98DF1F11BDF700D16523 /* main.m */; };
@@ -48,8 +48,8 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
-		BA23DB2B1F1356E300939AA8 /* HAHGlobalString.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HAHGlobalString.h; sourceTree = "<group>"; };
-		BA23DB2C1F1356E300939AA8 /* HAHGlobalString.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HAHGlobalString.m; sourceTree = "<group>"; };
+		BA23DB2B1F1356E300939AA8 /* HAHGlobalExtern.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HAHGlobalExtern.h; sourceTree = "<group>"; };
+		BA23DB2C1F1356E300939AA8 /* HAHGlobalExtern.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HAHGlobalExtern.m; sourceTree = "<group>"; };
 		BA23DB301F136E4100939AA8 /* GDataXMLNode.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GDataXMLNode.h; sourceTree = "<group>"; };
 		BA23DB311F136E4100939AA8 /* GDataXMLNode.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GDataXMLNode.m; sourceTree = "<group>"; };
 		BA8F98D81F11BDF700D16523 /* HomeassistantHelper.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = HomeassistantHelper.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -218,8 +218,8 @@
 			isa = PBXGroup;
 			children = (
 				BA8F991B1F12768300D16523 /* HAHDefine.h */,
-				BA23DB2B1F1356E300939AA8 /* HAHGlobalString.h */,
-				BA23DB2C1F1356E300939AA8 /* HAHGlobalString.m */,
+				BA23DB2B1F1356E300939AA8 /* HAHGlobalExtern.h */,
+				BA23DB2C1F1356E300939AA8 /* HAHGlobalExtern.m */,
 			);
 			path = Definitions;
 			sourceTree = "<group>";
@@ -355,7 +355,7 @@
 				BAEECA861F14AD4B0099000C /* HAHGroupModel.m in Sources */,
 				BA23DB361F136E4100939AA8 /* GDataXMLNode.m in Sources */,
 				BAEECA811F146D740099000C /* HAHConsoleManager.m in Sources */,
-				BA23DB2D1F1356E300939AA8 /* HAHGlobalString.m in Sources */,
+				BA23DB2D1F1356E300939AA8 /* HAHGlobalExtern.m in Sources */,
 				BAEECA911F14C50F0099000C /* HAHParser.m in Sources */,
 				BA8F98DD1F11BDF700D16523 /* AppDelegate.m in Sources */,
 				BAEECA9A1F14C7920099000C /* HAHConfigParser.m in Sources */,

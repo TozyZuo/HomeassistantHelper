@@ -8,6 +8,7 @@
 
 #import "HAHDataManager.h"
 #import "HAHEntityModel.h"
+#import "HAHGroupModel.h"
 #import "HAHPageModel.h"
 #import "HAHEntityParser.h"
 #import "HAHPageParser.h"
@@ -22,10 +23,10 @@
 @property (nonatomic, strong) WKNavigation      *homeNavigation;
 @property (nonatomic, assign) NSInteger         delayTime;
 @property (nonatomic, strong) NSString          *URL;
-@property (nonatomic, strong) NSArray           *entities;
-@property (nonatomic, strong) NSArray           *pages;
 @property (nonatomic, strong) NSMutableArray    *unreadyModels;
 @property (nonatomic, strong) dispatch_queue_t  sshQueue;
+@property (nonatomic, strong) NSArray<HAHEntityModel *> *entities;
+@property (nonatomic, strong) NSArray<HAHPageModel *>   *pages;
 
 @property (nonatomic,  copy ) void (^requestDataCompleteBlock)(NSArray<HAHEntityModel *> *, NSArray<HAHPageModel *> *);
 @end
@@ -117,7 +118,9 @@
                     NSString *string = [NSString stringWithContentsOfFile:@"/tmp/configuration.yaml" encoding:NSUTF8StringEncoding error:nil];
                     HAHLOG(@"configuration.yaml\n%@", string);
                 }
-                [self tryToCallBack];
+                dispatch_async(dispatch_get_main_queue(), ^{
+                    [self tryToCallBack];
+                });
             }
         }
 
@@ -129,7 +132,39 @@
 - (void)tryToCallBack
 {
     if (self.requestDataCompleteBlock && self.entities && self.pages) {
+
+        NSMutableArray<HAHEntityModel *> *ungroupedEntities = self.entities.mutableCopy;
+        // 合并信息
+        // TODO 可能有性能问题
+        for (HAHPageModel *pageModels in self.pages) {
+            for (HAHGroupModel *groupModels in pageModels.groups) {
+                for (int i = 0; i < groupModels.entities.count; i++) {
+                    BOOL notFound = YES;
+                    for (int j = 0; j < self.entities.count; j++) {
+                        if ([groupModels.entities[i].id isEqualToString:self.entities[j].id]) {
+                            [groupModels.entities replaceObjectAtIndex:i withObject:self.entities[j]];
+                            // 该entity有记录，移除
+                            for (int k = 0; k < ungroupedEntities.count; k++) {
+                                if ([ungroupedEntities[k].id isEqualToString:self.entities[j].id]) {
+                                    [ungroupedEntities removeObjectAtIndex:k];
+                                    break;
+                                }
+                            }
+                            notFound = NO;
+                            break;
+                        }
+                    }
+                    if (notFound) {
+                        HAHLOG(@"未找到设备 %@", groupModels.entities[i]);
+                    }
+                }
+            }
+        }
+
+        NSLog(@"ungroupedEntities %@", ungroupedEntities);
         self.requestDataCompleteBlock(self.entities, self.pages);
+        self.entities = nil;
+        self.pages = nil;
     }
 }
 

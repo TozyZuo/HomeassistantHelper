@@ -1,5 +1,5 @@
 //
-//  HAHGlobalString.h
+//  HAHGlobalExtern.h
 //  HomeassistantHelper
 //
 //  Created by TozyZuo on 2017/7/10.
@@ -12,3 +12,7 @@
 
 extern NSString *HAHUDAdressKey;
 extern NSString *HAHUDWindowFrameKey;
+
+#pragma mark - System
+
+extern BOOL HAHDebug;

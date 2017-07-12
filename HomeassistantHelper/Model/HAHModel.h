@@ -9,6 +9,5 @@
 #import <Foundation/Foundation.h>
 
 @interface HAHModel : NSObject
-@property (nonatomic, strong) NSString *name;
-@property (nonatomic, strong) NSString *id;
+
 @end

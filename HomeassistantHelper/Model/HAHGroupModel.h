@@ -6,10 +6,9 @@
 //  Copyright © 2017年 TozyZuo. All rights reserved.
 //
 
-#import "HAHModel.h"
+#import "HAHEntityModel.h"
 
-@class HAHEntityModel;
-
-@interface HAHGroupModel : HAHModel
+@interface HAHGroupModel : HAHEntityModel
+@property (nonatomic, strong) NSString *shortID;
 @property (nonatomic, strong) NSMutableArray<HAHEntityModel *> *entities;
 @end

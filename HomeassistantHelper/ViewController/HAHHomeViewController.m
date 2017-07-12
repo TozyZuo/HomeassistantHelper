@@ -66,7 +66,8 @@
 
     self.addressTextField.stringValue =  [[NSUserDefaults standardUserDefaults] objectForKey:HAHUDAdressKey] ?: @"http://192.168.x.x:8123";
 
-    [[[HAHPageParser alloc] init] parse:[NSString stringWithContentsOfFile:@"/Users/Tozy/HomeAssistant/groups.yaml" encoding:NSUTF8StringEncoding error:nil]];
+//    NSArray *pageModels = [[[HAHPageParser alloc] init] parse:[NSString stringWithContentsOfFile:@"/Users/Tozy/HomeAssistant/groups.yaml" encoding:NSUTF8StringEncoding error:nil]];
+//    NSLog(@"%@", pageModels);
 }
 
 - (void)viewDidAppear

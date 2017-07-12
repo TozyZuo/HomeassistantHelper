@@ -10,4 +10,12 @@
 
 @implementation HAHPageModel
 
+- (NSMutableArray<HAHGroupModel *> *)groups
+{
+    if (!_groups) {
+        _groups = [[NSMutableArray alloc] init];
+    }
+    return _groups;
+}
+
 @end
