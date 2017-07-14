@@ -15,26 +15,61 @@
 
 @implementation HAHConsoleManager
 
+#pragma mark - Life cycle
+
 + (instancetype)sharedManager
 {
-    static id _manager = nil;
+    static HAHConsoleManager *_manager = nil;
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{
         _manager = [[self alloc] initWithWindowNibName:NSStringFromClass(self)];
+        [_manager window];
+        [_manager close];
     });
     return _manager;
 }
 
-- (void)windowDidLoad {
+- (void)windowDidLoad
+{
     [super windowDidLoad];
-    
-    // Implement this method to handle any initialization after your window controller's window has been loaded from its nib file.
+
+    // 清除内容按钮
+    NSButton *zoomButton = [self.window standardWindowButton:NSWindowZoomButton];
+    NSButton *clearButton = [NSButton buttonWithImage:[NSImage imageNamed:@"trash"] target:self action:@selector(clearAction:)];
+    clearButton.bezelStyle = NSBezelStyleRoundRect;
+    clearButton.bordered = NO;
+    clearButton.size = NSMakeSize(20, 20);
+    clearButton.centerY = zoomButton.centerY;
+    clearButton.left = zoomButton.right + 6;
+    [zoomButton.superview addSubview:clearButton];
 }
 
-- (void)showConsole
+#pragma mark - Action
+
+- (void)clearAction:(NSButton *)button
 {
-    [self showWindow:self.window];
+    self.textView.string = @"";
 }
+
+#pragma mark - Public
+
+- (void)toggleConsole
+{
+    // 第一次调用self.window.isVisible返回yes，但是需要show
+    static BOOL firstShow = YES;
+    if (firstShow) {
+        firstShow = NO;
+        [self showWindow:self.window];
+        return;
+    }
+    if (self.window.isVisible) {
+        [self close];
+    } else {
+        [self showWindow:self.window];
+    }
+}
+
+#pragma mark - Private
 
 - (void)log:(NSString *)format args:(va_list)args
 {
@@ -43,8 +78,51 @@
 
 - (void)log:(NSString *)text
 {
-    self.textView.string = [self.textView.string stringByAppendingFormat:@"\n%@", text];
-    printf("\n%s", text.UTF8String);
+    HAHExecuteBlockOnMainThread(^{
+        self.textView.string = [self.textView.string stringByAppendingFormat:@"\n%@", text];
+        printf("\n%s", text.UTF8String);
+    });
+}
+
+@end
+
+
+@implementation HAHConsoleManagerController
+
+
+- (instancetype)initWithCoder:(NSCoder *)coder
+{
+    self = [super initWithCoder:coder];
+    if (self) {
+        self.objectClass = [HAHConsoleManager class];
+        self.content = [HAHConsoleManager sharedManager];
+    }
+    return self;
+}
+
+- (BOOL)canAdd
+{
+    return NO;
+}
+
+- (BOOL)canRemove
+{
+    return NO;
+}
+
+- (void)addObject:(id)object
+{
+
+}
+
+- (void)removeObject:(id)object
+{
+
+}
+
+- (id)newObject
+{
+    return [HAHConsoleManager sharedManager];
 }
 
 @end

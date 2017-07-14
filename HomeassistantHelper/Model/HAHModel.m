@@ -34,8 +34,8 @@ void *runtimekey_propertyKeys = &runtimekey_propertyKeys;
     }
 
     NSMutableString *description = [super description].mutableCopy;
-    for (NSString *propertyKey in propertyKeys) {
-        [description appendFormat:@" [%@] %@", propertyKey, [[self valueForKey:propertyKey] description]];
+    for (NSString *propertyKey in propertyKeys.reverseObjectEnumerator) {
+        [description appendFormat:@" [%@] %@", propertyKey, [self valueForKey:propertyKey]];
     }
 
     return description;

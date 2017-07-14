@@ -9,6 +9,9 @@
 /* Begin PBXBuildFile section */
 		BA23DB2D1F1356E300939AA8 /* HAHGlobalExtern.m in Sources */ = {isa = PBXBuildFile; fileRef = BA23DB2C1F1356E300939AA8 /* HAHGlobalExtern.m */; };
 		BA23DB361F136E4100939AA8 /* GDataXMLNode.m in Sources */ = {isa = PBXBuildFile; fileRef = BA23DB311F136E4100939AA8 /* GDataXMLNode.m */; };
+		BA8038001F18FE7C00EE7A36 /* NSView+Extensions.m in Sources */ = {isa = PBXBuildFile; fileRef = BA8037FF1F18FE7C00EE7A36 /* NSView+Extensions.m */; };
+		BA8038021F190F3A00EE7A36 /* Carbon.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BA8038011F190F3A00EE7A36 /* Carbon.framework */; };
+		BA80380F1F192F5100EE7A36 /* Foundation_Log.m in Sources */ = {isa = PBXBuildFile; fileRef = BA80380E1F192F5100EE7A36 /* Foundation_Log.m */; };
 		BA8F98DD1F11BDF700D16523 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = BA8F98DC1F11BDF700D16523 /* AppDelegate.m */; };
 		BA8F98E01F11BDF700D16523 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = BA8F98DF1F11BDF700D16523 /* main.m */; };
 		BA8F98E51F11BDF700D16523 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = BA8F98E41F11BDF700D16523 /* Assets.xcassets */; };
@@ -52,6 +55,10 @@
 		BA23DB2C1F1356E300939AA8 /* HAHGlobalExtern.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HAHGlobalExtern.m; sourceTree = "<group>"; };
 		BA23DB301F136E4100939AA8 /* GDataXMLNode.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GDataXMLNode.h; sourceTree = "<group>"; };
 		BA23DB311F136E4100939AA8 /* GDataXMLNode.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GDataXMLNode.m; sourceTree = "<group>"; };
+		BA8037FE1F18FE7C00EE7A36 /* NSView+Extensions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSView+Extensions.h"; sourceTree = "<group>"; };
+		BA8037FF1F18FE7C00EE7A36 /* NSView+Extensions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSView+Extensions.m"; sourceTree = "<group>"; };
+		BA8038011F190F3A00EE7A36 /* Carbon.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Carbon.framework; path = System/Library/Frameworks/Carbon.framework; sourceTree = SDKROOT; };
+		BA80380E1F192F5100EE7A36 /* Foundation_Log.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Foundation_Log.m; sourceTree = "<group>"; };
 		BA8F98D81F11BDF700D16523 /* HomeassistantHelper.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = HomeassistantHelper.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		BA8F98DB1F11BDF700D16523 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
 		BA8F98DC1F11BDF700D16523 /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
@@ -96,6 +103,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				BA8038021F190F3A00EE7A36 /* Carbon.framework in Frameworks */,
 				BAEECA7D1F137D4A0099000C /* NMSSH.framework in Frameworks */,
 				BA8F98FD1F1245DC00D16523 /* libxml2.tbd in Frameworks */,
 			);
@@ -107,6 +115,7 @@
 		BA23DB2E1F136E4100939AA8 /* OpenSource */ = {
 			isa = PBXGroup;
 			children = (
+				BA8037FD1F18FE7C00EE7A36 /* NSViewExtensions */,
 				BAEECA751F137D3C0099000C /* NMSSH.xcodeproj */,
 				BA23DB2F1F136E4100939AA8 /* GDataXML */,
 			);
@@ -120,6 +129,23 @@
 				BA23DB311F136E4100939AA8 /* GDataXMLNode.m */,
 			);
 			path = GDataXML;
+			sourceTree = "<group>";
+		};
+		BA8037FD1F18FE7C00EE7A36 /* NSViewExtensions */ = {
+			isa = PBXGroup;
+			children = (
+				BA8037FE1F18FE7C00EE7A36 /* NSView+Extensions.h */,
+				BA8037FF1F18FE7C00EE7A36 /* NSView+Extensions.m */,
+			);
+			path = NSViewExtensions;
+			sourceTree = "<group>";
+		};
+		BA80380D1F192F5100EE7A36 /* Category */ = {
+			isa = PBXGroup;
+			children = (
+				BA80380E1F192F5100EE7A36 /* Foundation_Log.m */,
+			);
+			path = Category;
 			sourceTree = "<group>";
 		};
 		BA8F98CF1F11BDF700D16523 = {
@@ -170,6 +196,7 @@
 		BA8F98F81F12456E00D16523 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				BA8038011F190F3A00EE7A36 /* Carbon.framework */,
 				BA8F98FB1F12458C00D16523 /* libxml2.2.tbd */,
 				BA8F98F91F12456E00D16523 /* libxml2.tbd */,
 			);
@@ -235,6 +262,7 @@
 		BAEECA8D1F14C4FE0099000C /* Other */ = {
 			isa = PBXGroup;
 			children = (
+				BA80380D1F192F5100EE7A36 /* Category */,
 				BAEECA8E1F14C4FE0099000C /* Parser */,
 			);
 			path = Other;
@@ -348,6 +376,7 @@
 				BA8F99191F126F0700D16523 /* HAHDataManager.m in Sources */,
 				BA8F99111F12690500D16523 /* HAHViewController.m in Sources */,
 				BAEECA8C1F14AD7C0099000C /* HAHModel.m in Sources */,
+				BA80380F1F192F5100EE7A36 /* Foundation_Log.m in Sources */,
 				BAEECA971F14C7830099000C /* HAHPageParser.m in Sources */,
 				BAEECA941F14C5960099000C /* HAHEntityParser.m in Sources */,
 				BA8F990C1F12688A00D16523 /* HAHEntityModel.m in Sources */,
@@ -359,6 +388,7 @@
 				BAEECA911F14C50F0099000C /* HAHParser.m in Sources */,
 				BA8F98DD1F11BDF700D16523 /* AppDelegate.m in Sources */,
 				BAEECA9A1F14C7920099000C /* HAHConfigParser.m in Sources */,
+				BA8038001F18FE7C00EE7A36 /* NSView+Extensions.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -16,3 +16,20 @@ NSString const * HAHUDWindowFrameKey = @"HAHUDWindowFrameKey";
 #pragma mark - System
 
 BOOL HAHDebug = YES;
+
+#pragma mark - Function
+
+void HAHExecuteBlockOnMainThread(void (^block)())
+{
+    if (!block) {
+        return;
+    }
+
+    if ([[NSThread currentThread] isMainThread]) {
+        block();
+    } else {
+        dispatch_async(dispatch_get_main_queue(), ^{
+            block();
+        });
+    }
+}

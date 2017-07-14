@@ -14,6 +14,12 @@ FOUNDATION_EXPORT void CMLog(NSString *format, ...) NS_FORMAT_FUNCTION(1,2) NS_N
 
 + (instancetype)sharedManager;
 
-- (void)showConsole;
+- (void)toggleConsole;
+
+@end
+
+
+
+@interface HAHConsoleManagerController : NSObjectController
 
 @end

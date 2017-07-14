@@ -77,7 +77,7 @@
         self.webView = [[WKWebView alloc] initWithFrame:CGRectZero configuration:config];
         self.webView.navigationDelegate = self;
 
-        NSView *view = NSApp.windows.firstObject.contentView;
+        NSView *view = NSApp.mainWindow.contentView;
         CGRect frame = view.frame;
         frame.origin.x = frame.size.width;
         self.webView.frame = frame;
@@ -107,7 +107,7 @@
             [session authenticateByPassword:password];
 
             if (session.isAuthorized) {
-                HAHLOG(@"Authentication succeeded");
+//                HAHLOG(@"Authentication succeeded");
 
                 if ([session.channel downloadFile:@"/home/homeassistant/.homeassistant/groups.yaml" to:@"/tmp/groups.yaml"]) {
                     NSString *string = [NSString stringWithContentsOfFile:@"/tmp/groups.yaml" encoding:NSUTF8StringEncoding error:nil];
@@ -116,7 +116,7 @@
                 }
                 if ([session.channel downloadFile:@"/home/homeassistant/.homeassistant/configuration.yaml" to:@"/tmp/configuration.yaml"]) {
                     NSString *string = [NSString stringWithContentsOfFile:@"/tmp/configuration.yaml" encoding:NSUTF8StringEncoding error:nil];
-                    HAHLOG(@"configuration.yaml\n%@", string);
+//                    HAHLOG(@"configuration.yaml\n%@", string);
                 }
                 dispatch_async(dispatch_get_main_queue(), ^{
                     [self tryToCallBack];

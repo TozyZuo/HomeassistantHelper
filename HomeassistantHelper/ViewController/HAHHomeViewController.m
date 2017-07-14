@@ -74,7 +74,6 @@
 {
     [super viewDidAppear];
 
-    [[HAHConsoleManager sharedManager] showConsole];
 }
 
 #pragma mark - Action
@@ -91,7 +90,8 @@
     {
         weakSelf.entities = entities;
         weakSelf.pages = pages;
-        HAHLOG(@"%@ \n\n\n%@", entities, pages);
+        HAHLOG(@"%@", pages);
+//        HAHLOG(@"%@ \n\n\n%@", entities, pages);
         sender.title = @"获取";
         sender.enabled = YES;
         weakSelf.addressTextField.enabled = YES;

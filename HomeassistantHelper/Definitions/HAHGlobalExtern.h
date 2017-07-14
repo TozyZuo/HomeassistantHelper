@@ -10,9 +10,13 @@
 
 #pragma mark - UserDefaults
 
-extern NSString *HAHUDAdressKey;
-extern NSString *HAHUDWindowFrameKey;
+FOUNDATION_EXPORT NSString *HAHUDAdressKey;
+FOUNDATION_EXPORT NSString *HAHUDWindowFrameKey;
 
 #pragma mark - System
 
-extern BOOL HAHDebug;
+FOUNDATION_EXPORT BOOL HAHDebug;
+
+#pragma mark - Function
+
+FOUNDATION_EXPORT void HAHExecuteBlockOnMainThread(void (^block)());

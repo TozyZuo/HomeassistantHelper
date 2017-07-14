@@ -9,6 +9,6 @@
 #import "HAHEntityModel.h"
 
 @interface HAHGroupModel : HAHEntityModel
-@property (nonatomic, strong) NSString *shortID;
 @property (nonatomic, strong) NSMutableArray<HAHEntityModel *> *entities;
+@property (nonatomic, strong) NSString *shortID;
 @end
