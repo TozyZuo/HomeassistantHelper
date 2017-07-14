@@ -614,16 +614,6 @@
                                                 </binding>
                                             </connections>
                                         </menuItem>
-                                        <menuItem title="清空控制台" keyEquivalent="k" id="GCz-1o-1n0">
-                                            <connections>
-                                                <action selector="toggleSourceList:" target="Ady-hI-5gd" id="yfC-Im-3rz"/>
-                                                <binding destination="bhs-66-oAX" name="target" keyPath="selection" id="HFa-gf-lsJ">
-                                                    <dictionary key="options">
-                                                        <string key="NSSelectorName">clearAction:</string>
-                                                    </dictionary>
-                                                </binding>
-                                            </connections>
-                                        </menuItem>
                                         <menuItem title="Enter Full Screen" keyEquivalent="f" id="4J7-dP-txa">
                                             <modifierMask key="keyEquivalentModifierMask" control="YES" command="YES"/>
                                             <connections>

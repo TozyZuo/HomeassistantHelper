@@ -8,8 +8,45 @@
 
 #import "HAHConsoleManager.h"
 
+@interface HAHConsoleTextView : NSTextView
+
+@end
+
+@implementation HAHConsoleTextView
+
+- (BOOL)performKeyEquivalent:(NSEvent *)event
+{
+    if ((event.modifierFlags & NSEventModifierFlagDeviceIndependentFlagsMask) == NSEventModifierFlagCommand)
+    {
+        if ([event.characters isEqualToString:@"+"])
+        {
+            self.font = [NSFont fontWithName:self.font.fontName size:self.font.pointSize + 1];
+            return YES;
+        }
+        else if ([event.characters isEqualToString:@"-"])
+        {
+            self.font = [NSFont fontWithName:self.font.fontName size:self.font.pointSize - 1];
+            return YES;
+        }
+        else if ([event.characters isEqualToString:@"k"])
+        {
+            [self clear];
+            return YES;
+        }
+    }
+    return [super performKeyEquivalent:event];
+}
+
+- (void)clear
+{
+    self.string = @"";
+}
+
+@end
+
+
 @interface HAHConsoleManager ()
-@property (weak) IBOutlet NSTextView *textView;
+@property (weak) IBOutlet HAHConsoleTextView *textView;
 
 @end
 
@@ -48,7 +85,7 @@
 
 - (void)clearAction:(NSButton *)button
 {
-    self.textView.string = @"";
+    [self.textView clear];
 }
 
 #pragma mark - Public
