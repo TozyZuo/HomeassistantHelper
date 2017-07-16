@@ -14,6 +14,29 @@
 
 @implementation HAHViewController
 
+#pragma mark - Life cycle
+
+- (instancetype)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
+{
+    if (self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil]) {
+        [self initialize];
+    }
+    return self;
+}
+
+- (instancetype)initWithCoder:(NSCoder *)coder
+{
+    if (self = [super initWithCoder:coder]) {
+        [self initialize];
+    }
+    return self;
+}
+
+- (void)initialize
+{
+
+}
+
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do view setup here.

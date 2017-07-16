@@ -8,62 +8,23 @@
 
 #import "HAHConsoleManager.h"
 
-@interface HAHConsoleTextView : NSTextView
-
-@end
-
-@implementation HAHConsoleTextView
-
-- (BOOL)performKeyEquivalent:(NSEvent *)event
-{
-    if ((event.modifierFlags & NSEventModifierFlagDeviceIndependentFlagsMask) == NSEventModifierFlagCommand)
-    {
-        if ([event.characters isEqualToString:@"+"])
-        {
-            self.font = [NSFont fontWithName:self.font.fontName size:self.font.pointSize + 1];
-            return YES;
-        }
-        else if ([event.characters isEqualToString:@"-"])
-        {
-            self.font = [NSFont fontWithName:self.font.fontName size:self.font.pointSize - 1];
-            return YES;
-        }
-        else if ([event.characters isEqualToString:@"k"])
-        {
-            [self clear];
-            return YES;
-        }
-    }
-    return [super performKeyEquivalent:event];
-}
-
-- (void)clear
-{
-    self.string = @"";
-}
-
-@end
-
 
 @interface HAHConsoleManager ()
-@property (weak) IBOutlet HAHConsoleTextView *textView;
-
+@property (weak) IBOutlet NSTextView *textView;
 @end
 
 @implementation HAHConsoleManager
 
 #pragma mark - Life cycle
 
-+ (instancetype)sharedManager
+- (void)awakeFromNib
 {
-    static HAHConsoleManager *_manager = nil;
-    static dispatch_once_t onceToken;
-    dispatch_once(&onceToken, ^{
-        _manager = [[self alloc] initWithWindowNibName:NSStringFromClass(self)];
-        [_manager window];
-        [_manager close];
-    });
-    return _manager;
+    [super awakeFromNib];
+
+    NSNumber *fontSize = [[NSUserDefaults standardUserDefaults] objectForKey:HAHUDConsoleFontSizeKey];
+    if (fontSize) {
+        self.textView.font = [NSFont fontWithName:self.textView.font.fontName size:fontSize.doubleValue];
+    }
 }
 
 - (void)windowDidLoad
@@ -72,7 +33,7 @@
 
     // 清除内容按钮
     NSButton *zoomButton = [self.window standardWindowButton:NSWindowZoomButton];
-    NSButton *clearButton = [NSButton buttonWithImage:[NSImage imageNamed:@"trash"] target:self action:@selector(clearAction:)];
+    NSButton *clearButton = [NSButton buttonWithImage:[NSImage imageNamed:@"default_console_ trash"] target:self action:@selector(clearAction:)];
     clearButton.bezelStyle = NSBezelStyleRoundRect;
     clearButton.bordered = NO;
     clearButton.size = NSMakeSize(20, 20);
@@ -81,29 +42,45 @@
     [zoomButton.superview addSubview:clearButton];
 }
 
+- (BOOL)performKeyEquivalent:(NSEvent *)event
+{
+    if ((event.modifierFlags & NSEventModifierFlagDeviceIndependentFlagsMask) == NSEventModifierFlagCommand)
+    {
+        if ([event.characters isEqualToString:@"+"])
+        {
+            NSFont *font = self.textView.font;
+            self.textView.font = [NSFont fontWithName:font.fontName size:font.pointSize + 1];
+            [[NSUserDefaults standardUserDefaults]  setObject:@(self.textView.font.pointSize) forKey:HAHUDConsoleFontSizeKey];
+            [[NSUserDefaults standardUserDefaults] synchronize];
+            return YES;
+        }
+        else if ([event.characters isEqualToString:@"-"])
+        {
+            NSFont *font = self.textView.font;
+            self.textView.font = [NSFont fontWithName:font.fontName size:font.pointSize - 1];
+            [[NSUserDefaults standardUserDefaults]  setObject:@(self.textView.font.pointSize) forKey:HAHUDConsoleFontSizeKey];
+            [[NSUserDefaults standardUserDefaults] synchronize];
+            return YES;
+        }
+        else if ([event.characters isEqualToString:@"k"])
+        {
+            [self clearAction:nil];
+            return YES;
+        }
+    }
+    return [super performKeyEquivalent:event];
+}
+
+- (NSString *)windowFrameKey
+{
+    return HAHUDConsoleWindowFrameKey;
+}
+
 #pragma mark - Action
 
 - (void)clearAction:(NSButton *)button
 {
-    [self.textView clear];
-}
-
-#pragma mark - Public
-
-- (void)toggleConsole
-{
-    // 第一次调用self.window.isVisible返回yes，但是需要show
-    static BOOL firstShow = YES;
-    if (firstShow) {
-        firstShow = NO;
-        [self showWindow:self.window];
-        return;
-    }
-    if (self.window.isVisible) {
-        [self close];
-    } else {
-        [self showWindow:self.window];
-    }
+    self.textView.string = @"";
 }
 
 #pragma mark - Private
@@ -125,7 +102,6 @@
 
 
 @implementation HAHConsoleManagerController
-
 
 - (instancetype)initWithCoder:(NSCoder *)coder
 {

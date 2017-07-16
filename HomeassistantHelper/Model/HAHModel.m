@@ -9,33 +9,86 @@
 #import "HAHModel.h"
 #import <objc/runtime.h>
 
-@implementation HAHModel
+@interface HAHModelInformation ()
+@property (nonatomic, strong) NSArray       *propertyNames;
+@property (nonatomic, strong) NSDictionary  *data;
+@end
+@implementation HAHModelInformation
 
-void *runtimekey_propertyKeys = &runtimekey_propertyKeys;
-
-- (NSString *)description
+- (instancetype)initWithModelClass:(Class)class
 {
-    NSMutableArray *propertyKeys = objc_getAssociatedObject([self class], runtimekey_propertyKeys);
-    if (!propertyKeys) {
-        propertyKeys = [[NSMutableArray alloc] init];
-        objc_setAssociatedObject([self class], runtimekey_propertyKeys, propertyKeys, OBJC_ASSOCIATION_RETAIN);
-        Class class = [self class];
+    if (self = [super init]) {
+
+        NSMutableArray *propertyNames = [[NSMutableArray alloc] init];
+        NSMutableDictionary *data = [[NSMutableDictionary alloc] init];
+
         while (class != [NSObject class]) {
+
             objc_property_t *pList;
             unsigned count;
             pList = class_copyPropertyList(class, &count);
+
             for (int i = 0; i < count; i++) {
+
                 objc_property_t p = pList[i];
-                [propertyKeys addObject:[NSString stringWithUTF8String:property_getName(p)]];
+
+                if ([[NSString stringWithUTF8String:property_getName(p)] isEqualToString:@"infomation"]) {
+                    continue;
+                }
+
+                // propertyName
+                NSString *propertyName = [NSString stringWithUTF8String:property_getName(p)];
+                [propertyNames addObject:propertyName];
+
+                // data
+                unsigned count;
+                objc_property_attribute_t *attributes = property_copyAttributeList(p, &count);
+                for (int i = 0; i < count; i++) {
+                    if ([@(attributes[i].name) isEqualToString:@"T"]) {
+                        NSString *classString = @(attributes[i].value);
+                        data[propertyName] = [classString substringWithRange:NSMakeRange(2, classString.length - 3)];
+                    }
+                }
+
             }
             free(pList);
             class = class_getSuperclass(class);
         }
+        self.propertyNames = propertyNames.reverseObjectEnumerator.allObjects.copy;
+        self.data = data.copy;
+    }
+    return self;
+}
+
+- (NSString *)classStringForProperty:(NSString *)property
+{
+    return self.data[property];
+}
+
+@end
+
+@implementation HAHModel
+
+void *runtimekeyHAHModelInformation = &runtimekeyHAHModelInformation;
+
++ (HAHModelInformation *)infomation
+{
+    HAHModelInformation *infomation = objc_getAssociatedObject(self, runtimekeyHAHModelInformation);
+
+    if (!infomation) {
+        infomation = [[HAHModelInformation alloc] initWithModelClass:self];
+        objc_setAssociatedObject(self, runtimekeyHAHModelInformation, infomation, OBJC_ASSOCIATION_RETAIN);
     }
 
-    NSMutableString *description = [super description].mutableCopy;
-    for (NSString *propertyKey in propertyKeys.reverseObjectEnumerator) {
-        [description appendFormat:@" [%@] %@", propertyKey, [self valueForKey:propertyKey]];
+    return infomation;
+}
+
+- (NSString *)description
+{
+    NSMutableString *description = super.description.mutableCopy;
+
+    for (NSString *property in [self.class infomation].propertyNames) {
+        [description appendFormat:@" [%@] %@", property, [self valueForKey:property]];
     }
 
     return description;

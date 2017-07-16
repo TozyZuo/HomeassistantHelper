@@ -11,7 +11,15 @@
 #pragma mark - UserDefaults
 
 NSString const * HAHUDAdressKey = @"HAHUDAdressKey";
-NSString const * HAHUDWindowFrameKey = @"HAHUDWindowFrameKey";
+NSString const * HAHUDUserNameKey = @"HAHUDUserNameKey";
+NSString const * HAHUDPasswordKey = @"HAHUDPasswordKey";
+NSString const * HAHUDKeepPasswordKey = @"HAHUDKeepPasswordKey";
+
+NSString const * HAHUDMainWindowFrameKey = @"HAHUDMainWindowFrameKey";
+NSString const * HAHUDBrowserWindowFrameKey = @"HAHUDBrowserWindowFrameKey";
+NSString const * HAHUDConsoleWindowFrameKey = @"HAHUDConsoleWindowFrameKey";
+
+NSString const * HAHUDConsoleFontSizeKey = @"HAHUDConsoleFontSizeKey";
 
 #pragma mark - System
 
@@ -33,3 +41,9 @@ void HAHExecuteBlockOnMainThread(void (^block)())
         });
     }
 }
+
+#pragma mark - Global
+
+CGFloat const HAHModelConfigViewWidth = 235;
+
+

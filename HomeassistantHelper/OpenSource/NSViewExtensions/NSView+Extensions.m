@@ -7,6 +7,8 @@
 
 #import "NSView+Extensions.h"
 
+BOOL flipped = YES;
+
 @implementation NSView (Extensions)
 
 // ------------------------------------------------------------------------------------------
@@ -48,14 +50,22 @@
 // ------------------------------------------------------------------------------------------
 - (CGFloat)top
 {
-	return self.frame.origin.y;	
+    if (flipped) {
+        return self.frame.origin.y;
+    } else {
+        return self.frame.origin.y + self.frame.size.height;
+    }
 }
 
 
 - (void)setTop:(CGFloat)top
 {
 	NSRect rect = self.frame;
-	rect.origin.y = top - rect.size.height;
+    if (flipped) {
+        rect.origin.y = top;
+    } else {
+        rect.origin.y = top - rect.size.height;
+    }
 	self.frame = rect;
 }
 
@@ -65,14 +75,22 @@
 // ------------------------------------------------------------------------------------------
 - (CGFloat)bottom
 {
-	return self.frame.origin.y + self.frame.size.height;	
+    if (flipped) {
+        return self.frame.origin.y + self.frame.size.height;
+    } else {
+        return self.frame.origin.y;
+    }
 }
 
 
 - (void)setBottom:(CGFloat)bottom
 {
 	NSRect rect = self.frame;
-	rect.origin.y = bottom;
+    if (flipped) {
+        rect.origin.y = bottom - rect.size.height;
+    } else {
+        rect.origin.y = bottom;
+    }
 	self.frame = rect;
 }
 
@@ -133,24 +151,21 @@
 // ------------------------------------------------------------------------------------------
 - (NSPoint)center
 {
-    CGFloat centerX = self.frame.origin.x + (self.frame.size.width / 2.0);
-    CGFloat centerY = self.frame.origin.y + (self.frame.size.height / 2.0);
-    
-    return CGPointMake(centerX, centerY);
+    return CGPointMake(self.centerX, self.centerY);
 }
 
 
 - (void)setCenter:(CGPoint)center
 {
-    CGFloat originX = center.x - (self.frame.size.width / 2.0);
-	CGFloat originY = center.y - (self.frame.size.height / 2.0);
+    CGFloat originX = center.x - (self.frame.size.width * .5);
+	CGFloat originY = center.y - (self.frame.size.height * .5);
 	
 	self.frame = NSMakeRect(originX, originY, self.frame.size.width, self.frame.size.height);
 }
 
 - (CGFloat)centerX
 {
-    return self.center.x;
+    return self.frame.origin.x + (self.frame.size.width * .5);
 }
 
 - (void)setCenterX:(CGFloat)centerX
@@ -160,7 +175,7 @@
 
 - (CGFloat)centerY
 {
-    return self.center.y;
+    return self.frame.origin.y + (self.frame.size.height * .5);
 }
 
 - (void)setCenterY:(CGFloat)centerY

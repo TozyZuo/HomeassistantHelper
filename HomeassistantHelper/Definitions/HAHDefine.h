@@ -15,6 +15,21 @@
 FOUNDATION_EXPORT void CMLog(NSString *format, ...) NS_FORMAT_FUNCTION(1,2) NS_NO_TAIL_CALL;
 
 
+#define HAH_CLANG_WARNING_IGNORE_HELPER0(x) #x
+#define HAH_CLANG_WARNING_IGNORE_HELPER1(x) HAH_CLANG_WARNING_IGNORE_HELPER0(clang diagnostic ignored x)
+#define HAH_CLANG_WARNING_IGNORE_HELPER2(y) HAH_CLANG_WARNING_IGNORE_HELPER1(#y)
+
+#define HAH_CLANG_WARNING_IGNORE_END _Pragma("clang diagnostic pop")
+#define HAH_CLANG_WARNING_IGNORE_BEGIN(x)\
+_Pragma("clang diagnostic push")\
+_Pragma(HAH_CLANG_WARNING_IGNORE_HELPER2(x))
+
+#define HAH_CLANG_WARNING_IGNORE_BEGIN_TWO(x,y)\
+_Pragma("clang diagnostic push")\
+_Pragma(HAH_CLANG_WARNING_IGNORE_HELPER2(x))\
+_Pragma(HAH_CLANG_WARNING_IGNORE_HELPER2(y))
+
+
 #ifdef DEBUG
 
 #define HAHLOG(...) CMLog(__VA_ARGS__)

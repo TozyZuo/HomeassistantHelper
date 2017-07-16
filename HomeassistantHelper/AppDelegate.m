@@ -21,7 +21,7 @@
     closeButton.action = @selector(closeAction:);
 
     // 还原上次关闭时的位置，如果是第一次打开，则全屏
-    NSString *windowFrame = [[NSUserDefaults standardUserDefaults] objectForKey:HAHUDWindowFrameKey];
+    NSString *windowFrame = [[NSUserDefaults standardUserDefaults] objectForKey:HAHUDMainWindowFrameKey];
     if (windowFrame) {
         [self.window setFrame:NSRectFromString(windowFrame) display:YES];
     } else {
@@ -32,7 +32,7 @@
 - (void)closeAction:(NSButton *)button
 {
     // 记录关闭时app的位置
-    [[NSUserDefaults standardUserDefaults]  setObject:NSStringFromRect(self.window.frame) forKey:HAHUDWindowFrameKey];
+    [[NSUserDefaults standardUserDefaults]  setObject:NSStringFromRect(self.window.frame) forKey:HAHUDMainWindowFrameKey];
     [[NSUserDefaults standardUserDefaults] synchronize];
     [[NSApplication sharedApplication] terminate:nil];
 }

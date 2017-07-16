@@ -8,6 +8,11 @@
 
 #import <Foundation/Foundation.h>
 
-@interface HAHModel : NSObject
+@interface HAHModelInformation : NSObject
+@property (nonatomic, readonly) NSArray *propertyNames;
+- (NSString *)classStringForProperty:(NSString *)property;
+@end
 
+@interface HAHModel : NSObject
+@property (readonly, class) HAHModelInformation *infomation;
 @end

@@ -78,9 +78,8 @@
         self.webView.navigationDelegate = self;
 
         NSView *view = NSApp.mainWindow.contentView;
-        CGRect frame = view.frame;
-        frame.origin.x = frame.size.width;
-        self.webView.frame = frame;
+        self.webView.left = view.right;
+        self.webView.size = [NSScreen mainScreen].visibleFrame.size;
         [view addSubview:self.webView];
     }
 
