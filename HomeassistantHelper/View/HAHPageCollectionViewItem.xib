@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="12118" systemVersion="16E195" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" customObjectInstantitationMethod="direct">
+    <dependencies>
+        <deployment identifier="macosx"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="12118"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <objects>
+        <customObject id="-2" userLabel="File's Owner" customClass="HAHPageCollectionViewItem">
+            <connections>
+                <outlet property="button" destination="9Ic-pB-EsE" id="TSU-2z-69t"/>
+                <outlet property="view" destination="Hz6-mo-xeY" id="0bl-1N-x8E"/>
+            </connections>
+        </customObject>
+        <customObject id="-1" userLabel="First Responder" customClass="FirstResponder"/>
+        <customObject id="-3" userLabel="Application" customClass="NSObject"/>
+        <customView id="Hz6-mo-xeY">
+            <rect key="frame" x="0.0" y="0.0" width="144" height="25"/>
+            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+            <subviews>
+                <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="9Ic-pB-EsE">
+                    <rect key="frame" x="0.0" y="0.0" width="144" height="25"/>
+                    <buttonCell key="cell" type="square" title="Button" bezelStyle="shadowlessSquare" alignment="center" enabled="NO" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="zUJ-e6-zCh">
+                        <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                        <font key="font" metaFont="system"/>
+                    </buttonCell>
+                </button>
+            </subviews>
+            <constraints>
+                <constraint firstItem="9Ic-pB-EsE" firstAttribute="leading" secondItem="Hz6-mo-xeY" secondAttribute="leading" id="6yT-zU-o2D"/>
+                <constraint firstAttribute="bottom" secondItem="9Ic-pB-EsE" secondAttribute="bottom" id="8pi-4b-Mok"/>
+                <constraint firstAttribute="trailing" secondItem="9Ic-pB-EsE" secondAttribute="trailing" id="Cne-PB-QZN"/>
+                <constraint firstItem="9Ic-pB-EsE" firstAttribute="top" secondItem="Hz6-mo-xeY" secondAttribute="top" id="iyU-lt-UA3"/>
+            </constraints>
+            <point key="canvasLocation" x="-36" y="58"/>
+        </customView>
+    </objects>
+</document>

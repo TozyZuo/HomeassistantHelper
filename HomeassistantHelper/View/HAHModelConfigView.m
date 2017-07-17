@@ -29,7 +29,12 @@ CGFloat HAHModelConfigViewVerticalSpace = 5;
 - (NSArray *)disabledProperties
 {
     static NSArray *disabledProperties = nil;
-    disabledProperties = @[@"id",];
+
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        disabledProperties = @[@"id",];
+    });
+
     return disabledProperties;
 }
 
@@ -37,10 +42,13 @@ CGFloat HAHModelConfigViewVerticalSpace = 5;
 {
     static NSDictionary *dispatchDictionary = nil;
 
-    dispatchDictionary = @{
-        @"NSString" : NSStringFromSelector(@selector(viewWithStringProperty:)),
-        @"BOOL" : NSStringFromSelector(@selector(viewWithBOOLProperty:)),
-    };
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        dispatchDictionary = @{
+            @"NSString" : NSStringFromSelector(@selector(viewWithStringProperty:)),
+            @"BOOL" : NSStringFromSelector(@selector(viewWithBOOLProperty:)),
+        };
+    });
 
     return dispatchDictionary;
 }

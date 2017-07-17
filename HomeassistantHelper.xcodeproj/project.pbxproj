@@ -19,6 +19,9 @@
 		BA7BE35F1F1AFFD500451762 /* HAHEditViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = BA7BE35E1F1AFFD500451762 /* HAHEditViewController.m */; };
 		BA7BE3621F1B23E000451762 /* HAHView.m in Sources */ = {isa = PBXBuildFile; fileRef = BA7BE3611F1B23E000451762 /* HAHView.m */; };
 		BA7BE3651F1B240100451762 /* HAHModelConfigView.m in Sources */ = {isa = PBXBuildFile; fileRef = BA7BE3641F1B240100451762 /* HAHModelConfigView.m */; };
+		BA7BE36C1F1BB65900451762 /* HAHPageCollectionViewItem.m in Sources */ = {isa = PBXBuildFile; fileRef = BA7BE36A1F1BB65900451762 /* HAHPageCollectionViewItem.m */; };
+		BA7BE36D1F1BB65900451762 /* HAHPageCollectionViewItem.xib in Resources */ = {isa = PBXBuildFile; fileRef = BA7BE36B1F1BB65900451762 /* HAHPageCollectionViewItem.xib */; };
+		BA7BE3711F1BB92600451762 /* NSString_HAH.m in Sources */ = {isa = PBXBuildFile; fileRef = BA7BE3701F1BB92600451762 /* NSString_HAH.m */; };
 		BA8038001F18FE7C00EE7A36 /* NSView+Extensions.m in Sources */ = {isa = PBXBuildFile; fileRef = BA8037FF1F18FE7C00EE7A36 /* NSView+Extensions.m */; };
 		BA8038021F190F3A00EE7A36 /* Carbon.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BA8038011F190F3A00EE7A36 /* Carbon.framework */; };
 		BA8F98DD1F11BDF700D16523 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = BA8F98DC1F11BDF700D16523 /* AppDelegate.m */; };
@@ -82,6 +85,11 @@
 		BA7BE3611F1B23E000451762 /* HAHView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HAHView.m; sourceTree = "<group>"; };
 		BA7BE3631F1B240100451762 /* HAHModelConfigView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HAHModelConfigView.h; sourceTree = "<group>"; };
 		BA7BE3641F1B240100451762 /* HAHModelConfigView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HAHModelConfigView.m; sourceTree = "<group>"; };
+		BA7BE3691F1BB65900451762 /* HAHPageCollectionViewItem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HAHPageCollectionViewItem.h; sourceTree = "<group>"; };
+		BA7BE36A1F1BB65900451762 /* HAHPageCollectionViewItem.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HAHPageCollectionViewItem.m; sourceTree = "<group>"; };
+		BA7BE36B1F1BB65900451762 /* HAHPageCollectionViewItem.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = HAHPageCollectionViewItem.xib; sourceTree = "<group>"; };
+		BA7BE36F1F1BB92600451762 /* NSString_HAH.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NSString_HAH.h; sourceTree = "<group>"; };
+		BA7BE3701F1BB92600451762 /* NSString_HAH.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NSString_HAH.m; sourceTree = "<group>"; };
 		BA8037FE1F18FE7C00EE7A36 /* NSView+Extensions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSView+Extensions.h"; sourceTree = "<group>"; };
 		BA8037FF1F18FE7C00EE7A36 /* NSView+Extensions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSView+Extensions.m"; sourceTree = "<group>"; };
 		BA8038011F190F3A00EE7A36 /* Carbon.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Carbon.framework; path = System/Library/Frameworks/Carbon.framework; sourceTree = SDKROOT; };
@@ -160,6 +168,7 @@
 		BA7BE34C1F1A4B2300451762 /* Category */ = {
 			isa = PBXGroup;
 			children = (
+				BA7BE36E1F1BB91000451762 /* NSString */,
 				BA7BE3591F1A5BD100451762 /* NSTextField */,
 				BA7BE34D1F1A4B2300451762 /* Foundation_Log */,
 				BA7BE34F1F1A4B2300451762 /* NSView */,
@@ -201,6 +210,9 @@
 				BA7BE3611F1B23E000451762 /* HAHView.m */,
 				BA7BE3631F1B240100451762 /* HAHModelConfigView.h */,
 				BA7BE3641F1B240100451762 /* HAHModelConfigView.m */,
+				BA7BE3691F1BB65900451762 /* HAHPageCollectionViewItem.h */,
+				BA7BE36A1F1BB65900451762 /* HAHPageCollectionViewItem.m */,
+				BA7BE36B1F1BB65900451762 /* HAHPageCollectionViewItem.xib */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -212,6 +224,15 @@
 				BA7BE35B1F1A5BE200451762 /* NSTextField_HAH.m */,
 			);
 			path = NSTextField;
+			sourceTree = "<group>";
+		};
+		BA7BE36E1F1BB91000451762 /* NSString */ = {
+			isa = PBXGroup;
+			children = (
+				BA7BE36F1F1BB92600451762 /* NSString_HAH.h */,
+				BA7BE3701F1BB92600451762 /* NSString_HAH.m */,
+			);
+			path = NSString;
 			sourceTree = "<group>";
 		};
 		BA8037FD1F18FE7C00EE7A36 /* NSViewExtensions */ = {
@@ -445,6 +466,7 @@
 				BAEECA821F146D740099000C /* HAHConsoleManager.xib in Resources */,
 				BA7BE3481F1A191300451762 /* HAHBrowserManager.xib in Resources */,
 				BA8F98E81F11BDF700D16523 /* Main.storyboard in Resources */,
+				BA7BE36D1F1BB65900451762 /* HAHPageCollectionViewItem.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -472,6 +494,7 @@
 				BA23DB361F136E4100939AA8 /* GDataXMLNode.m in Sources */,
 				BAEECA811F146D740099000C /* HAHConsoleManager.m in Sources */,
 				BA7BE3621F1B23E000451762 /* HAHView.m in Sources */,
+				BA7BE36C1F1BB65900451762 /* HAHPageCollectionViewItem.m in Sources */,
 				BA7BE35F1F1AFFD500451762 /* HAHEditViewController.m in Sources */,
 				BA23DB2D1F1356E300939AA8 /* HAHGlobalExtern.m in Sources */,
 				BAEECA911F14C50F0099000C /* HAHParser.m in Sources */,
@@ -479,6 +502,7 @@
 				BA8F98DD1F11BDF700D16523 /* AppDelegate.m in Sources */,
 				BAEECA9A1F14C7920099000C /* HAHConfigParser.m in Sources */,
 				BA8038001F18FE7C00EE7A36 /* NSView+Extensions.m in Sources */,
+				BA7BE3711F1BB92600451762 /* NSString_HAH.m in Sources */,
 				BA7BE34B1F1A295400451762 /* HAHWindowControllerManager.m in Sources */,
 				BA7BE35C1F1A5BE200451762 /* NSTextField_HAH.m in Sources */,
 			);
