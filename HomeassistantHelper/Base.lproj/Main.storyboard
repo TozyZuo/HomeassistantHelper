@@ -872,6 +872,13 @@
                                                 <tableView verticalHuggingPriority="750" allowsExpansionToolTips="YES" columnAutoresizingStyle="lastColumnOnly" columnSelection="YES" multipleSelection="NO" autosaveColumns="NO" rowSizeStyle="automatic" headerView="xJ7-FA-1Ex" viewBased="YES" id="Vyt-Ht-82b">
                                                     <rect key="frame" x="0.0" y="0.0" width="516" height="345"/>
                                                     <autoresizingMask key="autoresizingMask"/>
+                                                    <gestureRecognizers>
+                                                        <panGestureRecognizer delaysPrimaryMouseButtonEvents="YES" id="Yef-uh-PVw">
+                                                            <connections>
+                                                                <action selector="tableViewPanAction:" target="hdG-d1-Tbl" id="J84-93-16W"/>
+                                                            </connections>
+                                                        </panGestureRecognizer>
+                                                    </gestureRecognizers>
                                                     <size key="intercellSpacing" width="3" height="2"/>
                                                     <color key="backgroundColor" name="controlBackgroundColor" catalog="System" colorSpace="catalog"/>
                                                     <color key="gridColor" name="gridColor" catalog="System" colorSpace="catalog"/>
@@ -1013,7 +1020,7 @@
                                 <constraints>
                                     <constraint firstAttribute="width" constant="20" id="Tdr-ng-6h9"/>
                                 </constraints>
-                                <buttonCell key="cell" type="square" bezelStyle="shadowlessSquare" image="default_edit_ separate_on" imagePosition="only" alignment="center" state="on" imageScaling="proportionallyUpOrDown" inset="2" id="Nhj-wp-0eG">
+                                <buttonCell key="cell" type="square" bezelStyle="shadowlessSquare" image="default_edit_separate_on" imagePosition="only" alignment="center" state="on" imageScaling="proportionallyUpOrDown" inset="2" id="Nhj-wp-0eG">
                                     <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                                     <font key="font" metaFont="system"/>
                                 </buttonCell>
@@ -1048,6 +1055,6 @@
         </scene>
     </scenes>
     <resources>
-        <image name="default_edit_ separate_on" width="20" height="46"/>
+        <image name="default_edit_separate_on" width="20" height="46"/>
     </resources>
 </document>
