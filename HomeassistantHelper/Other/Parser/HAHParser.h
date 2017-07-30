@@ -9,5 +9,5 @@
 #import <Foundation/Foundation.h>
 
 @interface HAHParser : NSObject
-- (NSArray *)parse:(NSString *)text;
+- (id)parse:(NSString *)text;
 @end

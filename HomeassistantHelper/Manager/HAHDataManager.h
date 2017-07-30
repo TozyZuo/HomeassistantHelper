@@ -14,6 +14,9 @@
 
 + (instancetype)sharedManager;
 
-- (void)requestDataWithURL:(NSString *)url user:(NSString *)user password:(NSString *)password complete:(void (^)(NSArray<HAHEntityModel *> *entities, NSArray<HAHPageModel *> *pages))completeBlock;
+- (void)requestDataWithURL:(NSString *)url user:(NSString *)user password:(NSString *)password complete:(void (^)(NSArray<HAHEntityModel *> *ungroupedEntities, NSArray<HAHPageModel *> *pages))completeBlock;
+
+// 同步，阻塞进程
+- (NSString *)requestFile:(NSString *)fileName;
 
 @end

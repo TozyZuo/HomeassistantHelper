@@ -10,7 +10,7 @@
 
 @implementation HAHParser
 
-- (NSArray *)parse:(NSString *)text
+- (id)parse:(NSString *)text
 {
     return nil;
 }

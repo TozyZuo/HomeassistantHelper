@@ -8,7 +8,7 @@
 
 #import "HAHViewController.h"
 
-@class HAHPageModel;
+@class HAHPageModel, HAHEntityModel;
 @interface HAHEditViewController : HAHViewController
-- (void)reloadWithPages:(NSArray<HAHPageModel *> *)pages;
+- (void)reloadWithPages:(NSArray<HAHPageModel *> *)pages ungroupedEntities:(NSArray<HAHEntityModel *> *)ungroupedEntities;
 @end

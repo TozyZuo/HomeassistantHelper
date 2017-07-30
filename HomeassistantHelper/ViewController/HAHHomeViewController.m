@@ -104,12 +104,11 @@
     NSString *password = self.passwordTextField.stringValue.length ? self.passwordTextField.stringValue : self.passwordTextField.placeholderString;
     __weak typeof(self) weakSelf = self;
 
-    [[HAHDataManager sharedManager] requestDataWithURL:url user:user password:password complete:^(NSArray<HAHEntityModel *> *entities, NSArray<HAHPageModel *> *pages)
+    [[HAHDataManager sharedManager] requestDataWithURL:url user:user password:password complete:^(NSArray<HAHEntityModel *> *ungroupedEntities, NSArray<HAHPageModel *> *pages)
     {
-        weakSelf.entities = entities;
+//        weakSelf.entities = entities;
         weakSelf.pages = pages;
         HAHLOG(@"%@", pages);
-//        HAHLOG(@"%@ \n\n\n%@", entities, pages);
         sender.title = @"获取";
         sender.enabled = YES;
         weakSelf.addressTextField.enabled = YES;
@@ -127,7 +126,7 @@
         }
         [[NSUserDefaults standardUserDefaults] synchronize];
 
-        [self.editViewController reloadWithPages:pages];
+        [weakSelf.editViewController reloadWithPages:pages ungroupedEntities:ungroupedEntities];
     }];
 
     [[HAHBrowserManager sharedManager] loadWithURL:url];

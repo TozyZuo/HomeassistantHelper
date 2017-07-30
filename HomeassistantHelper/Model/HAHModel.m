@@ -32,6 +32,7 @@
 
                 objc_property_t p = pList[i];
 
+                // TODO 添加白名单列表，过滤不关心的属性
                 if ([[NSString stringWithUTF8String:property_getName(p)] isEqualToString:@"infomation"]) {
                     continue;
                 }

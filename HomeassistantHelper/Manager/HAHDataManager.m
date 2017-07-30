@@ -7,26 +7,27 @@
 //
 
 #import "HAHDataManager.h"
-#import "HAHEntityModel.h"
+#import "HAHEntityParser.h"
 #import "HAHGroupModel.h"
 #import "HAHPageModel.h"
-#import "HAHEntityParser.h"
-#import "HAHPageParser.h"
-#import "HAHConfigParser.h"
+#import "HAHConfigurationFile.h"
+#import "HAHGroupFile.h"
 #import <NMSSH/NMSSH.h>
 #import <WebKit/WebKit.h>
 
+static NSString * const HAHHomeassistantPath = @"/home/homeassistant/.homeassistant/";
 
 @interface HAHDataManager ()
 <WKNavigationDelegate>
-@property (nonatomic, strong) WKWebView         *webView;
-@property (nonatomic, strong) WKNavigation      *homeNavigation;
-@property (nonatomic, assign) NSInteger         delayTime;
-@property (nonatomic, strong) NSString          *URL;
-@property (nonatomic, strong) NSMutableArray    *unreadyModels;
-@property (nonatomic, strong) dispatch_queue_t  sshQueue;
+@property (nonatomic, strong) WKWebView             *webView;
+@property (nonatomic, strong) WKNavigation          *homeNavigation;
+@property (nonatomic, assign) NSInteger             delayTime;
+@property (nonatomic, strong) NSString              *URL;
+@property (nonatomic, strong) NSMutableArray        *unreadyModels;
+@property (nonatomic, strong) dispatch_queue_t      sshQueue;
+@property (nonatomic, strong) NMSSHSession          *session;
 @property (nonatomic, strong) NSArray<HAHEntityModel *> *entities;
-@property (nonatomic, strong) NSArray<HAHPageModel *>   *pages;
+@property (nonatomic, strong) HAHConfigurationFile  *configurationFile;
 
 @property (nonatomic,  copy ) void (^requestDataCompleteBlock)(NSArray<HAHEntityModel *> *, NSArray<HAHPageModel *> *);
 @end
@@ -59,6 +60,8 @@
     self.delayTime = 1;
     self.URL = url;
     self.requestDataCompleteBlock = completeBlock;
+    self.entities = nil;
+    self.configurationFile = nil;
 
     [self requestEntitiesWithURL:url];
     [self startFileRequestWithURL:url user:user password:password];
@@ -99,24 +102,17 @@
 {
     dispatch_async(self.sshQueue, ^{
 
-        NMSSHSession *session = [NMSSHSession connectToHost:[NSURL URLWithString:url].host
-                                               withUsername:user];
+        if (!self.session) {
+            self.session = [NMSSHSession connectToHost:[NSURL URLWithString:url].host withUsername:user];
+        }
 
-        if (session.isConnected) {
-            [session authenticateByPassword:password];
+        if (self.session.isConnected) {
+            [self.session authenticateByPassword:password];
 
-            if (session.isAuthorized) {
-//                HAHLOG(@"Authentication succeeded");
+            if (self.session.isAuthorized) {
 
-                if ([session.channel downloadFile:@"/home/homeassistant/.homeassistant/groups.yaml" to:@"/tmp/groups.yaml"]) {
-                    NSString *string = [NSString stringWithContentsOfFile:@"/tmp/groups.yaml" encoding:NSUTF8StringEncoding error:nil];
-//                    HAHLOG(@"groups.yaml\n%@", string);
-                    self.pages = [[[HAHPageParser alloc] init] parse:string];
-                }
-                if ([session.channel downloadFile:@"/home/homeassistant/.homeassistant/configuration.yaml" to:@"/tmp/configuration.yaml"]) {
-                    NSString *string = [NSString stringWithContentsOfFile:@"/tmp/configuration.yaml" encoding:NSUTF8StringEncoding error:nil];
-//                    HAHLOG(@"configuration.yaml\n%@", string);
-                }
+                self.configurationFile = [[HAHConfigurationFile alloc] initWithText:[self requestFile:@"configuration.yaml"]];
+
                 dispatch_async(dispatch_get_main_queue(), ^{
                     [self tryToCallBack];
                 });
@@ -124,48 +120,42 @@
         }
 
         // TODO
-        [session disconnect];
+        [self.session disconnect];
     });
+}
+
+- (NSString *)requestFile:(NSString *)fileName
+{
+    NSError *error;
+    NSString *string = [self.session.channel execute:[NSString stringWithFormat:@"cat %@%@", HAHHomeassistantPath, fileName] error:&error];
+    if (error) {
+        HAHLOG(@"%@ %s(%d)", error, __PRETTY_FUNCTION__, __LINE__);
+    }
+    return string;
 }
 
 - (void)tryToCallBack
 {
-    if (self.requestDataCompleteBlock && self.entities && self.pages) {
-
-        NSMutableArray<HAHEntityModel *> *ungroupedEntities = self.entities.mutableCopy;
-        // 合并信息
-        // TODO 可能有性能问题
-        for (HAHPageModel *pageModels in self.pages) {
-            for (HAHGroupModel *groupModels in pageModels.groups) {
-                for (int i = 0; i < groupModels.entities.count; i++) {
-                    BOOL notFound = YES;
-                    for (int j = 0; j < self.entities.count; j++) {
-                        if ([groupModels.entities[i].id isEqualToString:self.entities[j].id]) {
-                            [groupModels.entities replaceObjectAtIndex:i withObject:self.entities[j]];
-                            // 该entity有记录，移除
-                            for (int k = 0; k < ungroupedEntities.count; k++) {
-                                if ([ungroupedEntities[k].id isEqualToString:self.entities[j].id]) {
-                                    [ungroupedEntities removeObjectAtIndex:k];
-                                    break;
-                                }
-                            }
-                            notFound = NO;
-                            break;
-                        }
-                    }
-                    if (notFound) {
-                        HAHLOG(@"未找到设备 %@", groupModels.entities[i]);
-                    }
-                }
-            }
-        }
-
-        NSLog(@"ungroupedEntities %@", ungroupedEntities);
-        self.requestDataCompleteBlock(self.entities, self.pages);
-        self.entities = nil;
-        self.pages = nil;
+    if (self.requestDataCompleteBlock && self.entities && self.configurationFile)
+    {
+        [self.configurationFile mergeInfomationWithEntities:self.entities];
+        self.requestDataCompleteBlock([self filterUngroupedEntitiesWithAllEntities:self.entities pages:self.configurationFile.group.pages], self.configurationFile.group.pages);
     }
 }
+
+- (NSArray<HAHEntityModel *> *)filterUngroupedEntitiesWithAllEntities:(NSArray<HAHEntityModel *> *)entities pages:(NSArray<HAHPageModel *> *)pages
+{
+    NSMutableArray<HAHEntityModel *> *allEntities = entities.mutableCopy;
+
+    for (HAHPageModel *pageModels in pages) {
+        for (HAHGroupModel *groupModels in pageModels.groups) {
+            [allEntities removeObjectsInArray:groupModels.entities];
+        }
+    }
+
+    return allEntities.copy;
+}
+
 
 #pragma mark - WKNavigationDelegate
 
