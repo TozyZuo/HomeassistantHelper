@@ -11,5 +11,5 @@
 @interface HAHPageCollectionViewItem : NSCollectionViewItem
 @property (nonatomic, strong) NSString  *text;
 @property (nonatomic, assign) NSSize    size;
-- (CGFloat)widthWithText:(NSString *)text;
++ (CGFloat)widthWithText:(NSString *)text;
 @end

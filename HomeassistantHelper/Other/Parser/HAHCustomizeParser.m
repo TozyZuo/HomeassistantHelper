@@ -45,7 +45,6 @@
 
         NSString *value = lines[i+1];
         value = [[value componentsSeparatedByString:@":"].lastObject stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
-        NSLog(@"%@ %@ %d", key, value, i);
         result[key] = value;
     }
 

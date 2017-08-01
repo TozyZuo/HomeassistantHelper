@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="12118" systemVersion="16E195" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" customObjectInstantitationMethod="direct">
+<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="12118" systemVersion="16F73" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" customObjectInstantitationMethod="direct">
     <dependencies>
         <deployment identifier="macosx"/>
         <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="12118"/>
@@ -8,29 +8,38 @@
     <objects>
         <customObject id="-2" userLabel="File's Owner" customClass="HAHPageCollectionViewItem">
             <connections>
-                <outlet property="button" destination="9Ic-pB-EsE" id="TSU-2z-69t"/>
+                <outlet property="line" destination="VB1-xd-pF8" id="quV-Ab-dUU"/>
+                <outlet property="textField" destination="bs3-dr-DBc" id="f19-lm-ccw"/>
                 <outlet property="view" destination="Hz6-mo-xeY" id="0bl-1N-x8E"/>
             </connections>
         </customObject>
         <customObject id="-1" userLabel="First Responder" customClass="FirstResponder"/>
         <customObject id="-3" userLabel="Application" customClass="NSObject"/>
         <customView id="Hz6-mo-xeY">
-            <rect key="frame" x="0.0" y="0.0" width="144" height="25"/>
+            <rect key="frame" x="0.0" y="0.0" width="144" height="17"/>
             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
             <subviews>
-                <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="9Ic-pB-EsE">
-                    <rect key="frame" x="0.0" y="0.0" width="144" height="25"/>
-                    <buttonCell key="cell" type="square" title="Button" bezelStyle="shadowlessSquare" alignment="center" enabled="NO" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="zUJ-e6-zCh">
-                        <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" allowsCharacterPickerTouchBarItem="NO" translatesAutoresizingMaskIntoConstraints="NO" id="bs3-dr-DBc">
+                    <rect key="frame" x="52" y="0.0" width="41" height="17"/>
+                    <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" alignment="center" title="Label" id="jrh-m5-Tud">
                         <font key="font" metaFont="system"/>
-                    </buttonCell>
-                </button>
+                        <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                        <color key="backgroundColor" red="1" green="1" blue="1" alpha="0.0" colorSpace="custom" customColorSpace="sRGB"/>
+                    </textFieldCell>
+                </textField>
+                <customView translatesAutoresizingMaskIntoConstraints="NO" id="VB1-xd-pF8" userLabel="Line">
+                    <rect key="frame" x="143" y="0.0" width="1" height="17"/>
+                    <constraints>
+                        <constraint firstAttribute="width" constant="1" id="02T-jp-Sbr"/>
+                    </constraints>
+                </customView>
             </subviews>
             <constraints>
-                <constraint firstItem="9Ic-pB-EsE" firstAttribute="leading" secondItem="Hz6-mo-xeY" secondAttribute="leading" id="6yT-zU-o2D"/>
-                <constraint firstAttribute="bottom" secondItem="9Ic-pB-EsE" secondAttribute="bottom" id="8pi-4b-Mok"/>
-                <constraint firstAttribute="trailing" secondItem="9Ic-pB-EsE" secondAttribute="trailing" id="Cne-PB-QZN"/>
-                <constraint firstItem="9Ic-pB-EsE" firstAttribute="top" secondItem="Hz6-mo-xeY" secondAttribute="top" id="iyU-lt-UA3"/>
+                <constraint firstAttribute="trailing" secondItem="VB1-xd-pF8" secondAttribute="trailing" id="EbL-vM-zi9"/>
+                <constraint firstItem="bs3-dr-DBc" firstAttribute="centerY" secondItem="Hz6-mo-xeY" secondAttribute="centerY" id="HnE-x7-aVH"/>
+                <constraint firstAttribute="bottom" secondItem="VB1-xd-pF8" secondAttribute="bottom" id="qFe-zf-M9h"/>
+                <constraint firstItem="VB1-xd-pF8" firstAttribute="top" secondItem="Hz6-mo-xeY" secondAttribute="top" id="uIG-Y3-Aj5"/>
+                <constraint firstItem="bs3-dr-DBc" firstAttribute="centerX" secondItem="Hz6-mo-xeY" secondAttribute="centerX" id="vU5-Yr-Jfm"/>
             </constraints>
             <point key="canvasLocation" x="-36" y="58"/>
         </customView>

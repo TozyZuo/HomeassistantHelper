@@ -41,6 +41,7 @@ static CGFloat const TableHeaderCellTextMargin = 20;
     [super viewDidLoad];
 
     [self.collectionView registerClass:[HAHPageCollectionViewItem class] forItemWithIdentifier:HAHPageCollectionViewItemViewIdentifier];
+    [self.tableView registerNib:[[NSNib alloc] initWithNibNamed:@"HAHTableViewCell" bundle:nil] forIdentifier:[HAHTableViewCell identifier]];
 }
 
 #pragma mark - Action
@@ -155,18 +156,11 @@ static CGFloat const TableHeaderCellTextMargin = 20;
 
 - (NSSize)collectionView:(NSCollectionView *)collectionView layout:(NSCollectionViewLayout*)collectionViewLayout sizeForItemAtIndexPath:(NSIndexPath *)indexPath
 {
-    static HAHPageCollectionViewItem *item;
-    static dispatch_once_t onceToken;
-    dispatch_once(&onceToken, ^{
-        item = [[HAHPageCollectionViewItem alloc] init];
-        [item view];
-    });
-
     HAHPageModel *page = self.pages[indexPath.item];
     if (page.name.length) {
-        return NSMakeSize([item widthWithText:page.name], collectionView.height);
+        return NSMakeSize([HAHPageCollectionViewItem widthWithText:page.name], collectionView.height);
     } else if (page.id) {
-        return NSMakeSize([item widthWithText:page.id], collectionView.height);
+        return NSMakeSize([HAHPageCollectionViewItem widthWithText:page.id], collectionView.height);
     }
     return NSMakeSize(30, 30);
 }
@@ -193,7 +187,7 @@ static CGFloat const TableHeaderCellTextMargin = 20;
     HAHPageCollectionViewItem *item = [collectionView makeItemWithIdentifier:HAHPageCollectionViewItemViewIdentifier forIndexPath:indexPath];
     HAHPageModel *page = self.pages[indexPath.item];
     item.text = page.name ?: page.id;
-    item.size = NSMakeSize([item widthWithText:item.text], collectionView.height);
+    item.size = NSMakeSize([HAHPageCollectionViewItem widthWithText:item.text], collectionView.height);
     return item;
 }
 
@@ -211,9 +205,9 @@ static CGFloat const TableHeaderCellTextMargin = 20;
     }
 
     if (row < tableColumn.group.entities.count) {
-        HAHTableViewCell *cell = [[HAHTableViewCell alloc] init];
+        HAHTableViewCell *cell = [tableView makeViewWithIdentifier:[HAHTableViewCell identifier] owner:nil];
         cell.entity = tableColumn.group.entities[row];
-        cell.stringValue = cell.entity.name;
+        cell.text = cell.entity.name;
         [cell addGestureRecognizer:[[NSClickGestureRecognizer alloc] initWithTarget:self action:@selector(clickCellAction:)]];
         return cell;
     } else {

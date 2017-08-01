@@ -10,6 +10,11 @@
 
 @class HAHEntityModel;
 
-@interface HAHTableViewCell : NSTextField
-@property (nonatomic, strong) HAHEntityModel *entity;
+@interface HAHTableViewCell : NSTableCellView
+
+@property (nonatomic, strong) HAHEntityModel    *entity;
+@property (nonatomic, strong) NSString          *text;
+
+@property (class, readonly) NSString *identifier;
+
 @end

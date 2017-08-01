@@ -13,6 +13,8 @@
 		BA6AFD1B1F2DF2160020BCDD /* HAHEditViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = BA6AFD1A1F2DF2160020BCDD /* HAHEditViewController.m */; };
 		BA6AFD1E1F2DF22C0020BCDD /* HAHTableColumn.m in Sources */ = {isa = PBXBuildFile; fileRef = BA6AFD1D1F2DF22C0020BCDD /* HAHTableColumn.m */; };
 		BA6AFD211F2E08D00020BCDD /* HAHTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = BA6AFD201F2E08D00020BCDD /* HAHTableViewCell.m */; };
+		BA74317D1F3058C500713EA6 /* NSColor_HAH.m in Sources */ = {isa = PBXBuildFile; fileRef = BA74317C1F3058C500713EA6 /* NSColor_HAH.m */; };
+		BA74317F1F3072AD00713EA6 /* HAHTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = BA74317E1F3072AD00713EA6 /* HAHTableViewCell.xib */; };
 		BA7BE3471F1A191300451762 /* HAHBrowserManager.m in Sources */ = {isa = PBXBuildFile; fileRef = BA7BE3451F1A191300451762 /* HAHBrowserManager.m */; };
 		BA7BE3481F1A191300451762 /* HAHBrowserManager.xib in Resources */ = {isa = PBXBuildFile; fileRef = BA7BE3461F1A191300451762 /* HAHBrowserManager.xib */; };
 		BA7BE34B1F1A295400451762 /* HAHWindowControllerManager.m in Sources */ = {isa = PBXBuildFile; fileRef = BA7BE34A1F1A295400451762 /* HAHWindowControllerManager.m */; };
@@ -82,6 +84,9 @@
 		BA6AFD1D1F2DF22C0020BCDD /* HAHTableColumn.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HAHTableColumn.m; sourceTree = "<group>"; };
 		BA6AFD1F1F2E08D00020BCDD /* HAHTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HAHTableViewCell.h; sourceTree = "<group>"; };
 		BA6AFD201F2E08D00020BCDD /* HAHTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HAHTableViewCell.m; sourceTree = "<group>"; };
+		BA74317B1F3058C500713EA6 /* NSColor_HAH.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NSColor_HAH.h; sourceTree = "<group>"; };
+		BA74317C1F3058C500713EA6 /* NSColor_HAH.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NSColor_HAH.m; sourceTree = "<group>"; };
+		BA74317E1F3072AD00713EA6 /* HAHTableViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = HAHTableViewCell.xib; sourceTree = "<group>"; };
 		BA7BE3441F1A191300451762 /* HAHBrowserManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HAHBrowserManager.h; sourceTree = "<group>"; };
 		BA7BE3451F1A191300451762 /* HAHBrowserManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HAHBrowserManager.m; sourceTree = "<group>"; };
 		BA7BE3461F1A191300451762 /* HAHBrowserManager.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = HAHBrowserManager.xib; sourceTree = "<group>"; };
@@ -195,13 +200,24 @@
 				BA6AFD1D1F2DF22C0020BCDD /* HAHTableColumn.m */,
 				BA6AFD1F1F2E08D00020BCDD /* HAHTableViewCell.h */,
 				BA6AFD201F2E08D00020BCDD /* HAHTableViewCell.m */,
+				BA74317E1F3072AD00713EA6 /* HAHTableViewCell.xib */,
 			);
 			path = HAHEditViewController;
+			sourceTree = "<group>";
+		};
+		BA74317A1F3058B300713EA6 /* NSColor */ = {
+			isa = PBXGroup;
+			children = (
+				BA74317B1F3058C500713EA6 /* NSColor_HAH.h */,
+				BA74317C1F3058C500713EA6 /* NSColor_HAH.m */,
+			);
+			path = NSColor;
 			sourceTree = "<group>";
 		};
 		BA7BE34C1F1A4B2300451762 /* Category */ = {
 			isa = PBXGroup;
 			children = (
+				BA74317A1F3058B300713EA6 /* NSColor */,
 				BA7BE36E1F1BB91000451762 /* NSString */,
 				BA7BE3591F1A5BD100451762 /* NSTextField */,
 				BA7BE34D1F1A4B2300451762 /* Foundation_Log */,
@@ -506,6 +522,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				BA8F98E51F11BDF700D16523 /* Assets.xcassets in Resources */,
+				BA74317F1F3072AD00713EA6 /* HAHTableViewCell.xib in Resources */,
 				BAEECA821F146D740099000C /* HAHConsoleManager.xib in Resources */,
 				BA7BE3481F1A191300451762 /* HAHBrowserManager.xib in Resources */,
 				BA8F98E81F11BDF700D16523 /* Main.storyboard in Resources */,
@@ -524,6 +541,7 @@
 				BA9D68971F2DBA8300D24F80 /* HAHCustomizeFile.m in Sources */,
 				BAEECA891F14AD6B0099000C /* HAHPageModel.m in Sources */,
 				BA8F99141F12691F00D16523 /* HAHHomeViewController.m in Sources */,
+				BA74317D1F3058C500713EA6 /* NSColor_HAH.m in Sources */,
 				BA8F99191F126F0700D16523 /* HAHDataManager.m in Sources */,
 				BA8F99111F12690500D16523 /* HAHViewController.m in Sources */,
 				BAEECA8C1F14AD7C0099000C /* HAHModel.m in Sources */,
