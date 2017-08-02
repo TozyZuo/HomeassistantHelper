@@ -14,5 +14,6 @@
 @end
 
 @interface HAHModel : NSObject
+<NSCoding>
 @property (readonly, class) HAHModelInformation *infomation;
 @end

@@ -95,4 +95,21 @@ void *runtimekeyHAHModelInformation = &runtimekeyHAHModelInformation;
     return description;
 }
 
+- (instancetype)initWithCoder:(NSCoder *)aDecoder
+{
+    if (self = [super init]) {
+        for (NSString *property in [self.class infomation].propertyNames) {
+            [self setValue:[aDecoder decodeObjectForKey:property] forKey:property];
+        }
+    }
+    return self;
+}
+
+- (void)encodeWithCoder:(NSCoder *)aCoder
+{
+    for (NSString *property in [self.class infomation].propertyNames) {
+        [aCoder encodeObject:[self valueForKey:property] forKey:property];
+    }
+}
+
 @end

@@ -15,7 +15,20 @@
 #import <NMSSH/NMSSH.h>
 #import <WebKit/WebKit.h>
 
+
+#define LoadFileFromLocal // 本地开发测试
+
+
+#ifdef LoadFileFromLocal
+
+static NSString * const HAHHomeassistantPath = @"/Homeassistant/";
+
+#else
+
 static NSString * const HAHHomeassistantPath = @"/home/homeassistant/.homeassistant/";
+
+#endif
+
 
 @interface HAHDataManager ()
 <WKNavigationDelegate>
@@ -63,12 +76,26 @@ static NSString * const HAHHomeassistantPath = @"/home/homeassistant/.homeassist
     self.entities = nil;
     self.configurationFile = nil;
 
-    [self requestEntitiesWithURL:url];
+    [self startEntitiesRequestWithURL:url];
     [self startFileRequestWithURL:url user:user password:password];
 }
 
-- (void)requestEntitiesWithURL:(NSString *)url
+#pragma mark Private
+
+- (void)startEntitiesRequestWithURL:(NSString *)url
 {
+#ifdef LoadFileFromLocal
+
+    self.entities = [NSKeyedUnarchiver unarchiveObjectWithFile:@"/Users/Tozy/Desktop/Homeassistant/entities"];
+    [self tryToCallBack];
+
+    // 删掉这行会崩溃，编译器bug？？？
+    if (self.webView) {
+        [WKWebView class];
+    }
+
+#else
+
     if (!self.webView) {
         WKWebViewConfiguration * config = [[WKWebViewConfiguration alloc] init];
         //The minimum font size in points default is 0;
@@ -86,20 +113,21 @@ static NSString * const HAHHomeassistantPath = @"/home/homeassistant/.homeassist
         [view addSubview:self.webView];
     }
 
-    [self startEntitiesRequestWithURL:url];
-}
-
-#pragma mark Private
-
-- (void)startEntitiesRequestWithURL:(NSString *)url
-{
-//    NSURL *url = [NSURL URLWithString:@"http://192.168.10.147:8123"];
     NSURLRequest *request = [NSURLRequest requestWithURL:[NSURL URLWithString:url]];
     self.homeNavigation = [self.webView loadRequest:request];
+
+#endif
 }
 
 - (void)startFileRequestWithURL:(NSString *)url user:(NSString *)user password:(NSString *)password
 {
+#ifdef LoadFileFromLocal
+
+    self.configurationFile = [[HAHConfigurationFile alloc] initWithText:[self requestFile:@"configuration.yaml"]];
+    [self tryToCallBack];
+
+#else
+
     dispatch_async(self.sshQueue, ^{
 
         if (!self.session) {
@@ -122,12 +150,24 @@ static NSString * const HAHHomeassistantPath = @"/home/homeassistant/.homeassist
         // TODO
         [self.session disconnect];
     });
+
+#endif
 }
 
 - (NSString *)requestFile:(NSString *)fileName
 {
     NSError *error;
+
+#ifdef LoadFileFromLocal
+
+    NSString *string = [NSString stringWithContentsOfFile:[NSString stringWithFormat:@"%@%@", HAHHomeassistantPath, fileName] encoding:NSUTF8StringEncoding error:&error];
+
+#else
+
     NSString *string = [self.session.channel execute:[NSString stringWithFormat:@"cat %@%@", HAHHomeassistantPath, fileName] error:&error];
+
+#endif
+
     if (error) {
         HAHLOG(@"%@ %s(%d)", error, __PRETTY_FUNCTION__, __LINE__);
     }
