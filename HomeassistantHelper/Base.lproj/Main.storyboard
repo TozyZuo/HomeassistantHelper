@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.Storyboard.XIB" version="3.0" toolsVersion="12121" systemVersion="16F73" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" initialViewController="B8D-0N-5wS">
+<document type="com.apple.InterfaceBuilder3.Cocoa.Storyboard.XIB" version="3.0" toolsVersion="12118" systemVersion="16F73" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" initialViewController="B8D-0N-5wS">
     <dependencies>
         <deployment identifier="macosx"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="12121"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="12118"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
@@ -872,13 +872,6 @@
                                                 <tableView verticalHuggingPriority="750" allowsExpansionToolTips="YES" columnAutoresizingStyle="lastColumnOnly" columnSelection="YES" multipleSelection="NO" autosaveColumns="NO" rowSizeStyle="automatic" headerView="xJ7-FA-1Ex" viewBased="YES" id="Vyt-Ht-82b">
                                                     <rect key="frame" x="0.0" y="0.0" width="516" height="345"/>
                                                     <autoresizingMask key="autoresizingMask"/>
-                                                    <gestureRecognizers>
-                                                        <panGestureRecognizer delaysPrimaryMouseButtonEvents="YES" id="Yef-uh-PVw">
-                                                            <connections>
-                                                                <action selector="tableViewPanAction:" target="hdG-d1-Tbl" id="J84-93-16W"/>
-                                                            </connections>
-                                                        </panGestureRecognizer>
-                                                    </gestureRecognizers>
                                                     <size key="intercellSpacing" width="3" height="2"/>
                                                     <color key="backgroundColor" name="controlBackgroundColor" catalog="System" colorSpace="catalog"/>
                                                     <color key="gridColor" name="gridColor" catalog="System" colorSpace="catalog"/>
@@ -1041,6 +1034,14 @@
                             <constraint firstItem="cN0-0q-LZ5" firstAttribute="leading" secondItem="9pL-jd-838" secondAttribute="trailing" id="rYS-Dd-1Em"/>
                             <constraint firstItem="QNO-Ef-W1v" firstAttribute="leading" secondItem="ddL-0n-Taq" secondAttribute="leading" id="tYh-tc-ZS7"/>
                         </constraints>
+                        <gestureRecognizers>
+                            <panGestureRecognizer delaysPrimaryMouseButtonEvents="YES" id="ZSq-i3-2KK">
+                                <connections>
+                                    <action selector="editPanAction:" target="hdG-d1-Tbl" id="bs7-1U-C9L"/>
+                                    <outlet property="delegate" destination="hdG-d1-Tbl" id="ibT-yR-omK"/>
+                                </connections>
+                            </panGestureRecognizer>
+                        </gestureRecognizers>
                     </view>
                     <connections>
                         <outlet property="collectionView" destination="1Gk-SD-nHg" id="bIO-Q9-gkT"/>

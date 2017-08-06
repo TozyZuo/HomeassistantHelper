@@ -23,13 +23,15 @@ static CGFloat const TableHeaderCellTextMargin = 20;
     NSCollectionViewDelegate,
     NSCollectionViewDataSource,
     NSTableViewDelegate,
-    NSTableViewDataSource
+    NSTableViewDataSource,
+    NSGestureRecognizerDelegate
 >
 @property (weak) IBOutlet NSLayoutConstraint *configViewWidthConstraint;
 @property (weak) IBOutlet HAHModelConfigView *configView;
-@property (weak) IBOutlet NSCollectionView *collectionView;
-@property (weak) IBOutlet NSTableView *tableView;
+@property (weak) IBOutlet NSCollectionView   *collectionView;
+@property (weak) IBOutlet NSTableView        *tableView;
 
+@property (nonatomic, strong) HAHTableViewCell *movingCell;
 @property (nonatomic, strong) NSArray<HAHPageModel *> *pages;
 
 @end
@@ -57,20 +59,39 @@ static CGFloat const TableHeaderCellTextMargin = 20;
     [self.configView reloadWithModel:((HAHTableViewCell *)click.view).entity];
 }
 
-- (IBAction)tableViewPanAction:(NSPanGestureRecognizer *)pan
+- (IBAction)editPanAction:(NSPanGestureRecognizer *)pan
 {
-    NSLog(@"%s(%d)", __PRETTY_FUNCTION__, __LINE__);
-    NSPoint p = [pan locationInView:pan.view];
-
-    NSLog(@"%d %d", [self.tableView columnAtPoint:p], [self.tableView rowAtPoint:p]);
     switch (pan.state) {
         case NSGestureRecognizerStateBegan:
         {
-            NSPoint p = [pan locationInView:pan.view];
-
+            NSPoint p = [pan locationInView:self.tableView];
+            NSInteger column = [self.tableView columnAtPoint:p];
+            NSInteger row = [self.tableView rowAtPoint:p];
+            if (column >= 0 && row >= 0) {
+                HAHTableViewCell *cell = [self.tableView viewAtColumn:column row:row makeIfNecessary:NO];
+                if (cell) {
+                    HAHTableViewCell *movingCell = cell.copy;
+                    movingCell.frame = [cell.superview convertRect:cell.frame toView:self.view];
+                    [self.view addSubview:movingCell];
+                    movingCell.startOrigin = movingCell.origin;
+                    self.movingCell = movingCell;
+                }
+            }
         }
             break;
-
+        case NSGestureRecognizerStateChanged:
+        {
+            NSPoint p1 = self.movingCell.startOrigin;
+            NSPoint p2 = [pan translationInView:pan.view];
+            self.movingCell.origin = NSMakePoint(p1.x + p2.x, p1.y + p2.y);
+        }
+            break;
+        case NSGestureRecognizerStateEnded:
+        {
+            [self.movingCell removeFromSuperview];
+            self.movingCell = nil;
+        }
+            break;
         default:
             break;
     }
@@ -258,7 +279,6 @@ static CGFloat const TableHeaderCellTextMargin = 20;
     return YES;
 }
 
-
 #pragma mark - NSTableViewDataSource
 
 - (NSInteger)numberOfRowsInTableView:(NSTableView *)tableView
@@ -268,6 +288,30 @@ static CGFloat const TableHeaderCellTextMargin = 20;
         row = MAX(row, group.entities.count);
     }
     return row;
+}
+
+#pragma mark - NSGestureRecognizerDelegate
+
+- (BOOL)gestureRecognizerShouldBegin:(NSGestureRecognizer *)gestureRecognizer
+{
+    if ([gestureRecognizer isKindOfClass:[NSPanGestureRecognizer class]]) {
+
+        NSPoint p = [gestureRecognizer locationInView:self.tableView];
+
+        if (CGRectContainsPoint(self.tableView.bounds, p)) {
+
+            NSInteger column = [self.tableView columnAtPoint:p];
+            NSInteger row = [self.tableView rowAtPoint:p];
+
+            if (column >= 0 && row >= 0) {
+                HAHTableViewCell *cell = [self.tableView viewAtColumn:column row:row makeIfNecessary:NO];
+                if (cell) {
+                    return YES;
+                }
+            }
+        }
+    }
+    return NO;
 }
 
 @end

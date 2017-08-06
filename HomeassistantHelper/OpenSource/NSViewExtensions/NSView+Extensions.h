@@ -36,6 +36,9 @@ typedef NS_ENUM(NSUInteger, NSViewCornerCoordinateType)
 /** Sets the size.height property of the view to height. */
 @property (nonatomic, assign) CGFloat height;
 
+/** Sets the origin property of the view to 'origin'. */
+@property (nonatomic, assign) CGPoint origin;
+
 /** Sets the size property of the view to 'size'. */
 @property (nonatomic, assign) CGSize size;
 

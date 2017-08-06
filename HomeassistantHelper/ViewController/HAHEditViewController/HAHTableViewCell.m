@@ -11,7 +11,10 @@
 #import <objc/runtime.h>
 
 @interface HAHTableViewCell ()
-
+// HAHUsedForEdit
+@property (nonatomic, assign) BOOL      editing;
+@property (nonatomic, assign) NSPoint   startOrigin;
+@property (nonatomic,  weak ) HAHTableViewCell *cellInTableView;
 @end
 
 @implementation HAHTableViewCell
@@ -21,6 +24,7 @@ void *runtimeHAHTableViewCellIdentifierKey = &runtimeHAHTableViewCellIdentifierK
 - (void)awakeFromNib
 {
     [super awakeFromNib];
+
     self.wantsLayer = YES;
     self.layer.borderWidth = 1;
     self.layer.borderColor = [NSColor tableViewCellBorderColor];
@@ -41,6 +45,32 @@ void *runtimeHAHTableViewCellIdentifierKey = &runtimeHAHTableViewCellIdentifierK
     _text = text;
 
     self.textField.stringValue = text;
+}
+
+#pragma mark - NSCopying
+
+- (id)copyWithZone:(NSZone *)zone
+{
+    NSNib *nib = [[NSNib alloc] initWithNibNamed:@"HAHTableViewCell" bundle:nil];
+
+    NSArray *array;
+    [nib instantiateWithOwner:nil topLevelObjects:&array];
+    for (HAHTableViewCell *obj in array) {
+        if ([obj isKindOfClass:self.class]) {
+            obj.text = self.text;
+            obj.frame = self.frame;
+            return obj;
+        }
+    }
+
+    return nil;
+}
+
+#pragma mark - HAHUsedForEdit
+
+- (void)setEditing:(BOOL)editing
+{
+    _editing = editing;
 }
 
 @end
