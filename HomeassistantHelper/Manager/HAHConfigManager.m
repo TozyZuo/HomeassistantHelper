@@ -21,7 +21,17 @@
 
 - (void)updateConfig
 {
+    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
 
+        NSOperationQueue *queue = [[NSOperationQueue alloc] init];
+
+        [NSURLConnection sendAsynchronousRequest:[NSURLRequest requestWithURL:[NSURL URLWithString:@"http://raw.githubusercontent.com/TozyZuo/HomeassistantHelper/master/HomeassistantHelper/Resource/modelConfigMap.plist"]] queue:queue completionHandler:^(NSURLResponse * _Nullable response, NSData * _Nullable data, NSError * _Nullable connectionError)
+        {
+            if (data && !connectionError) {
+                self.modelConfigMap = (__bridge NSDictionary *)CFPropertyListCreateWithData(kCFAllocatorDefault, (__bridge CFDataRef)data, kCFPropertyListImmutable, NULL, NULL);
+            }
+        }];
+    });
 }
 
 @end
