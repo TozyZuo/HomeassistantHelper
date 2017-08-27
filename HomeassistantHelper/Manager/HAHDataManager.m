@@ -58,16 +58,6 @@ static NSString * const HAHHomeassistantPath = @"/home/homeassistant/.homeassist
 
 #pragma mark Public
 
-+ (instancetype)sharedManager
-{
-    static id _manager = nil;
-    static dispatch_once_t onceToken;
-    dispatch_once(&onceToken, ^{
-        _manager = [[self alloc] init];
-    });
-    return _manager;
-}
-
 - (void)requestDataWithURL:(NSString *)url user:(NSString *)user password:(NSString *)password complete:(void (^)(NSArray<HAHEntityModel *> *, NSArray<HAHPageModel *> *))completeBlock
 {
     self.delayTime = 1;

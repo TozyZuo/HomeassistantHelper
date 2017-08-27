@@ -20,7 +20,7 @@ void *HAHWindowControllerManagerKey = &HAHWindowControllerManagerKey;
 
 + (instancetype)sharedManager
 {
-    __block id _manager = objc_getAssociatedObject(self, HAHWindowControllerManagerKey);
+    id _manager = objc_getAssociatedObject(self, HAHWindowControllerManagerKey);
     if (!_manager) {
         _manager = [[self alloc] initWithWindowNibName:NSStringFromClass(self)];
         objc_setAssociatedObject(self, HAHWindowControllerManagerKey, _manager, OBJC_ASSOCIATION_RETAIN);

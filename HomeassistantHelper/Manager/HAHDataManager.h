@@ -6,13 +6,11 @@
 //  Copyright © 2017年 TozyZuo. All rights reserved.
 //
 
-#import <Foundation/Foundation.h>
+#import "HAHManager.h"
 
 @class HAHEntityModel, HAHPageModel;
 
-@interface HAHDataManager : NSObject
-
-+ (instancetype)sharedManager;
+@interface HAHDataManager : HAHManager
 
 - (void)requestDataWithURL:(NSString *)url user:(NSString *)user password:(NSString *)password complete:(void (^)(NSArray<HAHEntityModel *> *ungroupedEntities, NSArray<HAHPageModel *> *pages))completeBlock;
 

@@ -12,6 +12,7 @@
 
 @interface HAHModelConfigView : HAHView
 
+- (void)clear;
 - (void)reloadWithModel:(HAHModel *)model;
 
 @end

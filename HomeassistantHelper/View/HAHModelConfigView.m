@@ -8,6 +8,7 @@
 
 #import "HAHModelConfigView.h"
 #import "HAHModel.h"
+#import "HAHConfigManager.h"
 #import "NSTextField_HAH.h"
 #import <objc/runtime.h>
 
@@ -53,30 +54,21 @@ CGFloat HAHModelConfigViewVerticalSpace = 5;
     return dispatchDictionary;
 }
 
+- (void)clear
+{
+    [self.subviews makeObjectsPerformSelector:@selector(removeFromSuperview)];
+    self.height = self.superview.height;
+}
+
 - (void)reloadWithModel:(HAHModel *)model
 {
     self.model = model;
 
-    [self.subviews makeObjectsPerformSelector:@selector(removeFromSuperview)];
+    [self clear];
 
     HAHModelInformation *information = [model.class infomation];
 
-    NSMutableArray *array = information.propertyNames.mutableCopy;
-    [array addObjectsFromArray:information.propertyNames];
-    [array addObjectsFromArray:information.propertyNames];
-    [array addObjectsFromArray:information.propertyNames];
-    [array addObjectsFromArray:information.propertyNames];
-    [array addObjectsFromArray:information.propertyNames];
-    [array addObjectsFromArray:information.propertyNames];
-    [array addObjectsFromArray:information.propertyNames];
-    [array addObjectsFromArray:information.propertyNames];
-    [array addObjectsFromArray:information.propertyNames];
-    [array addObjectsFromArray:information.propertyNames];
-    [array addObjectsFromArray:information.propertyNames];
-    [array addObjectsFromArray:information.propertyNames];
-
     for (NSString *property in information.propertyNames) {
-//    for (NSString *property in array) {
         NSString *selectorString = self.dispatchDictionary[[information classStringForProperty:property]];
         if (selectorString) {
 
@@ -103,7 +95,7 @@ CGFloat HAHModelConfigViewVerticalSpace = 5;
 
     NSTextField *title = [[NSTextField alloc] initWithFrame:NSMakeRect(HAHModelConfigViewLeftMargin, HAHModelConfigViewTopMargin, width, 22)];
     [title enableLabelStyle];
-    title.stringValue = property;
+    title.stringValue = [HAHConfigManager sharedManager].modelConfigMap[property] ?: property;
     [view addSubview:title];
 
     NSTextField *textField = [[NSTextField alloc] initWithFrame:NSMakeRect(HAHModelConfigViewLeftMargin, title.bottom + HAHModelConfigViewVerticalSpace, width, 22)];

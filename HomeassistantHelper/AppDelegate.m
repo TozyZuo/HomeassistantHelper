@@ -7,6 +7,7 @@
 //
 
 #import "AppDelegate.h"
+#import "HAHConfigManager.h"
 
 @interface AppDelegate ()
 
@@ -37,8 +38,9 @@
     [[NSApplication sharedApplication] terminate:nil];
 }
 
-- (void)applicationDidFinishLaunching:(NSNotification *)aNotification {
-    // Insert code here to initialize your application
+- (void)applicationDidFinishLaunching:(NSNotification *)aNotification
+{
+    [[HAHConfigManager sharedManager] updateConfig];
 }
 
 

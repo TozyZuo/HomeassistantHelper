@@ -165,6 +165,12 @@ static CGFloat const TableHeaderCellTextMargin = 20;
 
 - (void)collectionView:(NSCollectionView *)collectionView didSelectItemsAtIndexPaths:(NSSet<NSIndexPath *> *)indexPaths
 {
+    NSInteger item = indexPaths.anyObject.item;
+    if (item) {
+        [self.configView reloadWithModel:self.pages[indexPaths.anyObject.item]];
+    } else {
+        [self.configView clear];
+    }
     [self reloadTableView];
 }
 
