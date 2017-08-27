@@ -17,22 +17,26 @@
     NSMutableArray<HAHPageModel *> *pageModels = [[NSMutableArray alloc] init];
     NSMutableArray<HAHGroupModel *> *groupModels = [[NSMutableArray alloc] init];
 
-    while (text.length) {
-        NSString *textBlock = [self cutTextBlockFromFullText:text];
-//        printf("%s\n====================\n", textBlock.UTF8String);
+    text = HAHFilterCommentsAndEmptyLineWithText(text);
 
-        if ([self isPageFromTextBlock:textBlock]) {
-            [pageModels addObject:[self pageModelWithTextBlock:textBlock]];
-        } else {
-            [groupModels addObject:[self groupModelWithTextBlock:textBlock]];
-        }
+    NSError *error;
+    NSString *pattern = @".*:([\\w\\W]*?)view:([\\w\\W]*?)entities:.*(\\n.*\\-.*)+";
 
-        if (textBlock.length) {
-            text = [[text substringWithRange:NSMakeRange(textBlock.length, text.length - textBlock.length)] stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
-        } else {
-            text = nil;
-        }
+    NSRegularExpression *rex = [NSRegularExpression regularExpressionWithPattern:pattern options:NSRegularExpressionCaseInsensitive|NSRegularExpressionAllowCommentsAndWhitespace error:&error];
+    if (error) {
+        HAHLOG(@"%@", error);
     }
+    [rex enumerateMatchesInString:text options:NSMatchingReportCompletion range:NSMakeRange(0, text.length) usingBlock:^(NSTextCheckingResult * _Nullable result, NSMatchingFlags flags, BOOL * _Nonnull stop)
+    {
+        if (result.range.length) {
+            NSString *textBlock = [text substringWithRange:result.range];
+            if ([self isPageFromTextBlock:textBlock]) {
+                [pageModels addObject:[self pageModelWithTextBlock:textBlock]];
+            } else {
+                [groupModels addObject:[self groupModelWithTextBlock:textBlock]];
+            }
+        }
+    }];
 
     for (HAHPageModel *pageModel in pageModels) {
         for (int i = 0; i < pageModel.groups.count; i++) {
@@ -57,30 +61,6 @@
     }
 
     return pageModels;
-}
-
-- (NSString *)cutTextBlockFromFullText:(NSString *)text
-{
-    if (!text.length) {
-        return nil;
-    }
-
-    NSRange tmpRange = [text rangeOfString:@".*:([\\w\\W]*?)view:([\\w\\W]*?)entities:([\\w\\W]*?):" options:NSRegularExpressionSearch];
-
-    if (tmpRange.location != NSNotFound)
-    {
-        NSString *tmpText = [text substringWithRange:tmpRange];
-        return [[tmpText substringWithRange:NSMakeRange(0, [tmpText rangeOfString:@"\n" options:NSBackwardsSearch].location)] stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
-    }
-    else
-    {
-        if ([[text componentsSeparatedByCharactersInSet:[NSCharacterSet newlineCharacterSet]].lastObject containsString:@"-"]) {
-            return text;
-        } else {
-            HAHLOG(@"解析错误！\n%@", text);
-            return nil;
-        }
-    }
 }
 
 - (BOOL)isPageFromTextBlock:(NSString *)text
@@ -118,8 +98,7 @@
             if (HAHDebug) {
                 if (!([line containsString:pageModel.id] ||
                       [line containsString:@"view"] ||
-                      [line containsString:@"entities"] ||
-                      [[line stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]] containsString:@"#"])) // 可能是注释
+                      [line containsString:@"entities"]))
                 {
                     HAHLOG(@"ERROR: 解析失败 %@", line);
                 }

@@ -29,6 +29,8 @@ FOUNDATION_EXPORT BOOL HAHDebug;
 
 FOUNDATION_EXPORT void HAHExecuteBlockOnMainThread(void (^block)());
 
+FOUNDATION_EXPORT NSString *HAHFilterCommentsAndEmptyLineWithText(NSString *text);
+
 #pragma mark - Global
 
 FOUNDATION_EXPORT CGFloat const HAHModelConfigViewWidth;

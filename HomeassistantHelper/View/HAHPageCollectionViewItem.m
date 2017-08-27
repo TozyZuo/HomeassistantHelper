@@ -21,8 +21,7 @@
     [super viewDidLoad];
 
     self.view.wantsLayer = YES;
-    CALayer *layer = self.view.layer;
-    layer.backgroundColor = [NSColor pageCollectionViewItemNormalColor];
+    self.view.layer.backgroundColor = [NSColor pageCollectionViewItemNormalColor];
 
     self.line.wantsLayer = YES;
     self.line.layer.backgroundColor = [NSColor pageCollectionViewItemLineColor];
@@ -43,24 +42,24 @@
 {
     [super setSelected:selected];
 
-    CALayer *layer = self.view.layer;
     if (selected) {
-        layer.backgroundColor = [NSColor pageCollectionViewItemSelectedColor];
+        self.view.layer.backgroundColor = [NSColor pageCollectionViewItemSelectedColor];
     } else {
-        layer.backgroundColor = [NSColor pageCollectionViewItemNormalColor];
+        self.view.layer.backgroundColor = [NSColor pageCollectionViewItemNormalColor];
     }
 }
 
 + (CGFloat)widthWithText:(NSString *)text
 {
-    static HAHPageCollectionViewItem *item;
+    static NSFont *font;
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{
-        item = [[HAHPageCollectionViewItem alloc] init];
+        HAHPageCollectionViewItem *item = [[HAHPageCollectionViewItem alloc] init];
         [item view];
+        font = item.textField.font;
     });
 
-    return [text sizeWithFont:item.textField.font].width + 44;
+    return [text sizeWithFont:font].width + 44;
 }
 
 @end

@@ -272,8 +272,8 @@ static CGFloat const TableHeaderCellTextMargin = 20;
         // 插入
 
     } else {
-        NSLog (@"unexpected operation (%d) in %s",
-               dropOperation, __FUNCTION__);
+        NSLog (@"unexpected operation (%lu) in %s",
+               (unsigned long)dropOperation, __FUNCTION__);
     }
 
     return YES;

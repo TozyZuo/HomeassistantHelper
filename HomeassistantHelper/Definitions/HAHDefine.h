@@ -30,13 +30,12 @@ _Pragma(HAH_CLANG_WARNING_IGNORE_HELPER2(x))\
 _Pragma(HAH_CLANG_WARNING_IGNORE_HELPER2(y))
 
 
+#define HAHLOG(...) if (HAHDebug) { CMLog(__VA_ARGS__); }
+
+
 #ifdef DEBUG
 
-#define HAHLOG(...) CMLog(__VA_ARGS__)
-
 #else /* DEBUG */
-
-#define HAHLOG(...)
 
 #endif /* DEBUG */
 
