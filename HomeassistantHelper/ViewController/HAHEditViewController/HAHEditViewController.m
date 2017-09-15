@@ -213,8 +213,8 @@ static CGFloat const TableHeaderCellTextMargin = 20;
 {
     HAHPageCollectionViewItem *item = [collectionView makeItemWithIdentifier:HAHPageCollectionViewItemViewIdentifier forIndexPath:indexPath];
     HAHPageModel *page = self.pages[indexPath.item];
-    item.text = page.name ?: page.id;
-    item.size = NSMakeSize([HAHPageCollectionViewItem widthWithText:item.text], collectionView.height);
+    [item bindPageModel:page];
+    item.size = NSMakeSize([HAHPageCollectionViewItem widthWithText:page.name], collectionView.height);
     return item;
 }
 
@@ -233,8 +233,7 @@ static CGFloat const TableHeaderCellTextMargin = 20;
 
     if (row < tableColumn.group.entities.count) {
         HAHTableViewCell *cell = [tableView makeViewWithIdentifier:[HAHTableViewCell identifier] owner:nil];
-        cell.entity = tableColumn.group.entities[row];
-        cell.text = cell.entity.name;
+        [cell bindEntityModel:tableColumn.group.entities[row]];
         [cell addGestureRecognizer:[[NSClickGestureRecognizer alloc] initWithTarget:self action:@selector(clickCellAction:)]];
         return cell;
     } else {

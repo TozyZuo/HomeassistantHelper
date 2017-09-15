@@ -27,14 +27,9 @@
     self.line.layer.backgroundColor = [NSColor pageCollectionViewItemLineColor];
 }
 
-- (void)setText:(NSString *)text
-{
-    _text = text;
-    self.textField.stringValue = text;
-}
-
 - (void)setSize:(NSSize)size
 {
+    _size = size;
     self.view.size = size;
 }
 
@@ -60,6 +55,12 @@
     });
 
     return [text sizeWithFont:font].width + 44;
+}
+
+- (void)bindPageModel:(HAHPageModel *)pageModel
+{
+    [self.textField unbind:NSValueBinding];
+    [self.textField bind:NSValueBinding toObject:pageModel withKeyPath:@"name" options:nil];
 }
 
 @end

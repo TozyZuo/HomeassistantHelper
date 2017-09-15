@@ -8,8 +8,10 @@
 
 #import <Cocoa/Cocoa.h>
 
+@class HAHPageModel;
+
 @interface HAHPageCollectionViewItem : NSCollectionViewItem
-@property (nonatomic, strong) NSString  *text;
 @property (nonatomic, assign) NSSize    size;
 + (CGFloat)widthWithText:(NSString *)text;
+- (void)bindPageModel:(HAHPageModel *)pageModel;
 @end

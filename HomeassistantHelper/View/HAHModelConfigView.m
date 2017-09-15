@@ -98,14 +98,14 @@ CGFloat HAHModelConfigViewVerticalSpace = 5;
     title.stringValue = [HAHConfigManager sharedManager].modelConfigMap[property] ?: property;
     [view addSubview:title];
 
-    NSTextField *textField = [[NSTextField alloc] initWithFrame:NSMakeRect(HAHModelConfigViewLeftMargin, title.bottom + HAHModelConfigViewVerticalSpace, width, 22)];
-    textField.stringValue = [self.model valueForKey:property] ?: @"";
+    NSTextField *value = [[NSTextField alloc] initWithFrame:NSMakeRect(HAHModelConfigViewLeftMargin, title.bottom + HAHModelConfigViewVerticalSpace, width, 22)];
+    [value bind:NSValueBinding toObject:self.model withKeyPath:property options:nil];
     if ([self.disabledProperties containsObject:property]) {
-        textField.enabled = NO;
+        value.enabled = NO;
     }
-    [view addSubview:textField];
+    [view addSubview:value];
 
-    view.height = textField.bottom;
+    view.height = value.bottom;
 
     return view;
 }

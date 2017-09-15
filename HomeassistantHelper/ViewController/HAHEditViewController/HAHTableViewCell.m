@@ -11,10 +11,11 @@
 #import <objc/runtime.h>
 
 @interface HAHTableViewCell ()
+@property (nonatomic, strong) HAHEntityModel    *entity;
 // HAHUsedForEdit
-@property (nonatomic, assign) BOOL      editing;
-@property (nonatomic, assign) NSPoint   startOrigin;
-@property (nonatomic,  weak ) HAHTableViewCell *cellInTableView;
+@property (nonatomic, assign) BOOL              editing;
+@property (nonatomic, assign) NSPoint           startOrigin;
+@property (nonatomic,  weak ) HAHTableViewCell  *cellInTableView;
 @end
 
 @implementation HAHTableViewCell
@@ -40,11 +41,11 @@ void *runtimeHAHTableViewCellIdentifierKey = &runtimeHAHTableViewCellIdentifierK
     return identifier;
 }
 
-- (void)setText:(NSString *)text
+- (void)bindEntityModel:(HAHEntityModel *)entityModel
 {
-    _text = text;
-
-    self.textField.stringValue = text;
+    self.entity = entityModel;
+    [self.textField unbind:NSValueBinding];
+    [self.textField bind:NSValueBinding toObject:entityModel withKeyPath:@"name" options:nil];
 }
 
 #pragma mark - NSCopying
@@ -57,8 +58,8 @@ void *runtimeHAHTableViewCellIdentifierKey = &runtimeHAHTableViewCellIdentifierK
     [nib instantiateWithOwner:nil topLevelObjects:&array];
     for (HAHTableViewCell *obj in array) {
         if ([obj isKindOfClass:self.class]) {
-            obj.text = self.text;
             obj.frame = self.frame;
+            [obj bindEntityModel:self.entity];
             return obj;
         }
     }

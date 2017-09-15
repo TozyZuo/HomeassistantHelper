@@ -38,11 +38,11 @@
 
         // 更新汉化
         for (HAHPageModel *pageModels in self.group.pages) {
-            pageModels.name = self.customize[pageModels.id] ?: pageModels.name;
+            pageModels.name = self.customize[pageModels.id] ?: pageModels.name ?: pageModels.id;
             for (HAHGroupModel *groupModels in pageModels.groups) {
-                groupModels.name = self.customize[groupModels.id] ?: groupModels.name;
+                groupModels.name = self.customize[groupModels.id] ?: groupModels.name ?: groupModels.id;
                 for (HAHEntityModel *entity in groupModels.entities) {
-                    entity.name = self.customize[entity.id] ?: entity.name;
+                    entity.name = self.customize[entity.id] ?: entity.name ?: entity.id;
                 }
             }
         }

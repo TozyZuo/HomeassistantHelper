@@ -13,10 +13,10 @@
 @interface HAHTableViewCell : NSTableCellView
 <NSCopying>
 
-@property (nonatomic, strong) HAHEntityModel    *entity;
-@property (nonatomic, strong) NSString          *text;
+@property (nonatomic, readonly) HAHEntityModel   *entity;
+@property (  class  , readonly) NSString         *identifier;
 
-@property (class, readonly) NSString *identifier;
+- (void)bindEntityModel:(HAHEntityModel *)entityModel;
 
 @end
 
