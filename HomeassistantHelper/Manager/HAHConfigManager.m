@@ -8,6 +8,10 @@
 
 #import "HAHConfigManager.h"
 
+@interface HAHConfigManager ()
+
+@end
+
 @implementation HAHConfigManager
 
 - (instancetype)init
@@ -21,16 +25,16 @@
 
 - (void)updateConfig
 {
+    __weak typeof(self) weakSelf = self;
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
 
-        NSOperationQueue *queue = [[NSOperationQueue alloc] init];
+        [[[NSURLSession sharedSession] dataTaskWithURL:[NSURL URLWithString:@"https://raw.githubusercontent.com/TozyZuo/HomeassistantHelper/master/HomeassistantHelper/Resource/modelConfigMap.plist"] completionHandler:^(NSData * _Nullable data, NSURLResponse * _Nullable response, NSError * _Nullable error)
+          {
+              if (data && !error) {
+                  weakSelf.modelConfigMap = (__bridge NSDictionary *)CFPropertyListCreateWithData(kCFAllocatorDefault, (__bridge CFDataRef)data, kCFPropertyListImmutable, NULL, NULL);
+              }
+          }] resume];
 
-        [NSURLConnection sendAsynchronousRequest:[NSURLRequest requestWithURL:[NSURL URLWithString:@"http://raw.githubusercontent.com/TozyZuo/HomeassistantHelper/master/HomeassistantHelper/Resource/modelConfigMap.plist"]] queue:queue completionHandler:^(NSURLResponse * _Nullable response, NSData * _Nullable data, NSError * _Nullable connectionError)
-        {
-            if (data && !connectionError) {
-                self.modelConfigMap = (__bridge NSDictionary *)CFPropertyListCreateWithData(kCFAllocatorDefault, (__bridge CFDataRef)data, kCFPropertyListImmutable, NULL, NULL);
-            }
-        }];
     });
 }
 

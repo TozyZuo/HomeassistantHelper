@@ -27,7 +27,7 @@ BOOL HAHDebug = YES;
 
 #pragma mark - Function
 
-void HAHExecuteBlockOnMainThread(void (^block)())
+void HAHExecuteBlockOnMainThread(void (^block)(void))
 {
     if (!block) {
         return;
