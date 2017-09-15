@@ -76,7 +76,7 @@ static NSString * const HAHHomeassistantPath = @"/home/homeassistant/.homeassist
 {
 #ifdef LoadFileFromLocal
 
-    self.entities = [NSKeyedUnarchiver unarchiveObjectWithFile:@"/Users/Tozy/Desktop/Homeassistant/entities"];
+    self.entities = [NSKeyedUnarchiver unarchiveObjectWithFile:@"/Homeassistant/entities"];
     [self tryToCallBack];
 
     // 删掉这行会崩溃，编译器bug？？？
