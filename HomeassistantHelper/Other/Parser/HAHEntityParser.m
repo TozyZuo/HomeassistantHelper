@@ -10,10 +10,6 @@
 #import "HAHEntityModel.h"
 #import "GDataXMLNode.h"
 
-
-NSString const * HAHFriendlyNameKey = @"friendly_name";
-
-
 @implementation HAHEntityParser
 
 - (NSArray<HAHEntityModel *> *)parse:(NSString *)text
@@ -60,7 +56,7 @@ NSString const * HAHFriendlyNameKey = @"friendly_name";
         // 生成model
         HAHEntityModel *model = [[HAHEntityModel alloc] init];
         model.id = idNode.XMLString;
-        model.name = attributesDictionary[HAHFriendlyNameKey];
+        model.name = attributesDictionary[HAHSFriendlyName];
 
 //        HAHLOG(@"%@", model);
         [models addObject:model];

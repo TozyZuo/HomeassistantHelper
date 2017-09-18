@@ -44,6 +44,11 @@ void HAHExecuteBlockOnMainThread(void (^block)(void))
 
 NSString *HAHFilterCommentsAndEmptyLineWithText(NSString *text)
 {
+    return [HAHSeparateTextToLinesAndFilterCommentsAndEmptyLine(text) componentsJoinedByString:@"\n"];
+}
+
+NSArray *HAHSeparateTextToLinesAndFilterCommentsAndEmptyLine(NSString *text)
+{
     NSMutableArray *lines = [text componentsSeparatedByCharactersInSet:[NSCharacterSet newlineCharacterSet]].mutableCopy;
 
     NSUInteger i = 0;
@@ -58,11 +63,18 @@ NSString *HAHFilterCommentsAndEmptyLineWithText(NSString *text)
         i++;
     }
 
-    return [lines componentsJoinedByString:@"\n"];
+    return lines;
+}
+
+NSString *HAHTrimAllWhiteSpaceWithText(NSString *text)
+{
+    return [text stringByReplacingOccurrencesOfString:@" " withString:@""];
 }
 
 #pragma mark - Global
 
 CGFloat const HAHModelConfigViewWidth = 235;
 
+#pragma mark - String
 
+NSString const * HAHSFriendlyName = @"friendly_name";

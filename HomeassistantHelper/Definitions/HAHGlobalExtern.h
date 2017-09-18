@@ -29,10 +29,14 @@ FOUNDATION_EXPORT BOOL HAHDebug;
 
 FOUNDATION_EXPORT void HAHExecuteBlockOnMainThread(void (^block)());
 
-FOUNDATION_EXPORT NSString *HAHFilterCommentsAndEmptyLineWithText(NSString *text);
+FOUNDATION_EXPORT NSString  *HAHFilterCommentsAndEmptyLineWithText(NSString *text);
+FOUNDATION_EXPORT NSArray   *HAHSeparateTextToLinesAndFilterCommentsAndEmptyLine(NSString *text);
+FOUNDATION_EXPORT NSString  *HAHTrimAllWhiteSpaceWithText(NSString *text);
 
 #pragma mark - Global
 
 FOUNDATION_EXPORT CGFloat const HAHModelConfigViewWidth;
 
+#pragma mark - String
 
+FOUNDATION_EXPORT NSString const * HAHSFriendlyName;

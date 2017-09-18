@@ -12,43 +12,43 @@
 
 - (NSDictionary *)parse:(NSString *)text
 {
-    NSMutableArray *lines = [text componentsSeparatedByString:@"\n"].mutableCopy;
+    text = HAHTrimAllWhiteSpaceWithText(HAHFilterCommentsAndEmptyLineWithText(text));
 
-    NSInteger idx = 0;
-    while (idx < lines.count) {
-        NSString *line = [lines[idx] stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
+    NSMutableDictionary *parseResult = [[NSMutableDictionary alloc] init];
+    NSError *error;
+    NSString *pattern = @".*:(\\n.*\\:.*)?";
 
-        if ([line hasPrefix:@"#"]) // 清除注释
-        {
-            [lines removeObjectAtIndex:idx];
-        }
-        else if (!line.length) // 空行
-        {
-            [lines removeObjectAtIndex:idx];
-        }
-        else // 替换成去掉空格的行
-        {
-            [lines replaceObjectAtIndex:idx withObject:line];
-            idx++;
-        }
+    NSRegularExpression *rex = [NSRegularExpression regularExpressionWithPattern:pattern options:NSRegularExpressionCaseInsensitive|NSRegularExpressionAllowCommentsAndWhitespace error:&error];
+    if (error) {
+        HAHLOG(@"%@", error);
     }
+    [rex enumerateMatchesInString:text options:NSMatchingReportCompletion range:NSMakeRange(0, text.length) usingBlock:^(NSTextCheckingResult * _Nullable result, NSMatchingFlags flags, BOOL * _Nonnull stop)
+     {
+         if (result.range.length)
+         {
+             NSString *textBlock = [text substringWithRange:result.range];
 
-    if (lines.count%2 != 0) {
-        HAHLOG(@"解析Customize行数不对");
-        [lines removeLastObject];
+             NSMutableArray *lines = [textBlock componentsSeparatedByCharactersInSet:[NSCharacterSet newlineCharacterSet]].mutableCopy;
+
+             NSString *identifier = [lines.firstObject componentsSeparatedByString:@":"].firstObject;
+             // 移除第一行id
+             [lines removeObjectAtIndex:0];
+             // 只用到了HAHSFriendlyName，不知道会不会有别的
+             parseResult[identifier] = [self propertiesWithLines:lines][HAHSFriendlyName];
+         }
+     }];
+
+    return parseResult;
+}
+
+- (NSDictionary *)propertiesWithLines:(NSArray *)lines
+{
+    NSMutableDictionary *properties = [[NSMutableDictionary alloc] init];
+    for (NSString *line in lines) {
+        NSArray<NSString *> *keyValue = [line componentsSeparatedByString:@":"];
+        properties[keyValue.firstObject] = keyValue.lastObject;
     }
-
-    NSMutableDictionary *result = [[NSMutableDictionary alloc] init];
-    for (int i = 0; i < lines.count - 1; i += 2) {
-        NSString *key = lines[i];
-        key = [[key componentsSeparatedByString:@":"].firstObject stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
-
-        NSString *value = lines[i+1];
-        value = [[value componentsSeparatedByString:@":"].lastObject stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
-        result[key] = value;
-    }
-
-    return result;
+    return properties;
 }
 
 @end
