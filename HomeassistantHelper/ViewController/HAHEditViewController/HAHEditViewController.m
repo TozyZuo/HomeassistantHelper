@@ -26,12 +26,13 @@ static CGFloat const TableHeaderCellTextMargin = 20;
     NSTableViewDataSource,
     NSGestureRecognizerDelegate
 >
-@property (weak) IBOutlet NSLayoutConstraint *configViewWidthConstraint;
-@property (weak) IBOutlet HAHModelConfigView *configView;
-@property (weak) IBOutlet NSCollectionView   *collectionView;
-@property (weak) IBOutlet NSTableView        *tableView;
+@property (weak) IBOutlet NSLayoutConstraint    *configViewWidthConstraint;
+@property (weak) IBOutlet HAHModelConfigView    *configView;
+@property (weak) IBOutlet NSCollectionView      *collectionView;
+@property (weak) IBOutlet NSTableView           *tableView;
 
-@property (nonatomic, strong) HAHTableViewCell *movingCell;
+@property (nonatomic, strong) HAHTableViewCell  *movingCell;
+@property (nonatomic, strong) NSView            *groupIndicatorView;
 @property (nonatomic, strong) NSArray<HAHPageModel *> *pages;
 
 @end
@@ -41,6 +42,10 @@ static CGFloat const TableHeaderCellTextMargin = 20;
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+
+    self.groupIndicatorView = [[NSView alloc] init];
+    self.groupIndicatorView.wantsLayer = YES;
+    self.groupIndicatorView.layer.backgroundColor = [NSColor blueColor].CGColor;
 
     [self.collectionView registerClass:[HAHPageCollectionViewItem class] forItemWithIdentifier:HAHPageCollectionViewItemViewIdentifier];
     [self.tableView registerNib:[[NSNib alloc] initWithNibNamed:@"HAHTableViewCell" bundle:nil] forIdentifier:[HAHTableViewCell identifier]];
@@ -70,9 +75,10 @@ static CGFloat const TableHeaderCellTextMargin = 20;
             if (column >= 0 && row >= 0) {
                 HAHTableViewCell *cell = [self.tableView viewAtColumn:column row:row makeIfNecessary:NO];
                 if (cell) {
+                    NSView *view = NSApp.keyWindow.contentView;
                     HAHTableViewCell *movingCell = cell.copy;
-                    movingCell.frame = [cell.superview convertRect:cell.frame toView:self.view];
-                    [self.view addSubview:movingCell];
+                    movingCell.frame = [cell.superview convertRect:cell.frame toView:view];
+                    [view addSubview:movingCell];
                     movingCell.startOrigin = movingCell.origin;
                     self.movingCell = movingCell;
                 }
@@ -83,7 +89,27 @@ static CGFloat const TableHeaderCellTextMargin = 20;
         {
             NSPoint p1 = self.movingCell.startOrigin;
             NSPoint p2 = [pan translationInView:pan.view];
-            self.movingCell.origin = NSMakePoint(p1.x + p2.x, p1.y + p2.y);
+            self.movingCell.origin = NSMakePoint(p1.x + p2.x, p1.y - p2.y);
+
+            NSPoint p = [self.movingCell.superview convertPoint:self.movingCell.center toView:self.tableView];
+
+            NSInteger column = [self.tableView columnAtPoint:p];
+            if (column >= 0)
+            {
+                NSInteger row = [self.tableView rowAtPoint:p];
+                if (row >= 0)
+                {
+
+                }
+                else
+                {
+
+                }
+            }
+            else
+            {
+                [self.groupIndicatorView removeFromSuperview];
+            }
         }
             break;
         case NSGestureRecognizerStateEnded:
