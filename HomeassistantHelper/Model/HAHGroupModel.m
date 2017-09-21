@@ -26,10 +26,10 @@
     return _shortID;
 }
 
-- (NSMutableArray<HAHEntityModel *> *)entities
+- (HAHObservableArray<HAHEntityModel *> *)entities
 {
     if (!_entities) {
-        _entities = [[NSMutableArray alloc] init];
+        _entities = [[HAHObservableArray alloc] init];
     }
     return _entities;
 }

@@ -11,5 +11,5 @@
 @class HAHGroupModel;
 
 @interface HAHPageModel : HAHEntityModel
-@property (nonatomic, strong) NSMutableArray<HAHGroupModel *> *groups;
+@property (nonatomic, strong) HAHObservableArray<HAHGroupModel *> *groups;
 @end

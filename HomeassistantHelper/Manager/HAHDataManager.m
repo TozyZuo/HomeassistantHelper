@@ -179,7 +179,10 @@ static NSString * const HAHHomeassistantPath = @"/home/homeassistant/.homeassist
 
     for (HAHPageModel *pageModels in pages) {
         for (HAHGroupModel *groupModels in pageModels.groups) {
-            [allEntities removeObjectsInArray:groupModels.entities];
+//            [allEntities removeObjectsInArray:groupModels.entities];
+            for (HAHEntityModel *entity in groupModels.entities) {
+                [allEntities removeObject:entity];
+            }
         }
     }
 

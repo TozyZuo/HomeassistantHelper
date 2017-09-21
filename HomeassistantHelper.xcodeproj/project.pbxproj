@@ -9,6 +9,10 @@
 /* Begin PBXBuildFile section */
 		BA23DB2D1F1356E300939AA8 /* HAHGlobalExtern.m in Sources */ = {isa = PBXBuildFile; fileRef = BA23DB2C1F1356E300939AA8 /* HAHGlobalExtern.m */; };
 		BA23DB361F136E4100939AA8 /* GDataXMLNode.m in Sources */ = {isa = PBXBuildFile; fileRef = BA23DB311F136E4100939AA8 /* GDataXMLNode.m */; };
+		BA5025471F739A2300254C21 /* HAHProxy.m in Sources */ = {isa = PBXBuildFile; fileRef = BA5025461F739A2300254C21 /* HAHProxy.m */; };
+		BA50254F1F739F1B00254C21 /* CTBlockDescription.m in Sources */ = {isa = PBXBuildFile; fileRef = BA50254B1F739F1B00254C21 /* CTBlockDescription.m */; };
+		BA5025501F739F1B00254C21 /* CTObjectiveCRuntimeAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = BA50254D1F739F1B00254C21 /* CTObjectiveCRuntimeAdditions.m */; };
+		BA5025531F73ADD900254C21 /* HAHObservableArray.m in Sources */ = {isa = PBXBuildFile; fileRef = BA5025521F73ADD900254C21 /* HAHObservableArray.m */; };
 		BA6AFD171F2DBCAF0020BCDD /* HAHCustomizeParser.m in Sources */ = {isa = PBXBuildFile; fileRef = BA6AFD161F2DBCAF0020BCDD /* HAHCustomizeParser.m */; };
 		BA6AFD1B1F2DF2160020BCDD /* HAHEditViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = BA6AFD1A1F2DF2160020BCDD /* HAHEditViewController.m */; };
 		BA6AFD1E1F2DF22C0020BCDD /* HAHTableColumn.m in Sources */ = {isa = PBXBuildFile; fileRef = BA6AFD1D1F2DF22C0020BCDD /* HAHTableColumn.m */; };
@@ -79,6 +83,16 @@
 		BA23DB2C1F1356E300939AA8 /* HAHGlobalExtern.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HAHGlobalExtern.m; sourceTree = "<group>"; };
 		BA23DB301F136E4100939AA8 /* GDataXMLNode.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GDataXMLNode.h; sourceTree = "<group>"; };
 		BA23DB311F136E4100939AA8 /* GDataXMLNode.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GDataXMLNode.m; sourceTree = "<group>"; };
+		BA5025451F739A2300254C21 /* HAHProxy.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HAHProxy.h; sourceTree = "<group>"; };
+		BA5025461F739A2300254C21 /* HAHProxy.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HAHProxy.m; sourceTree = "<group>"; };
+		BA5025481F739B7300254C21 /* HAHProxyProtocol.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HAHProxyProtocol.h; sourceTree = "<group>"; };
+		BA50254A1F739F1B00254C21 /* CTBlockDescription.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CTBlockDescription.h; sourceTree = "<group>"; };
+		BA50254B1F739F1B00254C21 /* CTBlockDescription.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CTBlockDescription.m; sourceTree = "<group>"; };
+		BA50254C1F739F1B00254C21 /* CTObjectiveCRuntimeAdditions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CTObjectiveCRuntimeAdditions.h; sourceTree = "<group>"; };
+		BA50254D1F739F1B00254C21 /* CTObjectiveCRuntimeAdditions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CTObjectiveCRuntimeAdditions.m; sourceTree = "<group>"; };
+		BA50254E1F739F1B00254C21 /* CTRuntimeAdditions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CTRuntimeAdditions.h; sourceTree = "<group>"; };
+		BA5025511F73ADD900254C21 /* HAHObservableArray.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HAHObservableArray.h; sourceTree = "<group>"; };
+		BA5025521F73ADD900254C21 /* HAHObservableArray.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HAHObservableArray.m; sourceTree = "<group>"; };
 		BA6AFD151F2DBCAF0020BCDD /* HAHCustomizeParser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HAHCustomizeParser.h; sourceTree = "<group>"; };
 		BA6AFD161F2DBCAF0020BCDD /* HAHCustomizeParser.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HAHCustomizeParser.m; sourceTree = "<group>"; };
 		BA6AFD191F2DF2160020BCDD /* HAHEditViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HAHEditViewController.h; sourceTree = "<group>"; };
@@ -183,6 +197,7 @@
 		BA23DB2E1F136E4100939AA8 /* OpenSource */ = {
 			isa = PBXGroup;
 			children = (
+				BA5025491F739F1B00254C21 /* CTRuntimeAdditions */,
 				BA8037FD1F18FE7C00EE7A36 /* NSViewExtensions */,
 				BAEECA751F137D3C0099000C /* NMSSH.xcodeproj */,
 				BA23DB2F1F136E4100939AA8 /* GDataXML */,
@@ -197,6 +212,37 @@
 				BA23DB311F136E4100939AA8 /* GDataXMLNode.m */,
 			);
 			path = GDataXML;
+			sourceTree = "<group>";
+		};
+		BA50253D1F735BD800254C21 /* NSArray */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = NSArray;
+			sourceTree = "<group>";
+		};
+		BA5025441F7399CE00254C21 /* Observe */ = {
+			isa = PBXGroup;
+			children = (
+				BA5025451F739A2300254C21 /* HAHProxy.h */,
+				BA5025461F739A2300254C21 /* HAHProxy.m */,
+				BA5025481F739B7300254C21 /* HAHProxyProtocol.h */,
+				BA5025511F73ADD900254C21 /* HAHObservableArray.h */,
+				BA5025521F73ADD900254C21 /* HAHObservableArray.m */,
+			);
+			path = Observe;
+			sourceTree = "<group>";
+		};
+		BA5025491F739F1B00254C21 /* CTRuntimeAdditions */ = {
+			isa = PBXGroup;
+			children = (
+				BA50254E1F739F1B00254C21 /* CTRuntimeAdditions.h */,
+				BA50254A1F739F1B00254C21 /* CTBlockDescription.h */,
+				BA50254B1F739F1B00254C21 /* CTBlockDescription.m */,
+				BA50254C1F739F1B00254C21 /* CTObjectiveCRuntimeAdditions.h */,
+				BA50254D1F739F1B00254C21 /* CTObjectiveCRuntimeAdditions.m */,
+			);
+			path = CTRuntimeAdditions;
 			sourceTree = "<group>";
 		};
 		BA6AFD181F2DF2160020BCDD /* HAHEditViewController */ = {
@@ -225,6 +271,7 @@
 		BA7BE34C1F1A4B2300451762 /* Category */ = {
 			isa = PBXGroup;
 			children = (
+				BA50253D1F735BD800254C21 /* NSArray */,
 				BA74317A1F3058B300713EA6 /* NSColor */,
 				BA7BE36E1F1BB91000451762 /* NSString */,
 				BA7BE3591F1A5BD100451762 /* NSTextField */,
@@ -444,6 +491,7 @@
 		BAEECA8D1F14C4FE0099000C /* Other */ = {
 			isa = PBXGroup;
 			children = (
+				BA5025441F7399CE00254C21 /* Observe */,
 				BA7BE34C1F1A4B2300451762 /* Category */,
 				BAEECA8E1F14C4FE0099000C /* Parser */,
 			);
@@ -588,13 +636,17 @@
 				BA7BE3651F1B240100451762 /* HAHModelConfigView.m in Sources */,
 				BA8F98DD1F11BDF700D16523 /* AppDelegate.m in Sources */,
 				BA6AFD1E1F2DF22C0020BCDD /* HAHTableColumn.m in Sources */,
+				BA50254F1F739F1B00254C21 /* CTBlockDescription.m in Sources */,
 				BA6AFD171F2DBCAF0020BCDD /* HAHCustomizeParser.m in Sources */,
 				BAEECA9A1F14C7920099000C /* HAHConfigParser.m in Sources */,
+				BA5025501F739F1B00254C21 /* CTObjectiveCRuntimeAdditions.m in Sources */,
+				BA5025471F739A2300254C21 /* HAHProxy.m in Sources */,
 				BA9D68941F2DA59400D24F80 /* HAHGroupFile.m in Sources */,
 				BA8038001F18FE7C00EE7A36 /* NSView+Extensions.m in Sources */,
 				BAD6BEF31F52F57A00C34C4F /* HAHManager.m in Sources */,
 				BA6AFD211F2E08D00020BCDD /* HAHTableViewCell.m in Sources */,
 				BA7BE3711F1BB92600451762 /* NSString_HAH.m in Sources */,
+				BA5025531F73ADD900254C21 /* HAHObservableArray.m in Sources */,
 				BA7BE34B1F1A295400451762 /* HAHWindowControllerManager.m in Sources */,
 				BA7BE35C1F1A5BE200451762 /* NSTextField_HAH.m in Sources */,
 			);

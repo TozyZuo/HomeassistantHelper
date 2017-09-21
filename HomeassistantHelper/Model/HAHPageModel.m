@@ -10,10 +10,10 @@
 
 @implementation HAHPageModel
 
-- (NSMutableArray<HAHGroupModel *> *)groups
+- (HAHObservableArray<HAHGroupModel *> *)groups
 {
     if (!_groups) {
-        _groups = [[NSMutableArray alloc] init];
+        _groups = [[HAHObservableArray alloc] init];
     }
     return _groups;
 }

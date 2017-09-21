@@ -14,6 +14,7 @@
 
 #import "HAHDefine.h"
 #import "HAHGlobalExtern.h"
+#import "HAHObservableArray.h"
 #import "NSView+Extensions.h"
 
 #endif /* PrefixHeader_pch */
