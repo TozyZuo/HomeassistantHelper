@@ -22,7 +22,9 @@
 
 
 @interface HAHTableViewCell (HAHUsedForEdit)
-@property (nonatomic, assign) BOOL      editing;
-@property (nonatomic, assign) NSPoint   startOrigin;
-@property (nonatomic,  weak ) HAHTableViewCell *cellInTableView;
+@property (nonatomic, assign) BOOL              editing;
+@property (nonatomic, assign) NSUInteger        pageIndex;
+@property (nonatomic, assign) NSUInteger        groupIndex;
+@property (nonatomic, assign) NSUInteger        entityIndex;
+@property (nonatomic, assign) NSPoint           startOrigin;
 @end

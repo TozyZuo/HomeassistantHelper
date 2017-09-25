@@ -14,8 +14,10 @@
 @property (nonatomic, strong) HAHEntityModel    *entity;
 // HAHUsedForEdit
 @property (nonatomic, assign) BOOL              editing;
+@property (nonatomic, assign) NSUInteger        pageIndex;
+@property (nonatomic, assign) NSUInteger        groupIndex;
+@property (nonatomic, assign) NSUInteger        entityIndex;
 @property (nonatomic, assign) NSPoint           startOrigin;
-@property (nonatomic,  weak ) HAHTableViewCell  *cellInTableView;
 @end
 
 @implementation HAHTableViewCell

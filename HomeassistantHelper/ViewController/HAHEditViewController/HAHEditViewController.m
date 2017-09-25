@@ -18,6 +18,12 @@
 NSString * const HAHPageCollectionViewItemViewIdentifier = @"HAHPageCollectionViewItemViewIdentifier";
 static CGFloat const TableHeaderCellTextMargin = 20;
 
+typedef struct HAHEditIndex {
+    NSInteger column;
+    NSInteger row;
+    NSInteger rowCount;
+} HAHEditIndex;
+
 @interface HAHEditViewController ()
 <
     NSCollectionViewDelegate,
@@ -44,6 +50,7 @@ static CGFloat const TableHeaderCellTextMargin = 20;
     [super viewDidLoad];
 
     self.groupIndicatorView = [[NSView alloc] init];
+    self.groupIndicatorView.height = 1;
     self.groupIndicatorView.wantsLayer = YES;
     self.groupIndicatorView.layer.backgroundColor = [NSColor blueColor].CGColor;
 
@@ -72,17 +79,18 @@ static CGFloat const TableHeaderCellTextMargin = 20;
             NSPoint p = [pan locationInView:self.tableView];
             NSInteger column = [self.tableView columnAtPoint:p];
             NSInteger row = [self.tableView rowAtPoint:p];
-            if (column >= 0 && row >= 0) {
-                HAHTableViewCell *cell = [self.tableView viewAtColumn:column row:row makeIfNecessary:NO];
-                if (cell) {
-                    NSView *view = NSApp.keyWindow.contentView;
-                    HAHTableViewCell *movingCell = cell.copy;
-                    movingCell.frame = [cell.superview convertRect:cell.frame toView:view];
-                    [view addSubview:movingCell];
-                    movingCell.startOrigin = movingCell.origin;
-                    self.movingCell = movingCell;
-                }
-            }
+
+            HAHTableViewCell *cell = [self.tableView viewAtColumn:column row:row makeIfNecessary:NO];
+            NSView *view = NSApp.keyWindow.contentView;
+            HAHTableViewCell *movingCell = cell.copy;
+            movingCell.frame = [cell.superview convertRect:cell.frame toView:view];
+            [view addSubview:movingCell];
+            movingCell.pageIndex = self.collectionView.selectionIndexPaths.anyObject.item;
+            movingCell.groupIndex = column;
+            movingCell.entityIndex = row;
+            movingCell.startOrigin = movingCell.origin;
+            self.movingCell = movingCell;
+            self.groupIndicatorView.width = movingCell.width;
         }
             break;
         case NSGestureRecognizerStateChanged:
@@ -91,19 +99,19 @@ static CGFloat const TableHeaderCellTextMargin = 20;
             NSPoint p2 = [pan translationInView:pan.view];
             self.movingCell.origin = NSMakePoint(p1.x + p2.x, p1.y - p2.y);
 
-            NSPoint p = [self.movingCell.superview convertPoint:self.movingCell.center toView:self.tableView];
-
-            NSInteger column = [self.tableView columnAtPoint:p];
-            if (column >= 0)
+            HAHEditIndex index = [self editingIndexWithGestureRecognizer:pan];
+            if (index.column >= 0)
             {
-                NSInteger row = [self.tableView rowAtPoint:p];
-                if (row >= 0)
-                {
+                [self.tableView addSubview:self.groupIndicatorView];
 
-                }
-                else
-                {
-
+                if (index.row == index.rowCount) {
+                    NSRect cellFrame = [self.tableView frameOfCellAtColumn:index.column row:index.row - 1];
+                    self.groupIndicatorView.top = CGRectGetMaxY(cellFrame) + .5;
+                    self.groupIndicatorView.left = CGRectGetMinX(cellFrame);
+                } else {
+                    NSRect cellFrame = [self.tableView frameOfCellAtColumn:index.column row:index.row];
+                    self.groupIndicatorView.bottom = CGRectGetMinY(cellFrame) - .5;
+                    self.groupIndicatorView.left = CGRectGetMinX(cellFrame);
                 }
             }
             else
@@ -114,6 +122,27 @@ static CGFloat const TableHeaderCellTextMargin = 20;
             break;
         case NSGestureRecognizerStateEnded:
         {
+            // 一定要在清理先，要不index不对
+            HAHEditIndex index = [self editingIndexWithGestureRecognizer:pan];
+
+            // 清理
+            HAHPageModel *page = self.pages[self.movingCell.pageIndex];
+            HAHGroupModel *srcGroup = page.groups[self.movingCell.groupIndex];
+            [srcGroup.entities removeObject:self.movingCell.entity];
+
+            // 添加
+            page = self.pages[self.collectionView.selectionIndexPaths.anyObject.item];
+            HAHGroupModel *dstGroup = page.groups[index.column];
+            if (dstGroup == srcGroup &&
+                index.row > self.movingCell.entityIndex)
+            {
+                index.row--;
+            }
+            [dstGroup.entities insertObject:self.movingCell.entity atIndex:index.row];
+
+            [self reloadTableView];
+
+            [self.groupIndicatorView removeFromSuperview];
             [self.movingCell removeFromSuperview];
             self.movingCell = nil;
         }
@@ -185,6 +214,40 @@ static CGFloat const TableHeaderCellTextMargin = 20;
     }
 
     [self.tableView reloadData];
+}
+
+- (HAHEditIndex)editingIndexWithGestureRecognizer:(NSPanGestureRecognizer *)pan
+{
+    HAHEditIndex index = (HAHEditIndex){.column = -1, .row = -1, .rowCount = -1};
+
+    // 中心点位置
+    NSPoint p = [pan locationInView:self.tableView];
+
+    NSInteger column = [self.tableView columnAtPoint:p];
+    if (column >= 0)
+    {
+        index.column = column;
+        NSInteger row = [self.tableView rowAtPoint:p];
+        NSInteger rowCount = self.pages[self.collectionView.selectionIndexPaths.anyObject.item].groups[column].entities.count;
+        index.rowCount = rowCount;
+        if (row >= 0 && row < rowCount)
+        {
+            NSRect cellFrame = [self.tableView frameOfCellAtColumn:column row:row];
+            CGFloat cellCenterY = CGRectGetMidY(cellFrame);
+
+            if (p.y < cellCenterY) {
+                index.row = row;
+            } else {
+                index.row = row + 1;
+            }
+        }
+        else
+        {
+            index.row = rowCount;
+        }
+    }
+
+    return index;
 }
 
 #pragma mark - NSCollectionViewDelegate
