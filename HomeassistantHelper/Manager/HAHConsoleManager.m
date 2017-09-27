@@ -93,8 +93,8 @@
 - (void)log:(NSString *)text
 {
     HAHExecuteBlockOnMainThread(^{
-        self.textView.string = [self.textView.string stringByAppendingFormat:@"\n%@", text];
-        printf("\n%s", text.UTF8String);
+        self.textView.string = [self.textView.string stringByAppendingFormat:@"%@\n", text];
+        printf("%s\n", text.UTF8String);
     });
 }
 

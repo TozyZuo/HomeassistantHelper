@@ -10,7 +10,7 @@
 
 @implementation HAHCustomizeParser
 
-- (NSDictionary *)parse:(NSString *)text
+- (NSMutableDictionary *)parse:(NSString *)text
 {
     text = HAHTrimAllWhiteSpaceWithText(HAHFilterCommentsAndEmptyLineWithText(text));
 

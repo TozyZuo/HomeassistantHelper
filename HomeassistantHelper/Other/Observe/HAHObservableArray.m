@@ -11,6 +11,8 @@
 
 @implementation HAHObservableArray
 
+HAH_CLANG_WARNING_IGNORE_BEGIN(-Wobjc-designated-initializers)
+
 - (instancetype)init
 {
     return (id)[HAHProxy proxyWithTarget:[[NSMutableArray alloc] init]];
@@ -25,6 +27,8 @@
 {
     return (id)[HAHProxy proxyWithTarget:[[NSMutableArray alloc] initWithCoder:aDecoder]];
 }
+
+HAH_CLANG_WARNING_IGNORE_END
 
 - (void)injectToSelector:(SEL)selector preprocessor:(id)block{}
 - (void)injectToSelector:(SEL)selector postprocessor:(id)block{}

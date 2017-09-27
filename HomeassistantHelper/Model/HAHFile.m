@@ -9,7 +9,7 @@
 #import "HAHFile.h"
 
 @interface HAHFile ()
-@property (nonatomic, strong) NSString *text;
+@property (nonatomic, strong) NSString *initialText;
 @end
 
 @implementation HAHFile
@@ -17,9 +17,19 @@
 - (instancetype)initWithText:(NSString *)text
 {
     if (self = [super init]) {
-        self.text = text;
+        self.initialText = text;
     }
     return self;
+}
+
+- (NSString *)text
+{
+    return self.initialText;
+}
+
+- (NSString *)name
+{
+    return nil;
 }
 
 @end

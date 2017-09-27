@@ -40,3 +40,6 @@ FOUNDATION_EXPORT CGFloat const HAHModelConfigViewWidth;
 #pragma mark - String
 
 FOUNDATION_EXPORT NSString const * HAHSFriendlyName;
+FOUNDATION_EXPORT NSString const * HAHSConfigurationFileName;
+FOUNDATION_EXPORT NSString const * HAHSGroupFileName;
+FOUNDATION_EXPORT NSString const * HAHSCustomizeFileName;

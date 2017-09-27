@@ -96,6 +96,8 @@
     self.userNameTextField.enabled = NO;
     self.passwordTextField.enabled = NO;
 
+    [self.editViewController reset];
+
     sender.title = @"获取中";
     sender.enabled = NO;
 

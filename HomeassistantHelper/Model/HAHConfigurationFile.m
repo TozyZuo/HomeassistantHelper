@@ -13,8 +13,19 @@
 #import "HAHGroupFile.h"
 #import "HAHCustomizeFile.h"
 #import "HAHDataManager.h"
+#import <KVOController/KVOController.h>
 
 @implementation HAHConfigurationFile
+
+- (void)dealloc
+{
+    
+}
+
+- (NSString *)name
+{
+    return (NSString *)HAHSConfigurationFileName;
+}
 
 - (instancetype)initWithText:(NSString *)text
 {
@@ -52,15 +63,28 @@
 
 - (void)mergeInfomationWithEntities:(NSArray<HAHEntityModel *> *)entities
 {
+    // 顺便添加监听
     for (HAHPageModel *pageModels in self.group.pages) {
         for (HAHGroupModel *groupModels in pageModels.groups) {
+
+            [groupModels.entities injectToSelector:@selector(removeObject:) postprocessor:^(id object)
+             {
+                 [[HAHDataManager sharedManager] saveFile:self.group];
+             }];
+
+            [groupModels.entities injectToSelector:@selector(insertObject:atIndex:) postprocessor:^(id object, NSUInteger index)
+             {
+                 [[HAHDataManager sharedManager] saveFile:self.group];
+             }];
+
             for (HAHEntityModel *entity in groupModels.entities) {
 
                 BOOL notFound = YES;
 
                 for (HAHEntityModel *mergeEntity in entities) {
                     if ([entity.id isEqualToString:mergeEntity.id]) {
-                        entity.name = mergeEntity.name;
+                        // 先以customize为准，理论上是一样的
+//                        entity.name = mergeEntity.name;
                         notFound = NO;
                         break;
                     }
@@ -69,6 +93,12 @@
                 if (notFound) {
                     HAHLOG(@"未找到设备 %@, 请检查是否填写错误", entity.id);
                 }
+
+                [self.KVOControllerNonRetaining observe:entity keyPath:FBKVOKeyPath(entity.name) options:NSKeyValueObservingOptionOld|NSKeyValueObservingOptionNew block:^(id  _Nullable observer, HAHEntityModel *entity, NSDictionary<NSKeyValueChangeKey,id> * _Nonnull change)
+                 {
+                     self.customize[entity.id] = entity.name;
+                     [[HAHDataManager sharedManager] saveFile:self.customize];
+                 }];
             }
         }
     }

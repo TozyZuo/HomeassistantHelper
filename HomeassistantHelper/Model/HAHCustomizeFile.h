@@ -11,5 +11,6 @@
 @interface HAHCustomizeFile : HAHFile
 
 - (NSString *)objectForKeyedSubscript:(NSString *)key;
+- (void)setObject:(NSString *)obj forKeyedSubscript:(NSString *)key;
 
 @end

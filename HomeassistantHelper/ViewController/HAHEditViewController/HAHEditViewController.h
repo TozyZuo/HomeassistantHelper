@@ -10,5 +10,6 @@
 
 @class HAHPageModel, HAHEntityModel;
 @interface HAHEditViewController : HAHViewController
+- (void)reset;
 - (void)reloadWithPages:(NSArray<HAHPageModel *> *)pages ungroupedEntities:(NSArray<HAHEntityModel *> *)ungroupedEntities;
 @end

@@ -21,6 +21,11 @@
 
 @implementation HAHProxy
 
+- (void)dealloc
+{
+    
+}
+
 + (instancetype)proxyWithTarget:(id)target
 {
     return [[self alloc] initWithTarget:target];
@@ -78,7 +83,7 @@
 {
     NSInvocation *blockInvocation = [NSInvocation invocationWithMethodSignature:[[CTBlockDescription alloc] initWithBlock:block].blockSignature];
     blockInvocation.target = block;
-    NSUInteger count = MIN(invocation.methodSignature.numberOfArguments, blockInvocation.methodSignature.numberOfArguments);
+    NSUInteger count = MIN(invocation.methodSignature.numberOfArguments, blockInvocation.methodSignature.numberOfArguments - 1);
     id argument;
     for (int i = 0; i < count; i++) {
         [invocation getArgument:&argument atIndex:i+2];
@@ -86,11 +91,6 @@
     }
     [blockInvocation invoke];
     return blockInvocation;
-}
-
-- (BOOL)isKindOfClass:(Class)aClass
-{
-    return [self.target isKindOfClass:aClass];
 }
 
 @end

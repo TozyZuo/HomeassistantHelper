@@ -78,3 +78,7 @@ CGFloat const HAHModelConfigViewWidth = 235;
 #pragma mark - String
 
 NSString const * HAHSFriendlyName = @"friendly_name";
+NSString const * HAHSConfigurationFileName = @"configuration.yaml";
+NSString const * HAHSGroupFileName = @"groups.yaml";
+NSString const * HAHSCustomizeFileName = @"customize.yaml";
+

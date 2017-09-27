@@ -18,6 +18,12 @@
 
 #define LoadFileFromLocal // 本地开发测试
 
+#define LogError(error) \
+if (error) {\
+    HAHLOG(@"%@ %s(%d)", error, __PRETTY_FUNCTION__, __LINE__);\
+}
+
+static NSString * const HAHBackupDirectory = @"HomeassistantHelperBackup";
 
 #ifdef LoadFileFromLocal
 
@@ -36,7 +42,7 @@ static NSString * const HAHHomeassistantPath = @"/home/homeassistant/.homeassist
 @property (nonatomic, strong) WKNavigation          *homeNavigation;
 @property (nonatomic, assign) NSInteger             delayTime;
 @property (nonatomic, strong) NSString              *URL;
-@property (nonatomic, strong) NSMutableArray        *unreadyModels;
+@property (nonatomic, strong) NSMutableSet          *filesToSave;
 @property (nonatomic, strong) dispatch_queue_t      sshQueue;
 @property (nonatomic, strong) NMSSHSession          *session;
 @property (nonatomic, strong) NSArray<HAHEntityModel *> *entities;
@@ -52,11 +58,21 @@ static NSString * const HAHHomeassistantPath = @"/home/homeassistant/.homeassist
     self = [super init];
     if (self) {
         self.sshQueue = dispatch_queue_create("HAH.ssh.queue", DISPATCH_QUEUE_SERIAL);
+        self.filesToSave = [[NSMutableSet alloc] init];
+
+        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(init) name:NSApplicationWillTerminateNotification object:nil];
     }
     return self;
 }
 
-#pragma mark Public
+#pragma mark - Notification
+
+- (void)applicationWillTerminateNotification:(NSNotification *)notification
+{
+    [self.session disconnect];
+}
+
+#pragma mark - Public
 
 - (void)requestDataWithURL:(NSString *)url user:(NSString *)user password:(NSString *)password complete:(void (^)(NSArray<HAHEntityModel *> *, NSArray<HAHPageModel *> *))completeBlock
 {
@@ -66,20 +82,66 @@ static NSString * const HAHHomeassistantPath = @"/home/homeassistant/.homeassist
     self.entities = nil;
     self.configurationFile = nil;
 
+    [self initializeSSHWithURL:url user:user password:password];
+
     [self startEntitiesRequestWithURL:url];
-    [self startFileRequestWithURL:url user:user password:password];
+    [self startFileRequest];
 }
 
-#pragma mark Private
+- (void)saveFile:(HAHFile *)file
+{
+    // 多次保存同一个文件，只保存一次
+    [self.filesToSave addObject:file];
+
+    // 下个loop一起保存
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+
+        // 子线程保存
+        dispatch_async(self.sshQueue, ^{
+
+            if (self.filesToSave.count) {
+
+                [self backupFile:file.name];
+
+                HAHFile *file = self.filesToSave.anyObject;
+                [self execute:@"echo", [NSString stringWithFormat:@"\"%@\">%@%@", file.text, HAHHomeassistantPath, file.name], nil];
+                [self.filesToSave removeObject:file];
+            }
+
+        });
+    });
+}
+
+#pragma mark - Private
+
+- (void)initializeSSHWithURL:(NSString *)url user:(NSString *)user password:(NSString *)password
+{
+    if (self.session) {
+        return;
+    }
+
+    dispatch_async(self.sshQueue, ^{
+
+        self.session = [NMSSHSession connectToHost:[NSURL URLWithString:url].host withUsername:user];
+
+        if (self.session.isConnected) {
+            [self.session authenticateByPassword:password];
+
+            if (self.session.isAuthorized) {
+                HAHLOG(@"SSH通道建立");
+            }
+        }
+    });
+}
 
 - (void)startEntitiesRequestWithURL:(NSString *)url
 {
 #ifdef LoadFileFromLocal
 
-    self.entities = [NSKeyedUnarchiver unarchiveObjectWithFile:@"/Homeassistant/entities"];
+    self.entities = [NSKeyedUnarchiver unarchiveObjectWithFile:[NSString stringWithFormat:@"%@entities", HAHHomeassistantPath]];
     [self tryToCallBack];
 
-    // 删掉这行会崩溃，编译器bug？？？
+    // FIXME 删掉这行会崩溃，编译器bug？？？，暂时不找根本原因
     if (self.webView) {
         [WKWebView class];
     }
@@ -109,59 +171,28 @@ static NSString * const HAHHomeassistantPath = @"/home/homeassistant/.homeassist
 #endif
 }
 
-- (void)startFileRequestWithURL:(NSString *)url user:(NSString *)user password:(NSString *)password
+- (void)startFileRequest
 {
 #ifdef LoadFileFromLocal
 
-    self.configurationFile = [[HAHConfigurationFile alloc] initWithText:[self requestFile:@"configuration.yaml"]];
+    self.configurationFile = [[HAHConfigurationFile alloc] initWithText:[self requestFile:(NSString *)HAHSConfigurationFileName]];
     [self tryToCallBack];
 
 #else
 
     dispatch_async(self.sshQueue, ^{
 
-        if (!self.session) {
-            self.session = [NMSSHSession connectToHost:[NSURL URLWithString:url].host withUsername:user];
+        if (self.session.isAuthorized) {
+
+            self.configurationFile = [[HAHConfigurationFile alloc] initWithText:[self requestFile:(NSString *)HAHSConfigurationFileName]];
+
+            dispatch_async(dispatch_get_main_queue(), ^{
+                [self tryToCallBack];
+            });
         }
-
-        if (self.session.isConnected) {
-            [self.session authenticateByPassword:password];
-
-            if (self.session.isAuthorized) {
-
-                self.configurationFile = [[HAHConfigurationFile alloc] initWithText:[self requestFile:@"configuration.yaml"]];
-
-                dispatch_async(dispatch_get_main_queue(), ^{
-                    [self tryToCallBack];
-                });
-            }
-        }
-
-        // TODO
-        [self.session disconnect];
     });
 
 #endif
-}
-
-- (NSString *)requestFile:(NSString *)fileName
-{
-    NSError *error;
-
-#ifdef LoadFileFromLocal
-
-    NSString *string = [NSString stringWithContentsOfFile:[NSString stringWithFormat:@"%@%@", HAHHomeassistantPath, fileName] encoding:NSUTF8StringEncoding error:&error];
-
-#else
-
-    NSString *string = [self.session.channel execute:[NSString stringWithFormat:@"cat %@%@", HAHHomeassistantPath, fileName] error:&error];
-
-#endif
-
-    if (error) {
-        HAHLOG(@"%@ %s(%d)", error, __PRETTY_FUNCTION__, __LINE__);
-    }
-    return string;
 }
 
 - (void)tryToCallBack
@@ -179,6 +210,7 @@ static NSString * const HAHHomeassistantPath = @"/home/homeassistant/.homeassist
 
     for (HAHPageModel *pageModels in pages) {
         for (HAHGroupModel *groupModels in pageModels.groups) {
+            // TODO 需要修复下proxy
 //            [allEntities removeObjectsInArray:groupModels.entities];
             for (HAHEntityModel *entity in groupModels.entities) {
                 [allEntities removeObject:entity];
@@ -189,6 +221,78 @@ static NSString * const HAHHomeassistantPath = @"/home/homeassistant/.homeassist
     return allEntities.copy;
 }
 
+#pragma mark SSH
+
+- (NSString *)execute:(NSString *)command, ... NS_REQUIRES_NIL_TERMINATION
+{
+    NSMutableArray *arguments = [[NSMutableArray alloc] init];
+
+    va_list ap;
+    va_start(ap, command);
+    NSString *arg;
+    while ((arg = va_arg(ap, NSString *))) {
+        [arguments addObject:arg];
+    }
+    va_end(ap);
+
+#ifdef LoadFileFromLocal
+
+    NSTask *task = [[NSTask alloc] init];
+    task.launchPath = [NSString stringWithFormat:@"/bin/%@", command];
+    task.arguments = arguments;
+    task.currentDirectoryPath = @"/";
+
+    NSPipe *pipe = [NSPipe pipe];
+    task.standardOutput = pipe;
+
+    NSFileHandle *fileHandle = pipe.fileHandleForReading;
+
+    [task launch];
+
+    return [[NSString alloc] initWithData:[fileHandle readDataToEndOfFile] encoding:NSUTF8StringEncoding];
+
+#else
+
+    [arguments insertObject:command atIndex:0];
+    [arguments insertObject:@"sudo" atIndex:0];
+
+    NSError *error;
+    NSString *result = [self.session.channel execute:[arguments componentsJoinedByString:@" "] error:&error];
+    LogError(error);
+    return result;
+    
+#endif
+}
+
+- (NSString *)requestFile:(NSString *)fileName
+{
+    return [self execute:@"cat", [NSString stringWithFormat:@"%@%@", HAHHomeassistantPath, fileName], nil];
+}
+
+- (BOOL)makeDirectoryWithPath:(NSString *)path directory:(NSString *)directory
+{
+    NSString *result = [self execute:@"ls", path, nil];
+    if (![result containsString:directory]) {
+        [self execute:@"mkdir", [NSString stringWithFormat:@"%@%@%@", path, [path hasSuffix:@"/"] ? @"" : @"/", directory], nil];
+        return YES;
+    }
+    return NO;
+}
+
+- (void)backupFile:(NSString *)fileName
+{
+    [self makeDirectoryWithPath:HAHHomeassistantPath directory:HAHBackupDirectory];
+
+    NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
+    dateFormatter.dateFormat = @"yyyyMMdd";
+    dateFormatter.locale = [[NSLocale alloc] initWithLocaleIdentifier:@"zh_CN"];
+    NSString *today = [dateFormatter stringFromDate:[NSDate date]];
+
+    NSString *backupPath = [NSString stringWithFormat:@"%@%@/", HAHHomeassistantPath, HAHBackupDirectory];
+    [self makeDirectoryWithPath:backupPath directory:today];
+
+    [self execute:@"cp", @"-n", [NSString stringWithFormat:@"%@%@", HAHHomeassistantPath, fileName], [NSString stringWithFormat:@"%@%@/%@", backupPath, today, fileName], nil];
+}
 
 #pragma mark - WKNavigationDelegate
 

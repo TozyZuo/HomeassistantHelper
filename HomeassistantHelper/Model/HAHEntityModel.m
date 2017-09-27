@@ -10,6 +10,11 @@
 
 @implementation HAHEntityModel
 
+- (void)dealloc
+{
+    
+}
+
 // TODO 暂时只重写了Entity的相等判断，后续考虑挪到基类
 - (NSUInteger)hash
 {

@@ -14,6 +14,7 @@
 #import "HAHTableColumn.h"
 #import "HAHTableViewCell.h"
 #import "NSString_HAH.h"
+#import <KVOController/KVOController.h>
 
 NSString * const HAHPageCollectionViewItemViewIdentifier = @"HAHPageCollectionViewItemViewIdentifier";
 static CGFloat const TableHeaderCellTextMargin = 20;
@@ -81,6 +82,13 @@ typedef struct HAHEditIndex {
             NSInteger row = [self.tableView rowAtPoint:p];
 
             HAHTableViewCell *cell = [self.tableView viewAtColumn:column row:row makeIfNecessary:NO];
+
+            // gestureRecognizerShouldBegin: 的时候有，但是StateBegan的时候可能没有
+            if (!cell) {
+                pan.state = NSGestureRecognizerStateFailed;
+                return;
+            }
+
             NSView *view = NSApp.keyWindow.contentView;
             HAHTableViewCell *movingCell = cell.copy;
             movingCell.frame = [cell.superview convertRect:cell.frame toView:view];
@@ -147,12 +155,27 @@ typedef struct HAHEditIndex {
             self.movingCell = nil;
         }
             break;
+        case NSGestureRecognizerStateCancelled:
+        {
+            [self.groupIndicatorView removeFromSuperview];
+            [self.movingCell removeFromSuperview];
+            self.movingCell = nil;
+        }
+            break;
         default:
             break;
     }
 }
 
 #pragma mark - Public
+
+- (void)reset
+{
+    self.pages = nil;
+    [self.collectionView reloadData];
+    [self reloadTableView];
+    [self.configView clear];
+}
 
 - (void)reloadWithPages:(NSArray<HAHPageModel *> *)pages ungroupedEntities:(NSArray<HAHEntityModel *> *)ungroupedEntities
 {
@@ -190,26 +213,27 @@ typedef struct HAHEditIndex {
 
     HAHPageModel *page = self.pages[self.collectionView.selectionIndexPaths.anyObject.item];
 
-    // 算宽度，所有entities中最长
-    CGFloat width = 0;
-    NSFont *font = [NSFont systemFontOfSize:14];
     for (HAHGroupModel *group in page.groups) {
-        width = MAX(width, [group.name ?: group.shortID sizeWithFont:font].width);
+
+        // 算宽度，所有entities & group中最长
+        NSFont *font = [NSFont systemFontOfSize:14];
+        CGFloat width = [group.name sizeWithFont:font].width;
         for (HAHEntityModel *entity in group.entities) {
-            width = MAX(width, [entity.name ?: entity.id sizeWithFont:font].width);
+            width = MAX(width, [entity.name sizeWithFont:font].width);
+            __weak typeof(self) weakSelf = self;
+            [self.KVOControllerNonRetaining observe:entity keyPath:FBKVOKeyPath(entity.name) options:NSKeyValueObservingOptionNew block:^(id  _Nullable observer, id  _Nonnull object, NSDictionary<NSKeyValueChangeKey,id> * _Nonnull change)
+            {
+                [weakSelf reloadTableView];
+            }];
         }
-    }
+        width += TableHeaderCellTextMargin;
 
-    width += TableHeaderCellTextMargin;
-
-    for (HAHGroupModel *group in page.groups) {
         HAHTableColumn *column = [[HAHTableColumn alloc] initWithIdentifier:group.shortID];
         column.title = group.name ?: group.shortID;
         column.headerCell.font = font;
         column.group = group;
         column.width = width;
-        column.maxWidth = width;
-        column.minWidth = [group.name ?: group.shortID sizeWithFont:font].width + TableHeaderCellTextMargin;
+        column.minWidth = width;
         [self.tableView addTableColumn:column];
     }
 

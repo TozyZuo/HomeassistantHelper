@@ -12,5 +12,5 @@
 /**
  @return @{id: friendly_name}
  */
-- (NSDictionary *)parse:(NSString *)text;
+- (NSMutableDictionary *)parse:(NSString *)text;
 @end

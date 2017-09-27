@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		BA23DB2D1F1356E300939AA8 /* HAHGlobalExtern.m in Sources */ = {isa = PBXBuildFile; fileRef = BA23DB2C1F1356E300939AA8 /* HAHGlobalExtern.m */; };
 		BA23DB361F136E4100939AA8 /* GDataXMLNode.m in Sources */ = {isa = PBXBuildFile; fileRef = BA23DB311F136E4100939AA8 /* GDataXMLNode.m */; };
+		BA501CAF1F7A25BC0023051B /* KVOController.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BA501CA81F7A22A80023051B /* KVOController.framework */; };
 		BA5025471F739A2300254C21 /* HAHProxy.m in Sources */ = {isa = PBXBuildFile; fileRef = BA5025461F739A2300254C21 /* HAHProxy.m */; };
 		BA50254F1F739F1B00254C21 /* CTBlockDescription.m in Sources */ = {isa = PBXBuildFile; fileRef = BA50254B1F739F1B00254C21 /* CTBlockDescription.m */; };
 		BA5025501F739F1B00254C21 /* CTObjectiveCRuntimeAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = BA50254D1F739F1B00254C21 /* CTObjectiveCRuntimeAdditions.m */; };
@@ -62,6 +63,55 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
+		BA501CA11F7A22A80023051B /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = BA501C971F7A22A80023051B /* FBKVOController.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = ECEA60FE18A49C620064AFF4;
+			remoteInfo = FBKVOController;
+		};
+		BA501CA31F7A22A80023051B /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = BA501C971F7A22A80023051B /* FBKVOController.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = ECEA610E18A49C620064AFF4;
+			remoteInfo = FBKVOControllerTests;
+		};
+		BA501CA51F7A22A80023051B /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = BA501C971F7A22A80023051B /* FBKVOController.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 81EC40C61CA3620A00BD9226;
+			remoteInfo = "FBKVOController-iOS-Dynamic";
+		};
+		BA501CA71F7A22A80023051B /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = BA501C971F7A22A80023051B /* FBKVOController.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 81EC40F81CA3639C00BD9226;
+			remoteInfo = "FBKVOController-OSX-Dynamic";
+		};
+		BA501CA91F7A22A80023051B /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = BA501C971F7A22A80023051B /* FBKVOController.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 81BD70C81CA4B57F00FB8E4D;
+			remoteInfo = "FBKVOController-tvOS-Dynamic";
+		};
+		BA501CAB1F7A22A80023051B /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = BA501C971F7A22A80023051B /* FBKVOController.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 81BD70EA1CA4B98D00FB8E4D;
+			remoteInfo = "FBKVOController-watchOS-Dynamic";
+		};
+		BA501CAD1F7A22DB0023051B /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = BA501C971F7A22A80023051B /* FBKVOController.xcodeproj */;
+			proxyType = 1;
+			remoteGlobalIDString = 81EC40F71CA3639C00BD9226;
+			remoteInfo = "FBKVOController-OSX-Dynamic";
+		};
 		BAEECA791F137D3C0099000C /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = BAEECA751F137D3C0099000C /* NMSSH.xcodeproj */;
@@ -83,6 +133,7 @@
 		BA23DB2C1F1356E300939AA8 /* HAHGlobalExtern.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HAHGlobalExtern.m; sourceTree = "<group>"; };
 		BA23DB301F136E4100939AA8 /* GDataXMLNode.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GDataXMLNode.h; sourceTree = "<group>"; };
 		BA23DB311F136E4100939AA8 /* GDataXMLNode.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GDataXMLNode.m; sourceTree = "<group>"; };
+		BA501C971F7A22A80023051B /* FBKVOController.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = FBKVOController.xcodeproj; path = FBKVOController/FBKVOController.xcodeproj; sourceTree = "<group>"; };
 		BA5025451F739A2300254C21 /* HAHProxy.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HAHProxy.h; sourceTree = "<group>"; };
 		BA5025461F739A2300254C21 /* HAHProxy.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HAHProxy.m; sourceTree = "<group>"; };
 		BA5025481F739B7300254C21 /* HAHProxyProtocol.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HAHProxyProtocol.h; sourceTree = "<group>"; };
@@ -185,6 +236,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				BA501CAF1F7A25BC0023051B /* KVOController.framework in Frameworks */,
 				BA8038021F190F3A00EE7A36 /* Carbon.framework in Frameworks */,
 				BAEECA7D1F137D4A0099000C /* NMSSH.framework in Frameworks */,
 				BA8F98FD1F1245DC00D16523 /* libxml2.tbd in Frameworks */,
@@ -197,6 +249,7 @@
 		BA23DB2E1F136E4100939AA8 /* OpenSource */ = {
 			isa = PBXGroup;
 			children = (
+				BA501C971F7A22A80023051B /* FBKVOController.xcodeproj */,
 				BA5025491F739F1B00254C21 /* CTRuntimeAdditions */,
 				BA8037FD1F18FE7C00EE7A36 /* NSViewExtensions */,
 				BAEECA751F137D3C0099000C /* NMSSH.xcodeproj */,
@@ -212,6 +265,19 @@
 				BA23DB311F136E4100939AA8 /* GDataXMLNode.m */,
 			);
 			path = GDataXML;
+			sourceTree = "<group>";
+		};
+		BA501C981F7A22A80023051B /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				BA501CA21F7A22A80023051B /* libFBKVOController.a */,
+				BA501CA41F7A22A80023051B /* FBKVOControllerTests.xctest */,
+				BA501CA61F7A22A80023051B /* KVOController.framework */,
+				BA501CA81F7A22A80023051B /* KVOController.framework */,
+				BA501CAA1F7A22A80023051B /* KVOController.framework */,
+				BA501CAC1F7A22A80023051B /* KVOController.framework */,
+			);
+			name = Products;
 			sourceTree = "<group>";
 		};
 		BA50253D1F735BD800254C21 /* NSArray */ = {
@@ -529,6 +595,7 @@
 			buildRules = (
 			);
 			dependencies = (
+				BA501CAE1F7A22DB0023051B /* PBXTargetDependency */,
 				BAEECA7C1F137D450099000C /* PBXTargetDependency */,
 			);
 			name = HomeassistantHelper;
@@ -564,6 +631,10 @@
 			projectDirPath = "";
 			projectReferences = (
 				{
+					ProductGroup = BA501C981F7A22A80023051B /* Products */;
+					ProjectRef = BA501C971F7A22A80023051B /* FBKVOController.xcodeproj */;
+				},
+				{
 					ProductGroup = BAEECA761F137D3C0099000C /* Products */;
 					ProjectRef = BAEECA751F137D3C0099000C /* NMSSH.xcodeproj */;
 				},
@@ -576,6 +647,48 @@
 /* End PBXProject section */
 
 /* Begin PBXReferenceProxy section */
+		BA501CA21F7A22A80023051B /* libFBKVOController.a */ = {
+			isa = PBXReferenceProxy;
+			fileType = archive.ar;
+			path = libFBKVOController.a;
+			remoteRef = BA501CA11F7A22A80023051B /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		BA501CA41F7A22A80023051B /* FBKVOControllerTests.xctest */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.cfbundle;
+			path = FBKVOControllerTests.xctest;
+			remoteRef = BA501CA31F7A22A80023051B /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		BA501CA61F7A22A80023051B /* KVOController.framework */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.framework;
+			path = KVOController.framework;
+			remoteRef = BA501CA51F7A22A80023051B /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		BA501CA81F7A22A80023051B /* KVOController.framework */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.framework;
+			path = KVOController.framework;
+			remoteRef = BA501CA71F7A22A80023051B /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		BA501CAA1F7A22A80023051B /* KVOController.framework */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.framework;
+			path = KVOController.framework;
+			remoteRef = BA501CA91F7A22A80023051B /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		BA501CAC1F7A22A80023051B /* KVOController.framework */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.framework;
+			path = KVOController.framework;
+			remoteRef = BA501CAB1F7A22A80023051B /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
 		BAEECA7A1F137D3C0099000C /* NMSSH.framework */ = {
 			isa = PBXReferenceProxy;
 			fileType = wrapper.framework;
@@ -655,6 +768,11 @@
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
+		BA501CAE1F7A22DB0023051B /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = "FBKVOController-OSX-Dynamic";
+			targetProxy = BA501CAD1F7A22DB0023051B /* PBXContainerItemProxy */;
+		};
 		BAEECA7C1F137D450099000C /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			name = NMSSH;

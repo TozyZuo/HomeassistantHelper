@@ -10,7 +10,7 @@
 #import "HAHCustomizeParser.h"
 
 @interface HAHCustomizeFile ()
-@property (nonatomic, strong) NSDictionary *internal;
+@property (nonatomic, strong) NSMutableDictionary *internal;
 @end
 
 @implementation HAHCustomizeFile
@@ -26,6 +26,34 @@
 - (NSString *)objectForKeyedSubscript:(NSString *)key
 {
     return self.internal[key];
+}
+
+- (void)setObject:(NSString *)obj forKeyedSubscript:(NSString *)key
+{
+    self.internal[key] = obj;
+}
+
+- (NSString *)text
+{
+    NSMutableString *text = [[NSMutableString alloc] initWithString:@""];
+
+    [self.internal enumerateKeysAndObjectsUsingBlock:^(id  _Nonnull identifier, id  _Nonnull name, BOOL * _Nonnull stop)
+    {
+        [text appendFormat:@"%@:\n", identifier];
+        [text appendFormat:@"   friendly_name: %@\n", name];
+    }];
+
+    return text;
+}
+
+- (NSString *)name
+{
+    return (NSString *)HAHSCustomizeFileName;
+}
+
+- (NSString *)debugDescription
+{
+    return [[super debugDescription] stringByAppendingString:self.internal.debugDescription];
 }
 
 @end
