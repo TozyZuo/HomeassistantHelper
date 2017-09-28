@@ -13,7 +13,7 @@
 #import "HAHGroupFile.h"
 #import "HAHCustomizeFile.h"
 #import "HAHDataManager.h"
-#import <KVOController/KVOController.h>
+#import "NSObject_HAH.h"
 
 @implementation HAHConfigurationFile
 
@@ -43,17 +43,18 @@
                 if ([text containsString:@"!include"]) {
                     text = [[HAHDataManager sharedManager] requestFile:[[text stringByReplacingOccurrencesOfString:@"!include" withString:@""] stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]]];
                 }
-                [self setValue:[[[fileMap[key] alloc] init] initWithText:text] forKey:key];
+                // TODO text = nil
+                [self setValue:[[[fileMap[key] alloc] init] initWithText:text] forKey:[key stringByAppendingString:@"File"]];
             }
         }
 
         // 更新汉化
-        for (HAHPageModel *pageModels in self.group.pages) {
-            pageModels.name = self.customize[pageModels.id] ?: pageModels.name ?: pageModels.id;
+        for (HAHPageModel *pageModels in self.groupFile.pages) {
+            pageModels.name = self.customizeFile[pageModels.id] ?: pageModels.name ?: pageModels.id;
             for (HAHGroupModel *groupModels in pageModels.groups) {
-                groupModels.name = self.customize[groupModels.id] ?: groupModels.name ?: groupModels.id;
+                groupModels.name = self.customizeFile[groupModels.id] ?: groupModels.name ?: groupModels.id;
                 for (HAHEntityModel *entity in groupModels.entities) {
-                    entity.name = self.customize[entity.id] ?: entity.name ?: entity.id;
+                    entity.name = self.customizeFile[entity.id] ?: entity.name ?: entity.id;
                 }
             }
         }
@@ -63,18 +64,19 @@
 
 - (void)mergeInfomationWithEntities:(NSArray<HAHEntityModel *> *)entities
 {
+    __weak typeof(self) weakSelf = self;
     // 顺便添加监听
-    for (HAHPageModel *pageModels in self.group.pages) {
+    for (HAHPageModel *pageModels in self.groupFile.pages) {
         for (HAHGroupModel *groupModels in pageModels.groups) {
 
             [groupModels.entities injectToSelector:@selector(removeObject:) postprocessor:^(id object)
              {
-                 [[HAHDataManager sharedManager] saveFile:self.group];
+                 [[HAHDataManager sharedManager] saveFile:weakSelf.groupFile];
              }];
 
             [groupModels.entities injectToSelector:@selector(insertObject:atIndex:) postprocessor:^(id object, NSUInteger index)
              {
-                 [[HAHDataManager sharedManager] saveFile:self.group];
+                 [[HAHDataManager sharedManager] saveFile:weakSelf.groupFile];
              }];
 
             for (HAHEntityModel *entity in groupModels.entities) {
@@ -93,11 +95,12 @@
                 if (notFound) {
                     HAHLOG(@"未找到设备 %@, 请检查是否填写错误", entity.id);
                 }
-
-                [self.KVOControllerNonRetaining observe:entity keyPath:FBKVOKeyPath(entity.name) options:NSKeyValueObservingOptionOld|NSKeyValueObservingOptionNew block:^(id  _Nullable observer, HAHEntityModel *entity, NSDictionary<NSKeyValueChangeKey,id> * _Nonnull change)
+                __weak typeof(entity) weakEntity = entity;
+                [entity removeObserver:self];
+                [entity addObserver:self selector:@selector(setName:) postprocessor:^(NSString *name)
                  {
-                     self.customize[entity.id] = entity.name;
-                     [[HAHDataManager sharedManager] saveFile:self.customize];
+                     weakSelf.customizeFile[weakEntity.id] = weakEntity.name;
+                     [[HAHDataManager sharedManager] saveFile:weakSelf.customizeFile];
                  }];
             }
         }

@@ -7,8 +7,14 @@
 //
 
 #import "HAHGroupModel.h"
+#import <objc/runtime.h>
 
 @implementation HAHGroupModel
+
+- (void)dealloc
+{
+    NSLog(@"%@ %p %s", object_getClass(self), self, __PRETTY_FUNCTION__);
+}
 
 - (NSString *)id
 {

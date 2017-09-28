@@ -50,7 +50,7 @@
                         data[propertyName] = [classString substringWithRange:NSMakeRange(2, classString.length - 3)];
                     }
                 }
-
+                free(attributes);
             }
             free(pList);
             class = class_getSuperclass(class);

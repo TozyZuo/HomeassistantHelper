@@ -7,8 +7,14 @@
 //
 
 #import "HAHPageModel.h"
+#import <objc/runtime.h>
 
 @implementation HAHPageModel
+
+- (void)dealloc
+{
+    NSLog(@"%@ %p %s", object_getClass(self), self, __PRETTY_FUNCTION__);
+}
 
 - (HAHObservableArray<HAHGroupModel *> *)groups
 {

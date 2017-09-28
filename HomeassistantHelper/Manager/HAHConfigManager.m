@@ -31,7 +31,7 @@
         [[[NSURLSession sharedSession] dataTaskWithURL:[NSURL URLWithString:@"https://raw.githubusercontent.com/TozyZuo/HomeassistantHelper/master/HomeassistantHelper/Resource/modelConfigMap.plist"] completionHandler:^(NSData * _Nullable data, NSURLResponse * _Nullable response, NSError * _Nullable error)
           {
               if (data && !error) {
-                  NSDictionary *modelConfigMap = (__bridge NSDictionary *)CFPropertyListCreateWithData(kCFAllocatorDefault, (__bridge CFDataRef)data, kCFPropertyListImmutable, NULL, NULL);
+                  NSDictionary *modelConfigMap = (__bridge_transfer NSDictionary *)CFPropertyListCreateWithData(kCFAllocatorDefault, (__bridge CFDataRef)data, kCFPropertyListImmutable, NULL, NULL);
                   if (![modelConfigMap isEqualToDictionary:weakSelf.modelConfigMap]) {
                       weakSelf.modelConfigMap = modelConfigMap;
                       NSString *path = [[NSBundle mainBundle] pathForResource:@"modelConfigMap" ofType:@"plist"];

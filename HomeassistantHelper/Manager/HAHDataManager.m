@@ -82,7 +82,9 @@ static NSString * const HAHHomeassistantPath = @"/home/homeassistant/.homeassist
     self.entities = nil;
     self.configurationFile = nil;
 
+#ifndef LoadFileFromLocal
     [self initializeSSHWithURL:url user:user password:password];
+#endif
 
     [self startEntitiesRequestWithURL:url];
     [self startFileRequest];
@@ -200,7 +202,8 @@ static NSString * const HAHHomeassistantPath = @"/home/homeassistant/.homeassist
     if (self.requestDataCompleteBlock && self.entities && self.configurationFile)
     {
         [self.configurationFile mergeInfomationWithEntities:self.entities];
-        self.requestDataCompleteBlock([self filterUngroupedEntitiesWithAllEntities:self.entities pages:self.configurationFile.group.pages], self.configurationFile.group.pages);
+        self.requestDataCompleteBlock([self filterUngroupedEntitiesWithAllEntities:self.entities pages:self.configurationFile.groupFile.pages], self.configurationFile.groupFile.pages);
+        self.requestDataCompleteBlock = nil;
     }
 }
 

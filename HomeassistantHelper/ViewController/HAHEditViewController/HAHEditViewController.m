@@ -14,7 +14,7 @@
 #import "HAHTableColumn.h"
 #import "HAHTableViewCell.h"
 #import "NSString_HAH.h"
-#import <KVOController/KVOController.h>
+#import "NSObject_HAH.h"
 
 NSString * const HAHPageCollectionViewItemViewIdentifier = @"HAHPageCollectionViewItemViewIdentifier";
 static CGFloat const TableHeaderCellTextMargin = 20;
@@ -221,10 +221,11 @@ typedef struct HAHEditIndex {
         for (HAHEntityModel *entity in group.entities) {
             width = MAX(width, [entity.name sizeWithFont:font].width);
             __weak typeof(self) weakSelf = self;
-            [self.KVOControllerNonRetaining observe:entity keyPath:FBKVOKeyPath(entity.name) options:NSKeyValueObservingOptionNew block:^(id  _Nullable observer, id  _Nonnull object, NSDictionary<NSKeyValueChangeKey,id> * _Nonnull change)
-            {
-                [weakSelf reloadTableView];
-            }];
+            [entity removeObserver:self];
+            [entity addObserver:self selector:@selector(setName:) postprocessor:^(NSString *name)
+             {
+                 [weakSelf reloadTableView];
+             }];
         }
         width += TableHeaderCellTextMargin;
 

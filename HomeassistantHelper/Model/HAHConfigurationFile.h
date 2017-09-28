@@ -11,8 +11,8 @@
 @class HAHGroupFile, HAHCustomizeFile, HAHEntityModel;
 
 @interface HAHConfigurationFile : HAHFile
-@property (readonly) HAHGroupFile       *group;
-@property (readonly) HAHCustomizeFile   *customize;
+@property (readonly) HAHGroupFile       *groupFile;
+@property (readonly) HAHCustomizeFile   *customizeFile;
 
 - (void)mergeInfomationWithEntities:(NSArray<HAHEntityModel *> *)entities;
 

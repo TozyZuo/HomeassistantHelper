@@ -45,8 +45,8 @@ void *runtimeHAHTableViewCellIdentifierKey = &runtimeHAHTableViewCellIdentifierK
 
 - (void)bindEntityModel:(HAHEntityModel *)entityModel
 {
-    self.entity = entityModel;
     [self.textField unbind:NSValueBinding];
+    self.entity = entityModel;
     [self.textField bind:NSValueBinding toObject:entityModel withKeyPath:@"name" options:nil];
 }
 

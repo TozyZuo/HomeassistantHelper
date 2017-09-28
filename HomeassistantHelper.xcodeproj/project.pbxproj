@@ -14,6 +14,7 @@
 		BA50254F1F739F1B00254C21 /* CTBlockDescription.m in Sources */ = {isa = PBXBuildFile; fileRef = BA50254B1F739F1B00254C21 /* CTBlockDescription.m */; };
 		BA5025501F739F1B00254C21 /* CTObjectiveCRuntimeAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = BA50254D1F739F1B00254C21 /* CTObjectiveCRuntimeAdditions.m */; };
 		BA5025531F73ADD900254C21 /* HAHObservableArray.m in Sources */ = {isa = PBXBuildFile; fileRef = BA5025521F73ADD900254C21 /* HAHObservableArray.m */; };
+		BA5936321F7C95F200CD9B87 /* NSObject_HAH.m in Sources */ = {isa = PBXBuildFile; fileRef = BA5936311F7C95F200CD9B87 /* NSObject_HAH.m */; };
 		BA6AFD171F2DBCAF0020BCDD /* HAHCustomizeParser.m in Sources */ = {isa = PBXBuildFile; fileRef = BA6AFD161F2DBCAF0020BCDD /* HAHCustomizeParser.m */; };
 		BA6AFD1B1F2DF2160020BCDD /* HAHEditViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = BA6AFD1A1F2DF2160020BCDD /* HAHEditViewController.m */; };
 		BA6AFD1E1F2DF22C0020BCDD /* HAHTableColumn.m in Sources */ = {isa = PBXBuildFile; fileRef = BA6AFD1D1F2DF22C0020BCDD /* HAHTableColumn.m */; };
@@ -144,6 +145,8 @@
 		BA50254E1F739F1B00254C21 /* CTRuntimeAdditions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CTRuntimeAdditions.h; sourceTree = "<group>"; };
 		BA5025511F73ADD900254C21 /* HAHObservableArray.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HAHObservableArray.h; sourceTree = "<group>"; };
 		BA5025521F73ADD900254C21 /* HAHObservableArray.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HAHObservableArray.m; sourceTree = "<group>"; };
+		BA5936301F7C95F200CD9B87 /* NSObject_HAH.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NSObject_HAH.h; sourceTree = "<group>"; };
+		BA5936311F7C95F200CD9B87 /* NSObject_HAH.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NSObject_HAH.m; sourceTree = "<group>"; };
 		BA6AFD151F2DBCAF0020BCDD /* HAHCustomizeParser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HAHCustomizeParser.h; sourceTree = "<group>"; };
 		BA6AFD161F2DBCAF0020BCDD /* HAHCustomizeParser.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HAHCustomizeParser.m; sourceTree = "<group>"; };
 		BA6AFD191F2DF2160020BCDD /* HAHEditViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HAHEditViewController.h; sourceTree = "<group>"; };
@@ -311,6 +314,15 @@
 			path = CTRuntimeAdditions;
 			sourceTree = "<group>";
 		};
+		BA5936291F7C95DE00CD9B87 /* NSObject */ = {
+			isa = PBXGroup;
+			children = (
+				BA5936301F7C95F200CD9B87 /* NSObject_HAH.h */,
+				BA5936311F7C95F200CD9B87 /* NSObject_HAH.m */,
+			);
+			path = NSObject;
+			sourceTree = "<group>";
+		};
 		BA6AFD181F2DF2160020BCDD /* HAHEditViewController */ = {
 			isa = PBXGroup;
 			children = (
@@ -337,6 +349,7 @@
 		BA7BE34C1F1A4B2300451762 /* Category */ = {
 			isa = PBXGroup;
 			children = (
+				BA5936291F7C95DE00CD9B87 /* NSObject */,
 				BA50253D1F735BD800254C21 /* NSArray */,
 				BA74317A1F3058B300713EA6 /* NSColor */,
 				BA7BE36E1F1BB91000451762 /* NSString */,
@@ -748,6 +761,7 @@
 				BAD6BEF01F52F35D00C34C4F /* HAHConfigManager.m in Sources */,
 				BA7BE3651F1B240100451762 /* HAHModelConfigView.m in Sources */,
 				BA8F98DD1F11BDF700D16523 /* AppDelegate.m in Sources */,
+				BA5936321F7C95F200CD9B87 /* NSObject_HAH.m in Sources */,
 				BA6AFD1E1F2DF22C0020BCDD /* HAHTableColumn.m in Sources */,
 				BA50254F1F739F1B00254C21 /* CTBlockDescription.m in Sources */,
 				BA6AFD171F2DBCAF0020BCDD /* HAHCustomizeParser.m in Sources */,
