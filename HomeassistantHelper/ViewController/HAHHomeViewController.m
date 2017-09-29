@@ -110,7 +110,7 @@
     {
 //        weakSelf.entities = entities;
         weakSelf.pages = pages;
-        HAHLOG(@"%@", pages);
+//        HAHLOG(@"%@", pages);
         sender.title = @"获取";
         sender.enabled = YES;
         weakSelf.addressTextField.enabled = YES;

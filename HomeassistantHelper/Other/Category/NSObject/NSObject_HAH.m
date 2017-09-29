@@ -7,6 +7,7 @@
 //
 
 #import "NSObject_HAH.h"
+#import "HAHSOStructDefine.h"
 #import <objc/objc-runtime.h>
 
 
@@ -14,6 +15,7 @@ NSString * const HAHSOClassPrefix = @"HAHSONotifying_";
 
 
 id HAHObserveTransmissionFunction(id self, SEL _cmd, ...);
+void HAHSOSetArguments(NSInvocation *invocation, NSMethodSignature *signature, NSUInteger startIndex, va_list *ap);
 NSString *HAHSOClassStringFromObject(id self);
 BOOL HAHSOIsObjectSelectorObserved(id self); // object 是否被 selector observed
 BOOL HAHSOClassAddMethod(Class class, SEL sel, id imp);
@@ -139,58 +141,44 @@ void *HAHObserveSelectorTableKey = &HAHObserveSelectorTableKey;
 
 id HAHObserveTransmissionFunction(id self, SEL _cmd, ...)
 {
-    // TODO 暂时只支持id， 不支持结构体和基本类型
-
     Class currentClass = object_getClass(self);
     Class originClass = HAHSOObjectGetOriginClass(self);
 
     NSMethodSignature *methodSignature = [NSMethodSignature signatureWithObjCTypes:method_getTypeEncoding(class_getInstanceMethod(originClass, _cmd))];
 
-    // 收集参数
-    NSInteger count = methodSignature.numberOfArguments - 2;
-    NSMutableArray *arguments = [[NSMutableArray alloc] initWithCapacity:count];
-
     va_list ap;
     va_start(ap, _cmd);
-    id arg;
-    for (int i = 0; i < count; i++) {
-        arg = va_arg(ap, id);
-        [arguments addObject:arg];
-    }
-    va_end(ap);
 
     // 构造blockInvocation，调用block
     NSInvocation *blockInvocation = [NSInvocation invocationWithMethodSignature:methodSignature];
     blockInvocation.selector = _cmd;
-    for (int i = 0; i < count; i++) {
-        [blockInvocation setArgument:&arg atIndex:i + 1];
-    }
+    HAHSOSetArguments(blockInvocation, methodSignature, 1, &ap);
 
     // 调用preprocessors
     for (NSDictionary *selectorTable in [self observerTable].objectEnumerator) {
         HAHObserveSelectorTableModel *table = selectorTable[NSStringFromSelector(_cmd)];
-        // TODO block.methodSignature 判断
         for (id block in table.preprocessors) {
             blockInvocation.target = block;
             [blockInvocation invoke];
         }
     }
 
+    va_start(ap, _cmd);
     // 调用原方法
     NSInvocation *invocation = [NSInvocation invocationWithMethodSignature:methodSignature];
     invocation.selector = _cmd;
-    for (int i = 0; i < count; i++) {
-        [invocation setArgument:&arg atIndex:i + 2];
-    }
+    HAHSOSetArguments(invocation, methodSignature, 2, &ap);
+
     object_setClass(self, originClass);
     invocation.target = self;
     [invocation invoke];
     object_setClass(self, currentClass);
 
+
+    va_end(ap);
     // 调用postprocessors
     for (NSDictionary *selectorTable in [self observerTable].objectEnumerator) {
         HAHObserveSelectorTableModel *table = selectorTable[NSStringFromSelector(_cmd)];
-        // TODO block.methodSignature 判断
         for (id block in table.postprocessors) {
             blockInvocation.target = block;
             [blockInvocation invoke];
@@ -204,6 +192,81 @@ id HAHObserveTransmissionFunction(id self, SEL _cmd, ...)
     }
 
     return returnValue;
+}
+
+void HAHSOSetArguments(NSInvocation *invocation, NSMethodSignature *signature, NSUInteger startIndex, va_list *ap)
+{
+    for (NSUInteger i = startIndex; i < signature.numberOfArguments; i++) {
+
+        NSUInteger size;
+        NSGetSizeAndAlignment([signature getArgumentTypeAtIndex:i], &size, NULL);
+
+
+#define CaseSize1(aSize)\
+        } else if (size <= aSize) {\
+            HAHSOStruct##aSize s = va_arg(*ap, HAHSOStruct##aSize);\
+            [invocation setArgument:&s atIndex:i];
+
+#define CaseSize2(aSize)\
+CaseSize1(aSize ## 0)\
+CaseSize1(aSize ## 1)\
+CaseSize1(aSize ## 2)\
+CaseSize1(aSize ## 3)\
+CaseSize1(aSize ## 4)\
+CaseSize1(aSize ## 5)\
+CaseSize1(aSize ## 6)\
+CaseSize1(aSize ## 7)\
+CaseSize1(aSize ## 8)\
+CaseSize1(aSize ## 9)
+
+#define CaseSize3(aSize)\
+CaseSize2(aSize ## 0)\
+CaseSize2(aSize ## 1)\
+CaseSize2(aSize ## 2)\
+CaseSize2(aSize ## 3)\
+CaseSize2(aSize ## 4)\
+CaseSize2(aSize ## 5)\
+CaseSize2(aSize ## 6)\
+CaseSize2(aSize ## 7)\
+CaseSize2(aSize ## 8)\
+CaseSize2(aSize ## 9)
+
+        if (NO) {
+        } else if (size <= 1) {
+            HAHSOStruct1 s = va_arg(*ap, HAHSOStruct1);
+            [invocation setArgument:&s atIndex:i];
+        CaseSize1(2)
+        CaseSize1(3)
+        CaseSize1(4)
+        CaseSize1(5)
+        CaseSize1(6)
+        CaseSize1(7)
+        CaseSize1(8)
+        CaseSize1(9)
+        CaseSize2(1)
+        CaseSize2(2)
+        CaseSize2(3)
+        CaseSize2(4)
+        CaseSize2(5)
+        CaseSize2(6)
+        CaseSize2(7)
+        CaseSize2(8)
+        CaseSize2(9)
+        CaseSize3(1)
+        CaseSize3(2)
+        CaseSize3(3)
+        CaseSize3(4)
+        CaseSize3(5)
+        CaseSize3(6)
+        CaseSize3(7)
+        CaseSize3(8)
+        CaseSize3(9)
+        CaseSize3(10)
+        } else {
+            HAHSOStruct1099 s = va_arg(*ap, HAHSOStruct1099);
+            [invocation setArgument:&s atIndex:i];
+        }
+    }
 }
 
 NSString *HAHSOClassStringFromObject(id self)
@@ -236,7 +299,6 @@ Class HAHSOObjectGetSOClass(id self)
     Class class = object_getClass(self);
     while (![NSStringFromClass(class) hasPrefix:HAHSOClassPrefix]) {
         if (class == [NSObject class]) {
-            NSLog(@"%@ does not be observed.", self);
             return nil;
         }
         class = class_getSuperclass(class);

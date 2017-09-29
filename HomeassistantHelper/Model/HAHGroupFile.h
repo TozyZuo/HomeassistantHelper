@@ -11,5 +11,5 @@
 @class HAHPageModel;
 
 @interface HAHGroupFile : HAHFile
-@property (readonly) HAHObservableArray<HAHPageModel *> *pages;
+@property (readonly) NSMutableArray<HAHPageModel *> *pages;
 @end

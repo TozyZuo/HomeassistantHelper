@@ -12,9 +12,9 @@
 
 @implementation HAHPageParser
 
-- (HAHObservableArray<HAHPageModel *> *)parse:(NSString *)text
+- (NSMutableArray<HAHPageModel *> *)parse:(NSString *)text
 {
-    HAHObservableArray<HAHPageModel *> *pageModels = [[HAHObservableArray alloc] init];
+    NSMutableArray<HAHPageModel *> *pageModels = [[NSMutableArray alloc] init];
     NSMutableArray<HAHGroupModel *> *groupModels = [[NSMutableArray alloc] init];
 
     text = HAHFilterCommentsAndEmptyLineWithText(text);

@@ -9,11 +9,8 @@
 /* Begin PBXBuildFile section */
 		BA23DB2D1F1356E300939AA8 /* HAHGlobalExtern.m in Sources */ = {isa = PBXBuildFile; fileRef = BA23DB2C1F1356E300939AA8 /* HAHGlobalExtern.m */; };
 		BA23DB361F136E4100939AA8 /* GDataXMLNode.m in Sources */ = {isa = PBXBuildFile; fileRef = BA23DB311F136E4100939AA8 /* GDataXMLNode.m */; };
-		BA501CAF1F7A25BC0023051B /* KVOController.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BA501CA81F7A22A80023051B /* KVOController.framework */; };
-		BA5025471F739A2300254C21 /* HAHProxy.m in Sources */ = {isa = PBXBuildFile; fileRef = BA5025461F739A2300254C21 /* HAHProxy.m */; };
 		BA50254F1F739F1B00254C21 /* CTBlockDescription.m in Sources */ = {isa = PBXBuildFile; fileRef = BA50254B1F739F1B00254C21 /* CTBlockDescription.m */; };
 		BA5025501F739F1B00254C21 /* CTObjectiveCRuntimeAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = BA50254D1F739F1B00254C21 /* CTObjectiveCRuntimeAdditions.m */; };
-		BA5025531F73ADD900254C21 /* HAHObservableArray.m in Sources */ = {isa = PBXBuildFile; fileRef = BA5025521F73ADD900254C21 /* HAHObservableArray.m */; };
 		BA5936321F7C95F200CD9B87 /* NSObject_HAH.m in Sources */ = {isa = PBXBuildFile; fileRef = BA5936311F7C95F200CD9B87 /* NSObject_HAH.m */; };
 		BA6AFD171F2DBCAF0020BCDD /* HAHCustomizeParser.m in Sources */ = {isa = PBXBuildFile; fileRef = BA6AFD161F2DBCAF0020BCDD /* HAHCustomizeParser.m */; };
 		BA6AFD1B1F2DF2160020BCDD /* HAHEditViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = BA6AFD1A1F2DF2160020BCDD /* HAHEditViewController.m */; };
@@ -64,55 +61,6 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
-		BA501CA11F7A22A80023051B /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = BA501C971F7A22A80023051B /* FBKVOController.xcodeproj */;
-			proxyType = 2;
-			remoteGlobalIDString = ECEA60FE18A49C620064AFF4;
-			remoteInfo = FBKVOController;
-		};
-		BA501CA31F7A22A80023051B /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = BA501C971F7A22A80023051B /* FBKVOController.xcodeproj */;
-			proxyType = 2;
-			remoteGlobalIDString = ECEA610E18A49C620064AFF4;
-			remoteInfo = FBKVOControllerTests;
-		};
-		BA501CA51F7A22A80023051B /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = BA501C971F7A22A80023051B /* FBKVOController.xcodeproj */;
-			proxyType = 2;
-			remoteGlobalIDString = 81EC40C61CA3620A00BD9226;
-			remoteInfo = "FBKVOController-iOS-Dynamic";
-		};
-		BA501CA71F7A22A80023051B /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = BA501C971F7A22A80023051B /* FBKVOController.xcodeproj */;
-			proxyType = 2;
-			remoteGlobalIDString = 81EC40F81CA3639C00BD9226;
-			remoteInfo = "FBKVOController-OSX-Dynamic";
-		};
-		BA501CA91F7A22A80023051B /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = BA501C971F7A22A80023051B /* FBKVOController.xcodeproj */;
-			proxyType = 2;
-			remoteGlobalIDString = 81BD70C81CA4B57F00FB8E4D;
-			remoteInfo = "FBKVOController-tvOS-Dynamic";
-		};
-		BA501CAB1F7A22A80023051B /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = BA501C971F7A22A80023051B /* FBKVOController.xcodeproj */;
-			proxyType = 2;
-			remoteGlobalIDString = 81BD70EA1CA4B98D00FB8E4D;
-			remoteInfo = "FBKVOController-watchOS-Dynamic";
-		};
-		BA501CAD1F7A22DB0023051B /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = BA501C971F7A22A80023051B /* FBKVOController.xcodeproj */;
-			proxyType = 1;
-			remoteGlobalIDString = 81EC40F71CA3639C00BD9226;
-			remoteInfo = "FBKVOController-OSX-Dynamic";
-		};
 		BAEECA791F137D3C0099000C /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = BAEECA751F137D3C0099000C /* NMSSH.xcodeproj */;
@@ -134,17 +82,11 @@
 		BA23DB2C1F1356E300939AA8 /* HAHGlobalExtern.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HAHGlobalExtern.m; sourceTree = "<group>"; };
 		BA23DB301F136E4100939AA8 /* GDataXMLNode.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GDataXMLNode.h; sourceTree = "<group>"; };
 		BA23DB311F136E4100939AA8 /* GDataXMLNode.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GDataXMLNode.m; sourceTree = "<group>"; };
-		BA501C971F7A22A80023051B /* FBKVOController.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = FBKVOController.xcodeproj; path = FBKVOController/FBKVOController.xcodeproj; sourceTree = "<group>"; };
-		BA5025451F739A2300254C21 /* HAHProxy.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HAHProxy.h; sourceTree = "<group>"; };
-		BA5025461F739A2300254C21 /* HAHProxy.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HAHProxy.m; sourceTree = "<group>"; };
-		BA5025481F739B7300254C21 /* HAHProxyProtocol.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HAHProxyProtocol.h; sourceTree = "<group>"; };
 		BA50254A1F739F1B00254C21 /* CTBlockDescription.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CTBlockDescription.h; sourceTree = "<group>"; };
 		BA50254B1F739F1B00254C21 /* CTBlockDescription.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CTBlockDescription.m; sourceTree = "<group>"; };
 		BA50254C1F739F1B00254C21 /* CTObjectiveCRuntimeAdditions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CTObjectiveCRuntimeAdditions.h; sourceTree = "<group>"; };
 		BA50254D1F739F1B00254C21 /* CTObjectiveCRuntimeAdditions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CTObjectiveCRuntimeAdditions.m; sourceTree = "<group>"; };
 		BA50254E1F739F1B00254C21 /* CTRuntimeAdditions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CTRuntimeAdditions.h; sourceTree = "<group>"; };
-		BA5025511F73ADD900254C21 /* HAHObservableArray.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HAHObservableArray.h; sourceTree = "<group>"; };
-		BA5025521F73ADD900254C21 /* HAHObservableArray.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HAHObservableArray.m; sourceTree = "<group>"; };
 		BA5936301F7C95F200CD9B87 /* NSObject_HAH.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NSObject_HAH.h; sourceTree = "<group>"; };
 		BA5936311F7C95F200CD9B87 /* NSObject_HAH.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NSObject_HAH.m; sourceTree = "<group>"; };
 		BA6AFD151F2DBCAF0020BCDD /* HAHCustomizeParser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HAHCustomizeParser.h; sourceTree = "<group>"; };
@@ -232,6 +174,7 @@
 		BAEECA961F14C7830099000C /* HAHPageParser.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HAHPageParser.m; sourceTree = "<group>"; };
 		BAEECA981F14C7920099000C /* HAHConfigParser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HAHConfigParser.h; sourceTree = "<group>"; };
 		BAEECA991F14C7920099000C /* HAHConfigParser.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HAHConfigParser.m; sourceTree = "<group>"; };
+		BAFD86681F7E370C0035B7DE /* HAHSOStructDefine.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HAHSOStructDefine.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -239,7 +182,6 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				BA501CAF1F7A25BC0023051B /* KVOController.framework in Frameworks */,
 				BA8038021F190F3A00EE7A36 /* Carbon.framework in Frameworks */,
 				BAEECA7D1F137D4A0099000C /* NMSSH.framework in Frameworks */,
 				BA8F98FD1F1245DC00D16523 /* libxml2.tbd in Frameworks */,
@@ -252,7 +194,6 @@
 		BA23DB2E1F136E4100939AA8 /* OpenSource */ = {
 			isa = PBXGroup;
 			children = (
-				BA501C971F7A22A80023051B /* FBKVOController.xcodeproj */,
 				BA5025491F739F1B00254C21 /* CTRuntimeAdditions */,
 				BA8037FD1F18FE7C00EE7A36 /* NSViewExtensions */,
 				BAEECA751F137D3C0099000C /* NMSSH.xcodeproj */,
@@ -270,36 +211,11 @@
 			path = GDataXML;
 			sourceTree = "<group>";
 		};
-		BA501C981F7A22A80023051B /* Products */ = {
-			isa = PBXGroup;
-			children = (
-				BA501CA21F7A22A80023051B /* libFBKVOController.a */,
-				BA501CA41F7A22A80023051B /* FBKVOControllerTests.xctest */,
-				BA501CA61F7A22A80023051B /* KVOController.framework */,
-				BA501CA81F7A22A80023051B /* KVOController.framework */,
-				BA501CAA1F7A22A80023051B /* KVOController.framework */,
-				BA501CAC1F7A22A80023051B /* KVOController.framework */,
-			);
-			name = Products;
-			sourceTree = "<group>";
-		};
 		BA50253D1F735BD800254C21 /* NSArray */ = {
 			isa = PBXGroup;
 			children = (
 			);
 			path = NSArray;
-			sourceTree = "<group>";
-		};
-		BA5025441F7399CE00254C21 /* Observe */ = {
-			isa = PBXGroup;
-			children = (
-				BA5025451F739A2300254C21 /* HAHProxy.h */,
-				BA5025461F739A2300254C21 /* HAHProxy.m */,
-				BA5025481F739B7300254C21 /* HAHProxyProtocol.h */,
-				BA5025511F73ADD900254C21 /* HAHObservableArray.h */,
-				BA5025521F73ADD900254C21 /* HAHObservableArray.m */,
-			);
-			path = Observe;
 			sourceTree = "<group>";
 		};
 		BA5025491F739F1B00254C21 /* CTRuntimeAdditions */ = {
@@ -317,6 +233,7 @@
 		BA5936291F7C95DE00CD9B87 /* NSObject */ = {
 			isa = PBXGroup;
 			children = (
+				BAFD86681F7E370C0035B7DE /* HAHSOStructDefine.h */,
 				BA5936301F7C95F200CD9B87 /* NSObject_HAH.h */,
 				BA5936311F7C95F200CD9B87 /* NSObject_HAH.m */,
 			);
@@ -570,7 +487,6 @@
 		BAEECA8D1F14C4FE0099000C /* Other */ = {
 			isa = PBXGroup;
 			children = (
-				BA5025441F7399CE00254C21 /* Observe */,
 				BA7BE34C1F1A4B2300451762 /* Category */,
 				BAEECA8E1F14C4FE0099000C /* Parser */,
 			);
@@ -608,7 +524,6 @@
 			buildRules = (
 			);
 			dependencies = (
-				BA501CAE1F7A22DB0023051B /* PBXTargetDependency */,
 				BAEECA7C1F137D450099000C /* PBXTargetDependency */,
 			);
 			name = HomeassistantHelper;
@@ -644,10 +559,6 @@
 			projectDirPath = "";
 			projectReferences = (
 				{
-					ProductGroup = BA501C981F7A22A80023051B /* Products */;
-					ProjectRef = BA501C971F7A22A80023051B /* FBKVOController.xcodeproj */;
-				},
-				{
 					ProductGroup = BAEECA761F137D3C0099000C /* Products */;
 					ProjectRef = BAEECA751F137D3C0099000C /* NMSSH.xcodeproj */;
 				},
@@ -660,48 +571,6 @@
 /* End PBXProject section */
 
 /* Begin PBXReferenceProxy section */
-		BA501CA21F7A22A80023051B /* libFBKVOController.a */ = {
-			isa = PBXReferenceProxy;
-			fileType = archive.ar;
-			path = libFBKVOController.a;
-			remoteRef = BA501CA11F7A22A80023051B /* PBXContainerItemProxy */;
-			sourceTree = BUILT_PRODUCTS_DIR;
-		};
-		BA501CA41F7A22A80023051B /* FBKVOControllerTests.xctest */ = {
-			isa = PBXReferenceProxy;
-			fileType = wrapper.cfbundle;
-			path = FBKVOControllerTests.xctest;
-			remoteRef = BA501CA31F7A22A80023051B /* PBXContainerItemProxy */;
-			sourceTree = BUILT_PRODUCTS_DIR;
-		};
-		BA501CA61F7A22A80023051B /* KVOController.framework */ = {
-			isa = PBXReferenceProxy;
-			fileType = wrapper.framework;
-			path = KVOController.framework;
-			remoteRef = BA501CA51F7A22A80023051B /* PBXContainerItemProxy */;
-			sourceTree = BUILT_PRODUCTS_DIR;
-		};
-		BA501CA81F7A22A80023051B /* KVOController.framework */ = {
-			isa = PBXReferenceProxy;
-			fileType = wrapper.framework;
-			path = KVOController.framework;
-			remoteRef = BA501CA71F7A22A80023051B /* PBXContainerItemProxy */;
-			sourceTree = BUILT_PRODUCTS_DIR;
-		};
-		BA501CAA1F7A22A80023051B /* KVOController.framework */ = {
-			isa = PBXReferenceProxy;
-			fileType = wrapper.framework;
-			path = KVOController.framework;
-			remoteRef = BA501CA91F7A22A80023051B /* PBXContainerItemProxy */;
-			sourceTree = BUILT_PRODUCTS_DIR;
-		};
-		BA501CAC1F7A22A80023051B /* KVOController.framework */ = {
-			isa = PBXReferenceProxy;
-			fileType = wrapper.framework;
-			path = KVOController.framework;
-			remoteRef = BA501CAB1F7A22A80023051B /* PBXContainerItemProxy */;
-			sourceTree = BUILT_PRODUCTS_DIR;
-		};
 		BAEECA7A1F137D3C0099000C /* NMSSH.framework */ = {
 			isa = PBXReferenceProxy;
 			fileType = wrapper.framework;
@@ -767,13 +636,11 @@
 				BA6AFD171F2DBCAF0020BCDD /* HAHCustomizeParser.m in Sources */,
 				BAEECA9A1F14C7920099000C /* HAHConfigParser.m in Sources */,
 				BA5025501F739F1B00254C21 /* CTObjectiveCRuntimeAdditions.m in Sources */,
-				BA5025471F739A2300254C21 /* HAHProxy.m in Sources */,
 				BA9D68941F2DA59400D24F80 /* HAHGroupFile.m in Sources */,
 				BA8038001F18FE7C00EE7A36 /* NSView+Extensions.m in Sources */,
 				BAD6BEF31F52F57A00C34C4F /* HAHManager.m in Sources */,
 				BA6AFD211F2E08D00020BCDD /* HAHTableViewCell.m in Sources */,
 				BA7BE3711F1BB92600451762 /* NSString_HAH.m in Sources */,
-				BA5025531F73ADD900254C21 /* HAHObservableArray.m in Sources */,
 				BA7BE34B1F1A295400451762 /* HAHWindowControllerManager.m in Sources */,
 				BA7BE35C1F1A5BE200451762 /* NSTextField_HAH.m in Sources */,
 			);
@@ -782,11 +649,6 @@
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
-		BA501CAE1F7A22DB0023051B /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			name = "FBKVOController-OSX-Dynamic";
-			targetProxy = BA501CAD1F7A22DB0023051B /* PBXContainerItemProxy */;
-		};
 		BAEECA7C1F137D450099000C /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			name = NMSSH;

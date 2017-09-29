@@ -187,7 +187,7 @@ typedef struct HAHEditIndex {
     HAHPageModel *ungroupedPage = [[HAHPageModel alloc] init];
     ungroupedPage.name = @"未分组";
     ungroupedPage.id = @"ungroupedPage";
-    ungroupedPage.groups = [[HAHObservableArray alloc] initWithObjects:ungroupedGroup, nil];
+    ungroupedPage.groups = [[NSMutableArray alloc] initWithObjects:ungroupedGroup, nil];
 
     NSMutableArray *finalPages = pages.mutableCopy;
     [finalPages insertObject:ungroupedPage atIndex:0];

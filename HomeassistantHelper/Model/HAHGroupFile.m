@@ -13,7 +13,7 @@
 #import "HAHEntityModel.h"
 
 @interface HAHGroupFile ()
-@property (nonatomic, strong) HAHObservableArray<HAHPageModel *> *pages;
+@property (nonatomic, strong) NSMutableArray<HAHPageModel *> *pages;
 @end
 
 @implementation HAHGroupFile

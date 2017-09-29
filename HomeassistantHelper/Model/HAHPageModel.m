@@ -16,10 +16,10 @@
     NSLog(@"%@ %p %s", object_getClass(self), self, __PRETTY_FUNCTION__);
 }
 
-- (HAHObservableArray<HAHGroupModel *> *)groups
+- (NSMutableArray<HAHGroupModel *> *)groups
 {
     if (!_groups) {
-        _groups = [[HAHObservableArray alloc] init];
+        _groups = [[NSMutableArray alloc] init];
     }
     return _groups;
 }

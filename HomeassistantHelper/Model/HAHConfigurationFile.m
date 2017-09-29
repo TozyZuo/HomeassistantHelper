@@ -67,14 +67,17 @@
     __weak typeof(self) weakSelf = self;
     // 顺便添加监听
     for (HAHPageModel *pageModels in self.groupFile.pages) {
+        // TODO page监听
         for (HAHGroupModel *groupModels in pageModels.groups) {
 
-            [groupModels.entities injectToSelector:@selector(removeObject:) postprocessor:^(id object)
+            [groupModels removeObserver:self];
+
+            [groupModels.entities addObserver:self selector:@selector(removeObject:) postprocessor:^(id object)
              {
                  [[HAHDataManager sharedManager] saveFile:weakSelf.groupFile];
              }];
 
-            [groupModels.entities injectToSelector:@selector(insertObject:atIndex:) postprocessor:^(id object, NSUInteger index)
+            [groupModels.entities addObserver:self selector:@selector(insertObject:atIndex:) postprocessor:^(id object, NSUInteger index)
              {
                  [[HAHDataManager sharedManager] saveFile:weakSelf.groupFile];
              }];
