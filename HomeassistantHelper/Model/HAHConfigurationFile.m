@@ -49,11 +49,11 @@
         }
 
         // 更新汉化
-        for (HAHPageModel *pageModels in self.groupFile.pages) {
-            pageModels.name = self.customizeFile[pageModels.id] ?: pageModels.name ?: pageModels.id;
-            for (HAHGroupModel *groupModels in pageModels.groups) {
-                groupModels.name = self.customizeFile[groupModels.id] ?: groupModels.name ?: groupModels.id;
-                for (HAHEntityModel *entity in groupModels.entities) {
+        for (HAHPageModel *pageModel in self.groupFile.pages) {
+            pageModel.name = self.customizeFile[pageModel.id] ?: pageModel.name ?: pageModel.id;
+            for (HAHGroupModel *groupModel in pageModel.groups) {
+                groupModel.name = self.customizeFile[groupModel.id] ?: groupModel.name ?: groupModel.id;
+                for (HAHEntityModel *entity in groupModel.entities) {
                     entity.name = self.customizeFile[entity.id] ?: entity.name ?: entity.id;
                 }
             }
@@ -66,23 +66,23 @@
 {
     __weak typeof(self) weakSelf = self;
     // 顺便添加监听
-    for (HAHPageModel *pageModels in self.groupFile.pages) {
+    for (HAHPageModel *pageModel in self.groupFile.pages) {
         // TODO page监听
-        for (HAHGroupModel *groupModels in pageModels.groups) {
+        for (HAHGroupModel *groupModel in pageModel.groups) {
 
-            [groupModels removeObserver:self];
+            [groupModel.entities removeObserver:self];
 
-            [groupModels.entities addObserver:self selector:@selector(removeObject:) postprocessor:^(id object)
+            [groupModel.entities addObserver:self selector:@selector(removeObject:) postprocessor:^(id object)
              {
                  [[HAHDataManager sharedManager] saveFile:weakSelf.groupFile];
              }];
 
-            [groupModels.entities addObserver:self selector:@selector(insertObject:atIndex:) postprocessor:^(id object, NSUInteger index)
+            [groupModel.entities addObserver:self selector:@selector(insertObject:atIndex:) postprocessor:^(id object, NSUInteger index)
              {
                  [[HAHDataManager sharedManager] saveFile:weakSelf.groupFile];
              }];
 
-            for (HAHEntityModel *entity in groupModels.entities) {
+            for (HAHEntityModel *entity in groupModel.entities) {
 
                 BOOL notFound = YES;
 
