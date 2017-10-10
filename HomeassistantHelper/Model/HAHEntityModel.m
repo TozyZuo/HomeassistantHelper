@@ -13,7 +13,8 @@
 
 - (void)dealloc
 {
-    NSLog(@"%@ %p %s", object_getClass(self), self, __PRETTY_FUNCTION__);
+    NSLog(@"%@ %p %@", object_getClass(self), self, self.name);
+//    NSLog(@"%@ %p %s", object_getClass(self), self, __PRETTY_FUNCTION__);
 }
 
 // TODO 暂时只重写了Entity的相等判断，后续考虑挪到基类

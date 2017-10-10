@@ -13,7 +13,7 @@
 
 - (void)dealloc
 {
-    NSLog(@"%@ %p %s", object_getClass(self), self, __PRETTY_FUNCTION__);
+
 }
 
 - (NSMutableArray<HAHGroupModel *> *)groups

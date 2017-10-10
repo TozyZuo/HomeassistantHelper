@@ -10,24 +10,20 @@
 #import "HAHSOStructDefine.h"
 #import <objc/objc-runtime.h>
 #import <pthread.h>
+#import <dlfcn.h>
 
 
 static NSString * const HAHSOClassPrefix = @"HAHSONotifying_";
-
-static NSHashTable *_selectorObservedObjects;
 
 
 id   HAHSOTransmissionFunction(id self, SEL _cmd, ...);
 void HAHSOSetArguments(NSInvocation *invocation, NSMethodSignature *signature, NSUInteger startIndex, va_list *ap);
 
-BOOL HAHSOIsObjectSelectorObserved(id self); // object 是否被 selector observed
-void HAHSOAddSOObject(id self);
-BOOL HAHSOClassAddMethod(Class class, SEL sel, id imp);
-
 Class HAHSOObjectGetOriginClass(id self);
 Class HAHSOObjectGetSOClass(id self); // 防止KVO之后拿到的class不对
 BOOL  HAHSOObjectSetSOClass(id self);
 BOOL  HAHSOObjectSetMethodImplementation(id self, SEL _cmd, IMP imp);
+BOOL  HAHSOClassOverrideMethod(Class class, SEL sel, id block);
 
 
 @interface HAHObserveSelectorTableModel : NSObject
@@ -41,6 +37,8 @@ BOOL  HAHSOObjectSetMethodImplementation(id self, SEL _cmd, IMP imp);
     pthread_mutex_t _lock;
 }
 @property (nonatomic,  weak ) NSObject *object;
+@property (nonatomic, strong) NSString *objectClass;
+@property (nonatomic, strong) NSString *objectAddress;
 @property (nonatomic, strong) NSMapTable<NSObject */* observers */, NSMutableDictionary<NSString */* selectors */, HAHObserveSelectorTableModel *> *> *observerTable;
 @end
 
@@ -48,7 +46,7 @@ BOOL  HAHSOObjectSetMethodImplementation(id self, SEL _cmd, IMP imp);
 
 - (void)dealloc
 {
-    NSLog(@"%@ %p %s", [self.object class], self.object, __PRETTY_FUNCTION__);
+    NSLog(@"%@ %@ %s", self.objectClass, self.objectAddress, __PRETTY_FUNCTION__);
     pthread_mutex_destroy(&_lock);
 }
 
@@ -57,10 +55,11 @@ BOOL  HAHSOObjectSetMethodImplementation(id self, SEL _cmd, IMP imp);
     self = [super init];
     if (self) {
         self.object = object;
+        self.objectClass = object.className;
+        self.objectAddress = [NSString stringWithFormat:@"%p", object];
         self.observerTable = [NSMapTable weakToStrongObjectsMapTable];
         pthread_mutex_init(&_lock, NULL);
     }
-    NSLog(@"%@ %p %s", [self.object class], self.object, __PRETTY_FUNCTION__);
     return self;
 }
 
@@ -155,10 +154,10 @@ BOOL  HAHSOObjectSetMethodImplementation(id self, SEL _cmd, IMP imp);
     pthread_mutex_unlock(&_lock);
 }
 
-- (NSString *)debugDescription
+- (NSString *)description
 {
     NSMutableString *s = [NSMutableString stringWithFormat:@"<%@:%p", NSStringFromClass([self class]), self];
-    [s appendFormat:@" object:<%@:%p>\n", HAHSOObjectGetOriginClass(self.object), self.object];
+    [s appendFormat:@" object:<%@:%p>\n", self.objectClass, self.objectAddress];
 
     pthread_mutex_lock(&_lock);
 
@@ -173,6 +172,9 @@ BOOL  HAHSOObjectSetMethodImplementation(id self, SEL _cmd, IMP imp);
 @end
 
 
+@interface NSObject (HAHObserve_Private)
+@property HAHSOController *SOController;
+@end
 @implementation NSObject (HAHObserve)
 
 void *HAHSOControllerKey = &HAHSOControllerKey;
@@ -182,9 +184,19 @@ void *HAHSOControllerKey = &HAHSOControllerKey;
     HAHSOController *controller = objc_getAssociatedObject(self, HAHSOControllerKey);
     if (!controller) {
         controller = [[HAHSOController alloc] initWithObject:self];
-        objc_setAssociatedObject(self, HAHSOControllerKey, controller, OBJC_ASSOCIATION_RETAIN);
+        self.SOController = controller;
     }
     return controller;
+}
+
+- (void)setSOController:(HAHSOController *)controller
+{
+    objc_setAssociatedObject(self, HAHSOControllerKey, controller, OBJC_ASSOCIATION_RETAIN);
+}
+
+- (BOOL)isSelectorObserved
+{
+    return NO;
 }
 
 - (void)addObserver:(NSObject *)observer selector:(SEL)selector preprocessor:(id)block
@@ -199,40 +211,58 @@ void *HAHSOControllerKey = &HAHSOControllerKey;
 
 - (void)removeAllObserver
 {
-    if (HAHSOIsObjectSelectorObserved(self)) {
+    if ([self isSelectorObserved]) {
         [self.SOController removeAllObserver];
     }
 }
 
 - (void)removeObserver:(NSObject *)observer
 {
-    if (HAHSOIsObjectSelectorObserved(self)) {
+    if ([self isSelectorObserved]) {
         [self.SOController removeObserver:observer];
     }
 }
 
 - (void)removeObserver:(NSObject *)observer selector:(SEL)selector
 {
-    if (HAHSOIsObjectSelectorObserved(self)) {
+    if ([self isSelectorObserved]) {
         [self.SOController removeObserver:observer selector:selector];
     }
 }
 
 - (void)removePreprocessorsWithObserver:(NSObject *)observer selector:(SEL)selector
 {
-    if (HAHSOIsObjectSelectorObserved(self)) {
+    if ([self isSelectorObserved]) {
         [self.SOController removePreprocessorsWithObserver:observer selector:selector];
     }
 }
 
 - (void)removePostprocessorsWithObserver:(NSObject *)observer selector:(SEL)selector
 {
-    if (HAHSOIsObjectSelectorObserved(self)) {
+    if ([self isSelectorObserved]) {
         [self.SOController removePostprocessorsWithObserver:observer selector:selector];
     }
 }
 
 @end
+
+
+struct HAHBlockLiteral {
+    void *isa; // initialized to &_NSConcreteStackBlock or &_NSConcreteGlobalBlock
+    int flags;
+    int reserved;
+    void (*invoke)(void *, ...);
+    struct block_descriptor {
+        unsigned long int reserved;	// NULL
+        unsigned long int size;         // sizeof(struct Block_literal_1)
+        // optional helper functions
+        void (*copy_helper)(void *dst, void *src);     // IFF (1<<25)
+        void (*dispose_helper)(void *src);             // IFF (1<<25)
+        // required ABI.2010.3.16
+        const char *signature;                         // IFF (1<<30)
+    } *descriptor;
+    // imported variables
+};
 
 
 @implementation HAHObserveSelectorTableModel
@@ -256,6 +286,51 @@ void *HAHSOControllerKey = &HAHSOControllerKey;
         _postprocessors = [[NSMutableArray alloc] init];
     }
     return _postprocessors;
+}
+
+- (NSString *)descriptionFromBlock:(id)block
+{
+    struct HAHBlockLiteral *blockRef = (__bridge struct HAHBlockLiteral *)block;
+    struct dl_info info;
+    dladdr(blockRef->invoke, &info);
+    return [NSString stringWithUTF8String:info.dli_sname];
+}
+
+- (NSArray *)descriptionArrayFromArray:(NSArray *)array
+{
+    NSMutableArray *descriptionArray = [[NSMutableArray alloc] init];
+    [array enumerateObjectsUsingBlock:^(id  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop)
+    {
+        [descriptionArray addObject:[self descriptionFromBlock:obj]];
+    }];
+
+    return descriptionArray;
+}
+
+- (NSString *)debugDescription
+{
+    NSMutableDictionary *dic = [[NSMutableDictionary alloc] init];
+    if (self.preprocessors.count) {
+        dic[@"preprocessors"] = [self descriptionArrayFromArray:self.preprocessors];
+    }
+    if (self.postprocessors.count) {
+        dic[@"postprocessors"] = [self descriptionArrayFromArray:self.postprocessors];
+    }
+
+    return [[super description] stringByAppendingFormat:@"%@", dic];
+}
+
+- (NSString *)description
+{
+    NSMutableDictionary *dic = [[NSMutableDictionary alloc] init];
+    if (self.preprocessors.count) {
+        dic[@"preprocessors"] = [self descriptionArrayFromArray:self.preprocessors];
+    }
+    if (self.postprocessors.count) {
+        dic[@"postprocessors"] = [self descriptionArrayFromArray:self.postprocessors];
+    }
+
+    return [NSString stringWithFormat:@"%@", dic];
 }
 
 @end
@@ -390,20 +465,9 @@ CaseSize2(aSize ## 9)
     }
 }
 
-BOOL HAHSOIsObjectSelectorObserved(id self)
+BOOL HAHSOClassOverrideMethod(Class class, SEL sel, id block)
 {
-    return [_selectorObservedObjects containsObject:self];
-//    return HAHSOObjectGetSOClass(self) ? YES : NO;
-}
-
-void HAHSOAddSOObject(id self)
-{
-    [_selectorObservedObjects addObject:self];
-}
-
-BOOL HAHSOClassAddMethod(Class class, SEL sel, id imp)
-{
-    return class_addMethod(class, sel, imp_implementationWithBlock(imp), method_getTypeEncoding(class_getInstanceMethod(class_getSuperclass(class), sel)));
+    return class_addMethod(class, sel, imp_implementationWithBlock(block), method_getTypeEncoding(class_getInstanceMethod(class_getSuperclass(class), sel)));
 }
 
 Class HAHSOObjectGetOriginClass(id self)
@@ -424,37 +488,44 @@ Class HAHSOObjectGetSOClass(id self)
     return class;
 }
 
-void HAHSODealloc(id self, SEL _cmd)
-{
-    NSLog(@"%@ %p %s", [self class], self, __PRETTY_FUNCTION__);
-}
-
 BOOL HAHSOObjectSetSOClass(id self)
 {
-    if (!HAHSOIsObjectSelectorObserved(self)) {
+    if (![self isSelectorObserved]) {
         NSString *soClassString = [HAHSOClassPrefix stringByAppendingString:NSStringFromClass([self class])];
         Class soClass = NSClassFromString(soClassString);
         if (!soClass) {
             objc_registerClassPair(objc_allocateClassPair(object_getClass(self), soClassString.UTF8String, 0));
             soClass = NSClassFromString(soClassString);
 
-            // FIXME
-            HAHSOClassAddMethod(soClass, @selector(class), ^Class(id self, SEL sel){
+            // 重写 class 方法
+            HAHSOClassOverrideMethod(soClass, @selector(class), ^Class(id self, SEL sel){
                 return HAHSOObjectGetOriginClass(self);
             });
-            SEL dealloc = NSSelectorFromString(@"dealloc");
-            if (!class_addMethod(soClass, dealloc, (IMP)HAHSODealloc, method_getTypeEncoding(class_getInstanceMethod([NSObject class], dealloc))))
+
+            // 重写 dealloc 方法
+            HAHSOClassOverrideMethod(soClass, NSSelectorFromString(@"dealloc"), ^(NSObject *self, SEL sel)
             {
+                NSLog(@"%@ %p %s", object_getClass(self), self, __PRETTY_FUNCTION__);
+#ifdef DEBUG
+                // 用 observerTable.count 不准，weak object挂掉并没有清理count
+                NSUInteger count = 0;
+                HAHSOController *controller = self.SOController;
+                for (__unused id key in controller.observerTable) {
+                    count++;
+                }
+                if (count) {
+                    NSLog(@"An instance %p of class %@ was deallocated while selector observers were still registered with it. Current observation info: %@", self, [self class], controller);
+                }
+                self.SOController = nil;
+#endif
+            });
 
-            }
-
-//            HAHSOClassAddMethod(soClass, dealloc, ^(__unsafe_unretained id self, SEL sel){
-////                NSLog(@"%@ %p %s", [self class], self, __PRETTY_FUNCTION__);
-//            });
+            // 重写 isSelectorObserved 方法
+            HAHSOClassOverrideMethod(soClass, @selector(isSelectorObserved), ^BOOL{
+                return YES;
+            });
         }
         object_setClass(self, soClass);
-        HAHSOAddSOObject(self);
-        [self class];
         return YES;
     }
     return NO;
@@ -474,7 +545,3 @@ BOOL HAHSOObjectSetMethodImplementation(id self, SEL _cmd, IMP imp)
     return NO;
 }
 
-static void __attribute__((constructor)) HAHSOInitialize(void)
-{
-    _selectorObservedObjects = [NSHashTable weakObjectsHashTable];
-}

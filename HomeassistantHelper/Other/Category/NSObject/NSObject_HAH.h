@@ -9,7 +9,6 @@
 #import <Foundation/Foundation.h>
 
 @interface NSObject (HAHObserve)
-// block里的东西一定要弱引用，否则可能产生内存问题
 /**
  *  block里的东西一定要弱引用，否则可能产生内存问题
  *  多次添加，多次调用，因为用block，所以无法判断是否之前添加过，建议添加之前先移除一次

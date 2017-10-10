@@ -69,7 +69,7 @@ static NSInteger __depth = 0;
             [logStr appendFormat:@"\t"];
         }
 
-        [logStr appendFormat:@"%@ =\t%@;\n", key, obj];
+        [logStr appendFormat:@"%@ = %@;\n", key, obj];
     }];
 
     for (NSInteger i = 1; i < depth; ++i) {
@@ -121,6 +121,42 @@ static NSInteger __depth = 0;
     }
 
     [logStr appendFormat:@")}"];
+    
+    return logStr;
+}
+
+@end
+
+@implementation NSMapTable (HAHLog)
+
+- (NSString *)descriptionWithLocale:(id)locale
+{
+    NSString *logStr = [self descriptionWithDepth:++__depth];
+    __depth--;
+    return logStr;
+}
+
+- (NSString *)descriptionWithDepth:(NSInteger)depth
+{
+    NSMutableString *logStr = [NSMutableString string];
+
+    [logStr appendFormat:@"{\n"];
+
+    for (id key in self) {
+        id obj = [self objectForKey:key];
+
+        for (NSInteger i = 0; i < depth; i++) {
+            [logStr appendFormat:@"\t"];
+        }
+
+        [logStr appendFormat:@"%@ -> %@;\n", key, obj];
+    }
+
+    for (NSInteger i = 1; i < depth; ++i) {
+        [logStr appendFormat:@"\t"];
+    }
+
+    [logStr appendFormat:@"}"];
     
     return logStr;
 }
