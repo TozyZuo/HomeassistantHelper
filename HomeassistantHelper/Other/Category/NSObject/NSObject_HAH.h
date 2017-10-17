@@ -7,6 +7,9 @@
 //
 
 #import <Foundation/Foundation.h>
+/*
+    浮点传参有问题
+ */
 
 @interface NSObject (HAHObserve)
 /**

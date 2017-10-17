@@ -280,24 +280,6 @@ void *HAHSOControllerKey = &HAHSOControllerKey;
 @end
 
 
-struct HAHBlockLiteral {
-    void *isa; // initialized to &_NSConcreteStackBlock or &_NSConcreteGlobalBlock
-    int flags;
-    int reserved;
-    void (*invoke)(void *, ...);
-    struct block_descriptor {
-        unsigned long int reserved;	// NULL
-        unsigned long int size;         // sizeof(struct Block_literal_1)
-        // optional helper functions
-        void (*copy_helper)(void *dst, void *src);     // IFF (1<<25)
-        void (*dispose_helper)(void *src);             // IFF (1<<25)
-        // required ABI.2010.3.16
-        const char *signature;                         // IFF (1<<30)
-    } *descriptor;
-    // imported variables
-};
-
-
 @implementation HAHObserveSelectorTableModel
 
 - (void)dealloc
@@ -387,6 +369,7 @@ id HAHSOTransmissionFunction(id self, SEL _cmd, ...)
             va_start(ap, _cmd);
             HAHSOSetArguments(blockInvocation, bd.blockSignature, 1, &ap);
             [blockInvocation invokeWithTarget:block];
+            va_end(ap);
         }
     }
 
@@ -396,6 +379,7 @@ id HAHSOTransmissionFunction(id self, SEL _cmd, ...)
     invocation.selector = _cmd;
     va_start(ap, _cmd);
     HAHSOSetArguments(invocation, methodSignature, 2, &ap);
+    va_end(ap);
 
     object_setClass(self, originClass);
     invocation.target = self;
@@ -412,10 +396,9 @@ id HAHSOTransmissionFunction(id self, SEL _cmd, ...)
             va_start(ap, _cmd);
             HAHSOSetArguments(blockInvocation, bd.blockSignature, 1, &ap);
             [blockInvocation invokeWithTarget:block];
+            va_end(ap);
         }
     }
-
-    va_end(ap);
 
     id returnValue = nil;
 
@@ -440,6 +423,7 @@ void HAHSOKVOTransmissionFunction(id self, SEL _cmd, ...)
             va_start(ap, _cmd);
             HAHSOSetArguments(blockInvocation, bd.blockSignature, 1, &ap);
             [blockInvocation invokeWithTarget:block];
+            va_end(ap);
         }
     }
 
@@ -571,6 +555,8 @@ CaseSize2(aSize ## 9)
         }
     }
 
+    va_end(ap);
+
     // 调用postprocessors
     for (NSDictionary *selectorTable in [[self SOController] observerTable].objectEnumerator) {
         HAHObserveSelectorTableModel *table = selectorTable[NSStringFromSelector(_cmd)];
@@ -581,10 +567,9 @@ CaseSize2(aSize ## 9)
             va_start(ap, _cmd);
             HAHSOSetArguments(blockInvocation, bd.blockSignature, 1, &ap);
             [blockInvocation invokeWithTarget:block];
+            va_end(ap);
         }
     }
-
-    va_end(ap);
 }
 
 void HAHSOSetArguments(NSInvocation *invocation, NSMethodSignature *signature, NSUInteger startIndex, va_list *ap)
