@@ -18,11 +18,6 @@
 
 #define LoadFileFromLocal // 本地开发测试
 
-#define LogError(error) \
-if (error) {\
-    HAHLOG(@"%@ %s(%d)", error, __PRETTY_FUNCTION__, __LINE__);\
-}
-
 static NSString * const HAHBackupDirectory = @"HomeassistantHelperBackup";
 
 #ifdef LoadFileFromLocal
@@ -257,7 +252,7 @@ static NSString * const HAHHomeassistantPath = @"/home/homeassistant/.homeassist
 
     NSError *error;
     NSString *result = [self.session.channel execute:[arguments componentsJoinedByString:@" "] error:&error];
-    LogError(error);
+    HAHLogError(error);
     return result;
     
 #endif

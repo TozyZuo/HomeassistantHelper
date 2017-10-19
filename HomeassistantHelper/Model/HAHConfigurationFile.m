@@ -70,7 +70,6 @@
         // TODO page监听
         for (HAHGroupModel *groupModel in pageModel.groups) {
 
-            [groupModel.entities removeObserver:self];
 
             [groupModel.entities addObserver:self selector:@selector(removeObject:) postprocessor:^(id object)
              {
@@ -99,7 +98,6 @@
                     HAHLOG(@"未找到设备 %@, 请检查是否填写错误", entity.id);
                 }
                 __weak typeof(entity) weakEntity = entity;
-                [entity removeObserver:self];
                 [entity addObserver:self selector:@selector(setName:) postprocessor:^(NSString *name)
                  {
                      weakSelf.customizeFile[weakEntity.id] = weakEntity.name;

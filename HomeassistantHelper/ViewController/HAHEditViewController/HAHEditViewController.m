@@ -221,7 +221,6 @@ typedef struct HAHEditIndex {
         for (HAHEntityModel *entity in group.entities) {
             width = MAX(width, [entity.name sizeWithFont:font].width);
             __weak typeof(self) weakSelf = self;
-            [entity removeObserver:self];
             [entity addObserver:self selector:@selector(setName:) postprocessor:^(NSString *name)
              {
                  [weakSelf reloadTableView];

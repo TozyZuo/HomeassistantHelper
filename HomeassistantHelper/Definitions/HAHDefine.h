@@ -33,6 +33,11 @@ _Pragma(HAH_CLANG_WARNING_IGNORE_HELPER2(y))
 #define HAHLOG(...) if (HAHDebug) { CMLog(__VA_ARGS__); }
 
 
+#define HAHLogError(error) \
+if (error) {\
+    HAHLOG(@"%@ %s(%d)", error, __PRETTY_FUNCTION__, __LINE__);\
+}
+
 #ifdef DEBUG
 
 #else /* DEBUG */
