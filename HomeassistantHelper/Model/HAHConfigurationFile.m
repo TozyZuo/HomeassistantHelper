@@ -70,13 +70,13 @@
         // TODO page监听
         for (HAHGroupModel *groupModel in pageModel.groups) {
 
-
-            [groupModel.entities addObserver:self selector:@selector(removeObject:) postprocessor:^(id object)
+            [groupModel removeObserver:self];
+            [groupModel.entities addObserver:self selector:@selector(removeObject:) postprocessor:^(id info, id object)
              {
                  [[HAHDataManager sharedManager] saveFile:weakSelf.groupFile];
              }];
 
-            [groupModel.entities addObserver:self selector:@selector(insertObject:atIndex:) postprocessor:^(id object, NSUInteger index)
+            [groupModel.entities addObserver:self selector:@selector(insertObject:atIndex:) postprocessor:^(id info, id object, NSUInteger index)
              {
                  [[HAHDataManager sharedManager] saveFile:weakSelf.groupFile];
              }];
@@ -98,7 +98,8 @@
                     HAHLOG(@"未找到设备 %@, 请检查是否填写错误", entity.id);
                 }
                 __weak typeof(entity) weakEntity = entity;
-                [entity addObserver:self selector:@selector(setName:) postprocessor:^(NSString *name)
+                [entity removeObserver:self];
+                [entity addObserver:self selector:@selector(setName:) postprocessor:^(id info, NSString *name)
                  {
                      weakSelf.customizeFile[weakEntity.id] = weakEntity.name;
                      [[HAHDataManager sharedManager] saveFile:weakSelf.customizeFile];
