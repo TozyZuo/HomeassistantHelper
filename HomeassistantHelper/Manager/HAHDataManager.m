@@ -101,7 +101,7 @@ static NSString * const HAHHomeassistantPath = @"/home/homeassistant/.homeassist
                 [self backupFile:file.name];
 
                 HAHFile *file = self.filesToSave.anyObject;
-                [self execute:@"echo", [NSString stringWithFormat:@"\"%@\">%@%@", file.text, HAHHomeassistantPath, file.name], nil];
+                [self execute:@"echo", [NSString stringWithFormat:@"\"%@\" > %@%@", file.text, HAHHomeassistantPath, file.name], nil];
                 [self.filesToSave removeObject:file];
             }
 
@@ -220,6 +220,7 @@ static NSString * const HAHHomeassistantPath = @"/home/homeassistant/.homeassist
 - (NSString *)execute:(NSString *)command, ... NS_REQUIRES_NIL_TERMINATION
 {
     NSMutableArray *arguments = [[NSMutableArray alloc] init];
+    [arguments addObject:command];
 
     va_list ap;
     va_start(ap, command);
@@ -232,9 +233,9 @@ static NSString * const HAHHomeassistantPath = @"/home/homeassistant/.homeassist
 #ifdef LoadFileFromLocal
 
     NSTask *task = [[NSTask alloc] init];
-    task.launchPath = [NSString stringWithFormat:@"/bin/%@", command];
-    task.arguments = arguments;
-    task.currentDirectoryPath = @"/";
+    task.launchPath = @"/bin/bash";
+    task.arguments = @[@"-c", [arguments componentsJoinedByString:@" "]];
+    task.currentDirectoryPath = HAHHomeassistantPath;
 
     NSPipe *pipe = [NSPipe pipe];
     task.standardOutput = pipe;
