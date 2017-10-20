@@ -14,7 +14,7 @@
 {
     id _transmition;
 }
-@property (nonatomic) NSMapTable <NSObject */*observer*/, NSMutableDictionary<NSString */*SEL*/, NSMutableArray<NSHashTable<id<AspectInfo>> *> *> *> *mapTable;
+@property (nonatomic) NSMapTable <NSObject */*observer*/, NSMutableDictionary<NSString */*SEL*/, NSMutableArray<NSHashTable<id<AspectInfo>> *> */*aspects*/> *> *mapTable;
 @property (readonly) HAHObserverMap *(^observer)(NSObject *observer);
 @property (readonly) HAHObserverMap *(^selector)(SEL selector);
 @property (readonly) NSHashTable *(^option)(AspectOptions option);

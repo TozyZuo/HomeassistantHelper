@@ -10,12 +10,28 @@
 #import "HAHPageModel.h"
 #import "HAHGroupModel.h"
 
+static NSMutableCharacterSet *HAHEntityParseCharacterSet;
+
+@interface HAHPageParser ()
+@property (nonatomic, strong) NSMutableDictionary *allGroups;
+@property (nonatomic, strong) NSMutableDictionary *allEntities;
+@end
+
 @implementation HAHPageParser
+
++ (void)load
+{
+    HAHEntityParseCharacterSet = [NSMutableCharacterSet whitespaceCharacterSet];
+    [HAHEntityParseCharacterSet addCharactersInString:@"-"];
+}
 
 - (NSMutableArray<HAHPageModel *> *)parse:(NSString *)text
 {
+    self.allGroups = [[NSMutableDictionary alloc] init];
+    self.allEntities = [[NSMutableDictionary alloc] init];
+
     NSMutableArray<HAHPageModel *> *pageModels = [[NSMutableArray alloc] init];
-    NSMutableArray<HAHGroupModel *> *groupModels = [[NSMutableArray alloc] init];
+    NSMutableDictionary<NSString *, HAHGroupModel *> *groupModels = [[NSMutableDictionary alloc] init];
 
     text = HAHFilterCommentsAndEmptyLineWithText(text);
 
@@ -23,9 +39,8 @@
     NSString *pattern = @".*:([\\w\\W]*?)view:([\\w\\W]*?)entities:.*(\\n.*\\-.*)+";
 
     NSRegularExpression *rex = [NSRegularExpression regularExpressionWithPattern:pattern options:NSRegularExpressionCaseInsensitive|NSRegularExpressionAllowCommentsAndWhitespace error:&error];
-    if (error) {
-        HAHLOG(@"%@", error);
-    }
+    HAHLogError(error);
+
     [rex enumerateMatchesInString:text options:NSMatchingReportCompletion range:NSMakeRange(0, text.length) usingBlock:^(NSTextCheckingResult * _Nullable result, NSMatchingFlags flags, BOOL * _Nonnull stop)
     {
         if (result.range.length) {
@@ -33,32 +48,30 @@
             if ([self isPageFromTextBlock:textBlock]) {
                 [pageModels addObject:[self pageModelWithTextBlock:textBlock]];
             } else {
-                [groupModels addObject:[self groupModelWithTextBlock:textBlock]];
+                HAHGroupModel *groupModel = [self groupModelWithTextBlock:textBlock];
+                groupModels[groupModel.id] = groupModel;
             }
         }
     }];
 
+    // 防止用户写错写漏
+    NSMutableDictionary *nonpagedGroups = groupModels.mutableCopy;
     for (HAHPageModel *pageModel in pageModels) {
-        for (int i = 0; i < pageModel.groups.count; i++) {
-            BOOL notFound = YES;
-            for (int j = 0; j < groupModels.count; j++) {
-                if ([pageModel.groups[i].id isEqualToString:groupModels[j].id]) {
-                    [pageModel.groups replaceObjectAtIndex:i withObject:groupModels[j]];
-                    [groupModels removeObjectAtIndex:j];
-                    notFound = NO;
-                    break;
-                }
-            }
-            if (notFound) {
-                HAHLOG(@"未找到组 %@", pageModel.groups[i]);
+        for (HAHGroupModel *groupModel in pageModel.groups) {
+            if (groupModels[groupModel.id]) {
+                nonpagedGroups[groupModel.id] = nil;
+            } else {
+                HAHLOG(@"未找到组 %@", groupModel);
             }
         }
-
     }
 
-    if (groupModels.count) {
-        HAHLOG(@"以下组未找到对应页面 %@", groupModels);
+    if (nonpagedGroups.count) {
+        HAHLOG(@"以下组未找到对应页面 %@", nonpagedGroups.allValues);
     }
+
+    self.allGroups = nil;
+    self.allEntities = nil;
 
     return pageModels;
 }
@@ -69,7 +82,7 @@
         if ([line containsString:@"view"]) {
             NSArray *parts = [line componentsSeparatedByString:@":"];
             if ([[parts.firstObject stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]] isEqualToString:@"view"]) {
-                return [[parts.lastObject stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]] isEqualToString:@"yes"];
+                return [[parts.lastObject stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]].lowercaseString isEqualToString:@"yes"];
             }
         }
     }
@@ -90,9 +103,7 @@
         }
         else if ([line containsString:@"-"])
         {
-            HAHGroupModel *groupModel = [[HAHGroupModel alloc] init];
-            groupModel.id = [[line componentsSeparatedByString:@"-"].lastObject stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
-            [pageModel.groups addObject:groupModel];
+            [pageModel.groups addObject:[self groupModelWithLineText:line]];
         }
         else {
             if (HAHDebug) {
@@ -113,8 +124,15 @@
 {
     NSArray *lines = [text componentsSeparatedByCharactersInSet:[NSCharacterSet newlineCharacterSet]];
 
-    HAHGroupModel *groupModel = [[HAHGroupModel alloc] init];
-    groupModel.shortID = [[lines.firstObject componentsSeparatedByString:@":"].firstObject stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
+    NSString *shortID = [[lines.firstObject componentsSeparatedByString:@":"].firstObject stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
+
+    HAHGroupModel *groupModel = self.allGroups[shortID];
+    if (!groupModel) {
+        groupModel = [[HAHGroupModel alloc] init];
+        groupModel.shortID = shortID;
+        self.allGroups[shortID] = groupModel;
+        self.allGroups[groupModel.id] = groupModel;
+    }
 
     for (NSString *line in lines) {
         if ([line containsString:@"name"]) {
@@ -122,9 +140,7 @@
         }
         else if ([line containsString:@"-"])
         {
-            HAHEntityModel *entityModel = [[HAHEntityModel alloc] init];
-            entityModel.id = [[line componentsSeparatedByString:@"-"].lastObject stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
-            [groupModel.entities addObject:entityModel];
+            [groupModel.entities addObject:[self entityModelWithLineText:line]];
         }
         else {
             if (HAHDebug) {
@@ -140,6 +156,31 @@
     }
 
     return groupModel;
+}
+
+- (HAHGroupModel *)groupModelWithLineText:(NSString *)text
+{
+    NSString *identifier = [text stringByTrimmingCharactersInSet:HAHEntityParseCharacterSet];
+    HAHGroupModel *groupModel = self.allGroups[identifier];
+    if (!groupModel) {
+        groupModel = [[HAHGroupModel alloc] init];
+        groupModel.id = identifier;
+        self.allGroups[identifier] = groupModel;
+        self.allGroups[groupModel.shortID] = groupModel;
+    }
+    return groupModel;
+}
+
+- (HAHEntityModel *)entityModelWithLineText:(NSString *)text
+{
+    NSString *identifier = [text stringByTrimmingCharactersInSet:HAHEntityParseCharacterSet];
+    HAHEntityModel *entityModel = self.allEntities[identifier];
+    if (!entityModel) {
+        entityModel = [[HAHEntityModel alloc] init];
+        entityModel.id = identifier;
+        self.allEntities[identifier] = entityModel;
+    }
+    return entityModel;
 }
 
 @end
