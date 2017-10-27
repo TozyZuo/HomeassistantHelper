@@ -7,6 +7,7 @@
 //
 
 #import <Foundation/Foundation.h>
+#import <objc/runtime.h>
 
 static NSInteger __depth = 0;
 
@@ -28,7 +29,7 @@ static NSInteger __depth = 0;
     NSInteger count = self.count;
     [self enumerateObjectsUsingBlock:^(id  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
         for (NSInteger i = 0; i < depth; i++) {
-            [logStr appendFormat:@"\t"];
+            [logStr appendString:@"\t"];
         }
 
         if (idx != count - 1) {
@@ -39,7 +40,7 @@ static NSInteger __depth = 0;
     }];
 
     for (NSInteger i = 1; i < depth; ++i) {
-        [logStr appendFormat:@"\t"];
+        [logStr appendString:@"\t"];
     }
 
     [logStr appendFormat:@")"];
@@ -66,14 +67,14 @@ static NSInteger __depth = 0;
 
     [self enumerateKeysAndObjectsUsingBlock:^(id  _Nonnull key, id  _Nonnull obj, BOOL * _Nonnull stop) {
         for (NSInteger i = 0; i < depth; i++) {
-            [logStr appendFormat:@"\t"];
+            [logStr appendString:@"\t"];
         }
 
         [logStr appendFormat:@"%@ = %@;\n", key, obj];
     }];
 
     for (NSInteger i = 1; i < depth; ++i) {
-        [logStr appendFormat:@"\t"];
+        [logStr appendString:@"\t"];
     }
 
     [logStr appendFormat:@"}"];
@@ -104,7 +105,7 @@ static NSInteger __depth = 0;
     [self enumerateObjectsUsingBlock:^(id  _Nonnull obj, BOOL * _Nonnull stop)
      {
          for (NSInteger i = 0; i < depth; i++) {
-             [logStr appendFormat:@"\t"];
+             [logStr appendString:@"\t"];
          }
 
          if (idx != count - 1) {
@@ -117,7 +118,7 @@ static NSInteger __depth = 0;
      }];
 
     for (NSInteger i = 1; i < depth; ++i) {
-        [logStr appendFormat:@"\t"];
+        [logStr appendString:@"\t"];
     }
 
     [logStr appendFormat:@")}"];
@@ -127,7 +128,40 @@ static NSInteger __depth = 0;
 
 @end
 
+typedef struct NSSlice_ {
+    __unsafe_unretained id *items; // 8
+    BOOL wantsStrong;
+    BOOL wantsWeak;
+    BOOL wantsARC;
+    BOOL shouldCopyIn;
+    BOOL usesStrong;
+    BOOL usesWeak;
+    BOOL usesARC;
+    BOOL usesSentinel;
+    BOOL pointerPersonality;
+    BOOL integerPersonality;
+    BOOL simpleReadClear; // 19
+    void *sizeFunction; // 24
+    void *hashFunction; // 32
+    void *isEqualFunction; // 40
+    void *describeFunction;// 48
+    void *acquireFunction; // 56
+    void *relinquishFunction; // 64
+    void *allocateFunction; // 72
+    void *freeFunction; // 80
+    id (*readAt)(__unsafe_unretained id *arg0, id arg1);// void *readAt; // 88
+    void *clearAt; // 96
+    void *storeAt; // 114
+} NSSlice_;
+
 @implementation NSMapTable (HAHLog)
+
+- (NSString *)debugDescription
+{
+    NSString *logStr = [self descriptionWithDepth:++__depth];
+    __depth--;
+    return logStr;
+}
 
 - (NSString *)descriptionWithLocale:(id)locale
 {
@@ -140,20 +174,99 @@ static NSInteger __depth = 0;
 {
     NSMutableString *logStr = [NSMutableString string];
 
-    [logStr appendFormat:@"{\n"];
+    [logStr appendString:@"NSMapTable {\n"];
 
-    for (id key in self) {
-        id obj = [self objectForKey:key];
+    NSUInteger capacity = [[self valueForKey:@"capacity"] unsignedIntegerValue];
 
-        for (NSInteger i = 0; i < depth; i++) {
-            [logStr appendFormat:@"\t"];
-        }
+    if (capacity) {
 
-        [logStr appendFormat:@"%@ -> %@;\n", key, obj];
+        NSUInteger idx = 0;
+
+        NSSlice_ keys;
+        NSSlice_ values;
+
+        NSValue *v = [self valueForKey:@"keys"];
+        [v getValue:&keys];
+        v = [self valueForKey:@"values"];
+        [v getValue:&values];
+
+        do {
+            id key = keys.readAt(&keys.items[idx], nil);
+            id value = values.readAt(&values.items[idx], nil);
+
+            if (key && value) {
+
+                for (NSInteger i = 0; i < depth; i++) {
+                    [logStr appendString:@"\t"];
+                }
+
+                [logStr appendFormat:@"[%lu] %@ -> %@\n", idx, key, value];
+            }
+        } while (++idx < capacity);
     }
 
     for (NSInteger i = 1; i < depth; ++i) {
-        [logStr appendFormat:@"\t"];
+        [logStr appendString:@"\t"];
+    }
+
+    [logStr appendFormat:@"}"];
+    
+    return logStr;
+}
+
+@end
+
+
+NSString *HAHLogDescription(id self, SEL _cmd)
+{
+    NSString *logStr = [self descriptionWithDepth:++__depth];
+    __depth--;
+    return logStr;
+}
+
+@implementation NSHashTable (HAHLog)
+
+- (NSString *)descriptionWithLocale:(id)locale
+{
+    NSString *logStr = [self descriptionWithDepth:++__depth];
+    __depth--;
+    return logStr;
+}
+
+- (NSString *)descriptionWithDepth:(NSInteger)depth
+{
+    NSMutableString *logStr = [NSMutableString string];
+
+    [logStr appendString:@"NSHashTable {\n"];
+
+    NSUInteger capacity = [[self valueForKey:@"capacity"] unsignedIntegerValue];
+
+    if (capacity) {
+
+        NSUInteger idx = 0;
+
+        NSSlice_ slice;
+
+        NSValue *v = [self valueForKey:@"slice"];
+        [v getValue:&slice];
+
+        do {
+
+            id object = slice.readAt(&slice.items[idx], nil);
+
+            if (object) {
+
+                for (NSInteger i = 0; i < depth; i++) {
+                    [logStr appendString:@"\t"];
+                }
+
+                [logStr appendFormat:@"[%lu] %@\n", idx, object];
+            }
+        } while (++idx < capacity);
+    }
+
+    for (NSInteger i = 1; i < depth; ++i) {
+        [logStr appendString:@"\t"];
     }
 
     [logStr appendFormat:@"}"];
