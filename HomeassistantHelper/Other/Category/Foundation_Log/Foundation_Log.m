@@ -20,6 +20,13 @@ static NSInteger __depth = 0;
     return logStr;
 }
 
+- (NSString *)descriptionWithLocale:(nullable id)locale indent:(NSUInteger)level
+{
+    NSString *logStr = [self descriptionWithDepth:++__depth];
+    __depth--;
+    return logStr;
+}
+
 - (NSString *)descriptionWithDepth:(NSInteger)depth
 {
     NSMutableString *logStr = [NSMutableString string];
@@ -59,6 +66,13 @@ static NSInteger __depth = 0;
     return logStr;
 }
 
+- (NSString *)descriptionWithLocale:(nullable id)locale indent:(NSUInteger)level
+{
+    NSString *logStr = [self descriptionWithDepth:++__depth];
+    __depth--;
+    return logStr;
+}
+
 - (NSString *)descriptionWithDepth:(NSInteger)depth
 {
     NSMutableString *logStr = [NSMutableString string];
@@ -87,6 +101,13 @@ static NSInteger __depth = 0;
 @implementation NSSet(HAHLog)
 
 - (NSString *)descriptionWithLocale:(id)locale
+{
+    NSString *logStr = [self descriptionWithDepth:++__depth];
+    __depth--;
+    return logStr;
+}
+
+- (NSString *)descriptionWithLocale:(nullable id)locale indent:(NSUInteger)level
 {
     NSString *logStr = [self descriptionWithDepth:++__depth];
     __depth--;
@@ -156,13 +177,6 @@ typedef struct NSSlice_ {
 
 @implementation NSMapTable (HAHLog)
 
-- (NSString *)debugDescription
-{
-    NSString *logStr = [self descriptionWithDepth:++__depth];
-    __depth--;
-    return logStr;
-}
-
 - (NSString *)descriptionWithLocale:(id)locale
 {
     NSString *logStr = [self descriptionWithDepth:++__depth];
@@ -216,14 +230,6 @@ typedef struct NSSlice_ {
 
 @end
 
-
-NSString *HAHLogDescription(id self, SEL _cmd)
-{
-    NSString *logStr = [self descriptionWithDepth:++__depth];
-    __depth--;
-    return logStr;
-}
-
 @implementation NSHashTable (HAHLog)
 
 - (NSString *)descriptionWithLocale:(id)locale
@@ -275,3 +281,20 @@ NSString *HAHLogDescription(id self, SEL _cmd)
 }
 
 @end
+
+#if (TARGET_OS_MAC && !TARGET_OS_SIMULATOR)
+
+NSString *HAHLogDescription(id self, SEL _cmd)
+{
+    NSString *logStr = [self descriptionWithDepth:++__depth];
+    __depth--;
+    return logStr;
+}
+
+static void __attribute__((constructor)) initialize(void)
+{
+    method_setImplementation(class_getInstanceMethod(object_getClass([NSMapTable weakToWeakObjectsMapTable]), @selector(description)), (IMP)HAHLogDescription);
+    method_setImplementation(class_getInstanceMethod(object_getClass([NSHashTable weakObjectsHashTable]), @selector(description)), (IMP)HAHLogDescription);
+}
+
+#endif
