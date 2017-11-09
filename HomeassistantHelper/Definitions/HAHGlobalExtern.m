@@ -10,16 +10,16 @@
 
 #pragma mark - UserDefaults
 
-NSString const * HAHUDAdressKey = @"HAHUDAdressKey";
-NSString const * HAHUDUserNameKey = @"HAHUDUserNameKey";
-NSString const * HAHUDPasswordKey = @"HAHUDPasswordKey";
-NSString const * HAHUDKeepPasswordKey = @"HAHUDKeepPasswordKey";
+NSString * const HAHUDAdressKey = @"HAHUDAdressKey";
+NSString * const HAHUDUserNameKey = @"HAHUDUserNameKey";
+NSString * const HAHUDPasswordKey = @"HAHUDPasswordKey";
+NSString * const HAHUDKeepPasswordKey = @"HAHUDKeepPasswordKey";
 
-NSString const * HAHUDMainWindowFrameKey = @"HAHUDMainWindowFrameKey";
-NSString const * HAHUDBrowserWindowFrameKey = @"HAHUDBrowserWindowFrameKey";
-NSString const * HAHUDConsoleWindowFrameKey = @"HAHUDConsoleWindowFrameKey";
+NSString * const HAHUDMainWindowFrameKey = @"HAHUDMainWindowFrameKey";
+NSString * const HAHUDBrowserWindowFrameKey = @"HAHUDBrowserWindowFrameKey";
+NSString * const HAHUDConsoleWindowFrameKey = @"HAHUDConsoleWindowFrameKey";
 
-NSString const * HAHUDConsoleFontSizeKey = @"HAHUDConsoleFontSizeKey";
+NSString * const HAHUDConsoleFontSizeKey = @"HAHUDConsoleFontSizeKey";
 
 #pragma mark - System
 
@@ -77,8 +77,8 @@ CGFloat const HAHModelConfigViewWidth = 235;
 
 #pragma mark - String
 
-NSString const * HAHSFriendlyName = @"friendly_name";
-NSString const * HAHSConfigurationFileName = @"configuration.yaml";
-NSString const * HAHSGroupFileName = @"groups.yaml";
-NSString const * HAHSCustomizeFileName = @"customize.yaml";
+NSString * const HAHSFriendlyName = @"friendly_name";
+NSString * const HAHSConfigurationFileName = @"configuration.yaml";
+NSString * const HAHSGroupFileName = @"groups.yaml";
+NSString * const HAHSCustomizeFileName = @"customize.yaml";
 

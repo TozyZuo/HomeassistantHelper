@@ -55,7 +55,7 @@ static NSString * const HAHHomeassistantPath = @"/home/homeassistant/.homeassist
         self.sshQueue = dispatch_queue_create("HAH.ssh.queue", DISPATCH_QUEUE_SERIAL);
         self.filesToSave = [[NSMutableSet alloc] init];
 
-        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(init) name:NSApplicationWillTerminateNotification object:nil];
+        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(applicationWillTerminateNotification:) name:NSApplicationWillTerminateNotification object:nil];
     }
     return self;
 }
@@ -65,6 +65,7 @@ static NSString * const HAHHomeassistantPath = @"/home/homeassistant/.homeassist
 - (void)applicationWillTerminateNotification:(NSNotification *)notification
 {
     [self.session disconnect];
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
 }
 
 #pragma mark - Public

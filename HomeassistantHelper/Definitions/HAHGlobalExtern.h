@@ -10,16 +10,16 @@
 
 #pragma mark - UserDefaults
 
-FOUNDATION_EXPORT NSString *HAHUDAdressKey;
-FOUNDATION_EXPORT NSString *HAHUDUserNameKey;
-FOUNDATION_EXPORT NSString *HAHUDPasswordKey;
-FOUNDATION_EXPORT NSString *HAHUDKeepPasswordKey;
+FOUNDATION_EXPORT NSString * const HAHUDAdressKey;
+FOUNDATION_EXPORT NSString * const HAHUDUserNameKey;
+FOUNDATION_EXPORT NSString * const HAHUDPasswordKey;
+FOUNDATION_EXPORT NSString * const HAHUDKeepPasswordKey;
 
-FOUNDATION_EXPORT NSString *HAHUDMainWindowFrameKey;
-FOUNDATION_EXPORT NSString *HAHUDBrowserWindowFrameKey;
-FOUNDATION_EXPORT NSString *HAHUDConsoleWindowFrameKey;
+FOUNDATION_EXPORT NSString * const HAHUDMainWindowFrameKey;
+FOUNDATION_EXPORT NSString * const HAHUDBrowserWindowFrameKey;
+FOUNDATION_EXPORT NSString * const HAHUDConsoleWindowFrameKey;
 
-FOUNDATION_EXPORT NSString *HAHUDConsoleFontSizeKey;
+FOUNDATION_EXPORT NSString * const HAHUDConsoleFontSizeKey;
 
 #pragma mark - System
 
@@ -39,7 +39,7 @@ FOUNDATION_EXPORT CGFloat const HAHModelConfigViewWidth;
 
 #pragma mark - String
 
-FOUNDATION_EXPORT NSString const * HAHSFriendlyName;
-FOUNDATION_EXPORT NSString const * HAHSConfigurationFileName;
-FOUNDATION_EXPORT NSString const * HAHSGroupFileName;
-FOUNDATION_EXPORT NSString const * HAHSCustomizeFileName;
+FOUNDATION_EXPORT NSString * const HAHSFriendlyName;
+FOUNDATION_EXPORT NSString * const HAHSConfigurationFileName;
+FOUNDATION_EXPORT NSString * const HAHSGroupFileName;
+FOUNDATION_EXPORT NSString * const HAHSCustomizeFileName;
