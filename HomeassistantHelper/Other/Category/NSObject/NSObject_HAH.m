@@ -156,17 +156,21 @@ void *HAHObserverMapKey = &HAHObserverMapKey;
 
 - (void)removePreprocessorsWithObserver:(NSObject *)observer selector:(SEL)selector
 {
-    for (id<AspectToken> token in self.observerMap.observer(observer).selector(selector).option(AspectPositionBefore))
+    NSHashTable *tokens = self.observerMap.observer(observer).selector(selector).option(AspectPositionBefore);
+    for (id<AspectToken> token in tokens.allObjects)
     {
         [token remove];
+        [tokens removeObject:token];
     }
 }
 
 - (void)removePostprocessorsWithObserver:(NSObject *)observer selector:(SEL)selector
 {
-    for (id<AspectToken> token in self.observerMap.observer(observer).selector(selector).option(AspectPositionAfter))
+    NSHashTable *tokens = self.observerMap.observer(observer).selector(selector).option(AspectPositionAfter);
+    for (id<AspectToken> token in tokens.allObjects)
     {
         [token remove];
+        [tokens removeObject:token];
     }
 }
 

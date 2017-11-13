@@ -20,6 +20,7 @@ NSString * const HAHPageCollectionViewItemViewIdentifier = @"HAHPageCollectionVi
 static CGFloat const TableHeaderCellTextMargin = 20;
 
 typedef struct HAHEditIndex {
+    NSInteger pageIndex;
     NSInteger column;
     NSInteger row;
     NSInteger rowCount;
@@ -42,6 +43,8 @@ typedef struct HAHEditIndex {
 @property (nonatomic, strong) NSView            *groupIndicatorView;
 @property (nonatomic, strong) NSArray<HAHPageModel *> *pages;
 
+@property (nonatomic, readonly) NSInteger       pageIndex;
+
 @end
 
 @implementation HAHEditViewController
@@ -57,6 +60,13 @@ typedef struct HAHEditIndex {
 
     [self.collectionView registerClass:[HAHPageCollectionViewItem class] forItemWithIdentifier:HAHPageCollectionViewItemViewIdentifier];
     [self.tableView registerNib:[[NSNib alloc] initWithNibNamed:@"HAHTableViewCell" bundle:nil] forIdentifier:[HAHTableViewCell identifier]];
+}
+
+#pragma mark - Property
+
+- (NSInteger)pageIndex
+{
+    return self.collectionView.selectionIndexPaths.anyObject.item;
 }
 
 #pragma mark - Action
@@ -93,7 +103,7 @@ typedef struct HAHEditIndex {
             HAHTableViewCell *movingCell = cell.copy;
             movingCell.frame = [cell.superview convertRect:cell.frame toView:view];
             [view addSubview:movingCell];
-            movingCell.pageIndex = self.collectionView.selectionIndexPaths.anyObject.item;
+            movingCell.pageIndex = self.pageIndex;
             movingCell.groupIndex = column;
             movingCell.entityIndex = row;
             movingCell.startOrigin = movingCell.origin;
@@ -108,7 +118,15 @@ typedef struct HAHEditIndex {
             self.movingCell.origin = NSMakePoint(p1.x + p2.x, p1.y - p2.y);
 
             HAHEditIndex index = [self editingIndexWithGestureRecognizer:pan];
-            if (index.column >= 0)
+
+            if (index.pageIndex != self.pageIndex)
+            {
+                self.collectionView.selectionIndexPaths = [NSSet setWithObject:[NSIndexPath indexPathForItem:index.pageIndex inSection:0]];
+                [self.configView clear];
+                [self reloadTableView];
+                [self.groupIndicatorView removeFromSuperview];
+            }
+            else if (index.column >= 0)
             {
                 [self.tableView addSubview:self.groupIndicatorView];
 
@@ -116,10 +134,12 @@ typedef struct HAHEditIndex {
                     NSRect cellFrame = [self.tableView frameOfCellAtColumn:index.column row:index.row - 1];
                     self.groupIndicatorView.top = CGRectGetMaxY(cellFrame) + .5;
                     self.groupIndicatorView.left = CGRectGetMinX(cellFrame);
+                    self.groupIndicatorView.width = cellFrame.size.width;
                 } else {
                     NSRect cellFrame = [self.tableView frameOfCellAtColumn:index.column row:index.row];
                     self.groupIndicatorView.bottom = CGRectGetMinY(cellFrame) - .5;
                     self.groupIndicatorView.left = CGRectGetMinX(cellFrame);
+                    self.groupIndicatorView.width = cellFrame.size.width;
                 }
             }
             else
@@ -133,22 +153,25 @@ typedef struct HAHEditIndex {
             // 一定要在清理先，要不index不对
             HAHEditIndex index = [self editingIndexWithGestureRecognizer:pan];
 
-            // 清理
-            HAHPageModel *page = self.pages[self.movingCell.pageIndex];
-            HAHGroupModel *srcGroup = page.groups[self.movingCell.groupIndex];
-            [srcGroup.entities removeObject:self.movingCell.entity];
+            if (index.column >= 0) {
 
-            // 添加
-            page = self.pages[self.collectionView.selectionIndexPaths.anyObject.item];
-            HAHGroupModel *dstGroup = page.groups[index.column];
-            if (dstGroup == srcGroup &&
-                index.row > self.movingCell.entityIndex)
-            {
-                index.row--;
+                // 清理
+                HAHPageModel *page = self.pages[self.movingCell.pageIndex];
+                HAHGroupModel *srcGroup = page.groups[self.movingCell.groupIndex];
+                [srcGroup.entities removeObject:self.movingCell.entity];
+
+                // 添加
+                page = self.pages[self.pageIndex];
+                HAHGroupModel *dstGroup = page.groups[index.column];
+                if (dstGroup == srcGroup &&
+                    index.row > self.movingCell.entityIndex)
+                {
+                    index.row--;
+                }
+                [dstGroup.entities insertObject:self.movingCell.entity atIndex:index.row];
+                
+                [self reloadTableView];
             }
-            [dstGroup.entities insertObject:self.movingCell.entity atIndex:index.row];
-
-            [self reloadTableView];
 
             [self.groupIndicatorView removeFromSuperview];
             [self.movingCell removeFromSuperview];
@@ -193,11 +216,19 @@ typedef struct HAHEditIndex {
     [finalPages insertObject:ungroupedPage atIndex:0];
 
     self.pages = finalPages;
+    for (HAHPageModel *page in pages) {
+        [page removeObserver:self];
+        __weak typeof(self) weakSelf = self;
+        [page addObserver:self selector:@selector(setName:) postprocessor:^{
+            NSInteger index = weakSelf.pageIndex;
+            [weakSelf.collectionView reloadData];
+            weakSelf.collectionView.selectionIndexPaths = [NSSet setWithObject:[NSIndexPath indexPathForItem:index inSection:0]];
+        }];
+    }
+
     [self.collectionView reloadData];
+    self.collectionView.selectionIndexPaths = [NSSet setWithObject:[NSIndexPath indexPathForItem:1 inSection:0]];
 
-    NSSet *selectionIndexPaths = [NSSet setWithObject:[NSIndexPath indexPathForItem:1 inSection:0]];
-
-    self.collectionView.selectionIndexPaths = selectionIndexPaths;
     [self reloadTableView];
 }
 
@@ -211,16 +242,21 @@ typedef struct HAHEditIndex {
         [self.tableView removeTableColumn:column];
     }
 
-    HAHPageModel *page = self.pages[self.collectionView.selectionIndexPaths.anyObject.item];
+    HAHPageModel *page = self.pages[self.pageIndex];
 
+    __weak typeof(self) weakSelf = self;
     for (HAHGroupModel *group in page.groups) {
+
+        [group removeObserver:self];
+        [group addObserver:self selector:@selector(setName:) postprocessor:^{
+            [weakSelf reloadTableView];
+        }];
 
         // 算宽度，所有entities & group中最长
         NSFont *font = [NSFont systemFontOfSize:14];
         CGFloat width = [group.name sizeWithFont:font].width;
         for (HAHEntityModel *entity in group.entities) {
             width = MAX(width, [entity.name sizeWithFont:font].width);
-            __weak typeof(self) weakSelf = self;
             [entity removeObserver:self];
             [entity addObserver:self selector:@selector(setName:) postprocessor:^(id info, NSString *name)
              {
@@ -243,7 +279,10 @@ typedef struct HAHEditIndex {
 
 - (HAHEditIndex)editingIndexWithGestureRecognizer:(NSPanGestureRecognizer *)pan
 {
-    HAHEditIndex index = (HAHEditIndex){.column = -1, .row = -1, .rowCount = -1};
+    HAHEditIndex index = (HAHEditIndex){.pageIndex = -1, .column = -1, .row = -1, .rowCount = -1};
+
+    NSIndexPath *indexPath = [self.collectionView indexPathForItemAtPoint:[pan locationInView:self.collectionView]];
+    index.pageIndex = indexPath ? indexPath.item : self.pageIndex;
 
     // 中心点位置
     NSPoint p = [pan locationInView:self.tableView];
@@ -253,7 +292,7 @@ typedef struct HAHEditIndex {
     {
         index.column = column;
         NSInteger row = [self.tableView rowAtPoint:p];
-        NSInteger rowCount = self.pages[self.collectionView.selectionIndexPaths.anyObject.item].groups[column].entities.count;
+        NSInteger rowCount = self.pages[self.pageIndex].groups[column].entities.count;
         index.rowCount = rowCount;
         if (row >= 0 && row < rowCount)
         {
@@ -362,40 +401,15 @@ typedef struct HAHEditIndex {
     [self.configView reloadWithModel:tableColumn.group];
 }
 
-- (void)tableView:(NSTableView *)tableView draggingSession:(NSDraggingSession *)session willBeginAtPoint:(NSPoint)screenPoint forRowIndexes:(NSIndexSet *)rowIndexes
+- (void)tableView:(NSTableView *)tableView didDragTableColumn:(HAHTableColumn *)tableColumn
 {
-
-}
-
-- (void)tableView:(NSTableView *)tableView draggingSession:(NSDraggingSession *)session endedAtPoint:(NSPoint)screen
-{
-
-}
-
-- (NSDragOperation)tableView:(NSTableView *)tableView validateDrop:(id <NSDraggingInfo>)info proposedRow:(NSInteger)row proposedDropOperation:(NSTableViewDropOperation)dropOperation
-{
-    [tableView setDropRow: row
-       dropOperation: dropOperation];
-
-    NSDragOperation dragOp = NSDragOperationCopy;
-
-    return (dragOp);
-}
-
-- (BOOL)tableView:(NSTableView *)tableView acceptDrop:(id <NSDraggingInfo>)info row:(NSInteger)row dropOperation:(NSTableViewDropOperation)dropOperation
-{
-    if (dropOperation == NSTableViewDropOn) {
-        // 替换
-
-    } else if (dropOperation == NSTableViewDropAbove) {
-        // 插入
-
-    } else {
-        NSLog (@"unexpected operation (%lu) in %s",
-               (unsigned long)dropOperation, __FUNCTION__);
-    }
-
-    return YES;
+    HAHPageModel *page = self.pages[self.pageIndex];
+    NSUInteger columnIndex = [tableView.tableColumns indexOfObject:tableColumn];
+    NSUInteger modelIndex = [page.groups indexOfObject:tableColumn.group];
+    if (columnIndex != modelIndex) { // 减少一次save的io
+        [page.groups removeObjectAtIndex:modelIndex];
+        [page.groups insertObject:tableColumn.group atIndex:columnIndex];
+    };
 }
 
 #pragma mark - NSTableViewDataSource
@@ -403,7 +417,7 @@ typedef struct HAHEditIndex {
 - (NSInteger)numberOfRowsInTableView:(NSTableView *)tableView
 {
     NSInteger row = 0;
-    for (HAHGroupModel *group in self.pages[self.collectionView.selectionIndexPaths.anyObject.item].groups) {
+    for (HAHGroupModel *group in self.pages[self.pageIndex].groups) {
         row = MAX(row, group.entities.count);
     }
     return row;

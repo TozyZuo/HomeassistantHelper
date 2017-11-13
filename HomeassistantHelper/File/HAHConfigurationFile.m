@@ -67,7 +67,31 @@
     __weak typeof(self) weakSelf = self;
     // 顺便添加监听
     for (HAHPageModel *pageModel in self.groupFile.pages) {
-        // TODO page监听
+
+        [pageModel.groups removeObserver:self];
+        [pageModel.groups addObserver:self selector:@selector(removeObject:) postprocessor:^(id info, id object)
+         {
+             [[HAHDataManager sharedManager] saveFile:weakSelf.groupFile];
+         }];
+
+        [pageModel.groups addObserver:self selector:@selector(removeObjectAtIndex:) postprocessor:^(id info, NSUInteger index)
+         {
+             [[HAHDataManager sharedManager] saveFile:weakSelf.groupFile];
+         }];
+
+        [pageModel.groups addObserver:self selector:@selector(insertObject:atIndex:) postprocessor:^(id info, id object, NSUInteger index)
+         {
+             [[HAHDataManager sharedManager] saveFile:weakSelf.groupFile];
+         }];
+
+        __weak typeof(pageModel) weakPage = pageModel;
+        [pageModel removeObserver:self];
+        [pageModel addObserver:self selector:@selector(setName:) postprocessor:^(id info, NSString *name)
+         {
+             weakSelf.customizeFile[weakPage.id] = name;
+             [[HAHDataManager sharedManager] saveFile:weakSelf.customizeFile];
+             [[HAHDataManager sharedManager] saveFile:weakSelf.groupFile];
+         }];
         for (HAHGroupModel *groupModel in pageModel.groups) {
 
             [groupModel removeObserver:self];
@@ -76,8 +100,22 @@
                  [[HAHDataManager sharedManager] saveFile:weakSelf.groupFile];
              }];
 
+            [groupModel.entities addObserver:self selector:@selector(removeObjectAtIndex:) postprocessor:^(id info, NSUInteger index)
+             {
+                 [[HAHDataManager sharedManager] saveFile:weakSelf.groupFile];
+             }];
+
             [groupModel.entities addObserver:self selector:@selector(insertObject:atIndex:) postprocessor:^(id info, id object, NSUInteger index)
              {
+                 [[HAHDataManager sharedManager] saveFile:weakSelf.groupFile];
+             }];
+
+            __weak typeof(groupModel) weakGroup = groupModel;
+            [groupModel removeObserver:self];
+            [groupModel addObserver:self selector:@selector(setName:) postprocessor:^(id info, NSString *name)
+             {
+                 weakSelf.customizeFile[weakGroup.id] = name;
+                 [[HAHDataManager sharedManager] saveFile:weakSelf.customizeFile];
                  [[HAHDataManager sharedManager] saveFile:weakSelf.groupFile];
              }];
 
@@ -101,7 +139,7 @@
                 [entity removeObserver:self];
                 [entity addObserver:self selector:@selector(setName:) postprocessor:^(id info, NSString *name)
                  {
-                     weakSelf.customizeFile[weakEntity.id] = weakEntity.name;
+                     weakSelf.customizeFile[weakEntity.id] = name;
                      [[HAHDataManager sharedManager] saveFile:weakSelf.customizeFile];
                  }];
             }

@@ -44,20 +44,6 @@
     }
 }
 
-- (void)initialize
-{
-    [super initialize];
-    // 注册通知
-//    NSDictionary *notificationDictionary = @{NSWindowDidResizeNotification : NSStringFromSelector(@selector(windowDidResizeNotification:))};
-
-//    for (NSString *notificationName in notificationDictionary) {
-//        SEL selector = NSSelectorFromString(notificationDictionary[notificationName]);
-//        [[NSNotificationCenter defaultCenter] removeObserver:self name:notificationName object:nil];
-//        [[NSNotificationCenter defaultCenter] addObserver:self selector:selector name:notificationName object:nil];
-//    }
-
-}
-
 - (void)viewDidLoad
 {
     [super viewDidLoad];
@@ -146,23 +132,6 @@
     [[NSUserDefaults standardUserDefaults] synchronize];
 }
 
-#pragma mark - Notification
-
-- (void)windowDidResizeNotification:(NSNotification *)notification
-{
-    NSWindow *window = notification.object;
-
-    NSLog(@"%@", NSStringFromRect(window.frame));
-}
-
-- (void)controlTextDidEndEditingNotification:(NSNotification *)notification
-{
-//    NSTextField *textField = notification.object;
-
-}
-
 #pragma mark - Private
-
-//- (void)
 
 @end
