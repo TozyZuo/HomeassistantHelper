@@ -24,8 +24,6 @@
 @property (weak) IBOutlet NSButton          *keepPasswordButton;
 
 @property (nonatomic, strong) HAHEditViewController     *editViewController;
-@property (nonatomic, strong) NSArray<HAHEntityModel *> *entities;
-@property (nonatomic, strong) NSArray<HAHPageModel *>   *pages;
 
 @end
 
@@ -47,6 +45,8 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(restoreBackupNotification:) name:HAHRestorBackupNotification object:nil];
 
     NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
     self.addressTextField.stringValue = [userDefaults objectForKey:HAHUDAdressKey] ?: @"http://192.168.x.x:8123";
@@ -94,8 +94,6 @@
 
     [[HAHDataManager sharedManager] requestDataWithURL:url user:user password:password complete:^(NSArray<HAHEntityModel *> *ungroupedEntities, NSArray<HAHPageModel *> *pages)
     {
-//        weakSelf.entities = entities;
-        weakSelf.pages = pages;
 //        HAHLOG(@"%@", pages);
         sender.title = @"获取";
         sender.enabled = YES;
@@ -130,6 +128,13 @@
         [[NSUserDefaults standardUserDefaults] removeObjectForKey:HAHUDKeepPasswordKey];
     }
     [[NSUserDefaults standardUserDefaults] synchronize];
+}
+
+#pragma mark - Notification
+
+- (void)restoreBackupNotification:(NSNotification *)notification
+{
+    [self readInfoButtonAction:self.readInfoButton];
 }
 
 #pragma mark - Private

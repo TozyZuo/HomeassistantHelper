@@ -18,6 +18,7 @@ FOUNDATION_EXPORT NSString * const HAHUDKeepPasswordKey;
 FOUNDATION_EXPORT NSString * const HAHUDMainWindowFrameKey;
 FOUNDATION_EXPORT NSString * const HAHUDBrowserWindowFrameKey;
 FOUNDATION_EXPORT NSString * const HAHUDConsoleWindowFrameKey;
+FOUNDATION_EXPORT NSString * const HAHUDBackupWindowFrameKey;
 
 FOUNDATION_EXPORT NSString * const HAHUDConsoleFontSizeKey;
 
@@ -36,6 +37,10 @@ FOUNDATION_EXPORT NSString  *HAHTrimAllWhiteSpaceWithText(NSString *text);
 #pragma mark - Global
 
 FOUNDATION_EXPORT CGFloat const HAHModelConfigViewWidth;
+
+#pragma mark - Notification
+
+FOUNDATION_EXPORT NSString * const HAHRestorBackupNotification;
 
 #pragma mark - String
 

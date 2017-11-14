@@ -18,6 +18,11 @@
 
 void *HAHWindowControllerManagerKey = &HAHWindowControllerManagerKey;
 
+- (void)dealloc
+{
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
+}
+
 + (instancetype)sharedManager
 {
     id _manager = objc_getAssociatedObject(self, HAHWindowControllerManagerKey);
@@ -70,6 +75,45 @@ void *HAHWindowControllerManagerKey = &HAHWindowControllerManagerKey;
     } else {
         [self showWindow:self.window];
     }
+}
+
+@end
+
+@implementation HAHManagerController
+
+- (instancetype)initWithCoder:(NSCoder *)coder
+{
+    self = [super initWithCoder:coder];
+    if (self) {
+        self.objectClass = self.managerClass;
+        self.content = [self.managerClass sharedManager];
+    }
+    return self;
+}
+
+- (BOOL)canAdd
+{
+    return NO;
+}
+
+- (BOOL)canRemove
+{
+    return NO;
+}
+
+- (void)addObject:(id)object
+{
+
+}
+
+- (void)removeObject:(id)object
+{
+
+}
+
+- (id)newObject
+{
+    return [self.managerClass sharedManager];
 }
 
 @end

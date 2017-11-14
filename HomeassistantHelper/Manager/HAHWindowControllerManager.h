@@ -18,3 +18,7 @@
 - (void)toggleDisplay;
 
 @end
+
+@interface HAHManagerController : NSObjectController
+@property (nonatomic, readonly) Class managerClass;
+@end

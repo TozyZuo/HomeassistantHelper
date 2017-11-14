@@ -14,6 +14,6 @@
 
 @end
 
-@interface HAHBrowserManagerController : NSObjectController
+@interface HAHBrowserManagerController : HAHManagerController
 
 @end

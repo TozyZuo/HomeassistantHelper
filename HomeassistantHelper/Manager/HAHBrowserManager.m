@@ -54,39 +54,9 @@
 
 @implementation HAHBrowserManagerController
 
-- (instancetype)initWithCoder:(NSCoder *)coder
+- (Class)managerClass
 {
-    self = [super initWithCoder:coder];
-    if (self) {
-        self.objectClass = [HAHBrowserManager class];
-        self.content = [HAHBrowserManager sharedManager];
-    }
-    return self;
-}
-
-- (BOOL)canAdd
-{
-    return NO;
-}
-
-- (BOOL)canRemove
-{
-    return NO;
-}
-
-- (void)addObject:(id)object
-{
-
-}
-
-- (void)removeObject:(id)object
-{
-
-}
-
-- (id)newObject
-{
-    return [HAHBrowserManager sharedManager];
+    return [HAHBrowserManager class];
 }
 
 @end

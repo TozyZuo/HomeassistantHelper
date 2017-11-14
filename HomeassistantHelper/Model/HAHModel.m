@@ -86,11 +86,16 @@ void *runtimekeyHAHModelInformation = &runtimekeyHAHModelInformation;
 
 - (NSString *)description
 {
-    NSMutableString *description = super.description.mutableCopy;
+//    NSMutableString *description = super.description.mutableCopy;
+    NSMutableString *description = [NSMutableString stringWithFormat:@"<%@: %p ", [self class], self];
 
+    NSMutableArray *properties = [[NSMutableArray alloc] init];
     for (NSString *property in [self.class infomation].propertyNames) {
-        [description appendFormat:@" [%@] %@", property, [self valueForKey:property]];
+//        [description appendFormat:@" [%@] %@", property, [self valueForKey:property]];
+        [properties addObject:[NSString stringWithFormat:@"%@ = %@", property, [self valueForKey:property]]];
     }
+
+    [description appendFormat:@"%@>", properties];
 
     return description;
 }

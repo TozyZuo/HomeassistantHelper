@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="12118" systemVersion="16F73" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" customObjectInstantitationMethod="direct">
+<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="12118" systemVersion="16G29" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" customObjectInstantitationMethod="direct">
     <dependencies>
         <deployment identifier="macosx"/>
         <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="12118"/>
@@ -30,7 +30,7 @@
             <connections>
                 <outlet property="textField" destination="wdd-hC-jsB" id="88Z-Wk-qac"/>
             </connections>
-            <point key="canvasLocation" x="-227.5" y="3.5"/>
+            <point key="canvasLocation" x="-18" y="-6"/>
         </tableCellView>
     </objects>
 </document>

@@ -22,8 +22,6 @@
 
 @implementation HAHTableViewCell
 
-void *runtimeHAHTableViewCellIdentifierKey = &runtimeHAHTableViewCellIdentifierKey;
-
 - (void)awakeFromNib
 {
     [super awakeFromNib];
@@ -35,10 +33,9 @@ void *runtimeHAHTableViewCellIdentifierKey = &runtimeHAHTableViewCellIdentifierK
 
 + (NSString *)identifier
 {
-    NSString *identifier = objc_getAssociatedObject(self, runtimeHAHTableViewCellIdentifierKey);
+    static NSString *identifier = nil;
     if (!identifier) {
         identifier = [NSString stringWithFormat:@"%@ID", NSStringFromClass(self)];
-        objc_setAssociatedObject(self, runtimeHAHTableViewCellIdentifierKey, identifier, OBJC_ASSOCIATION_RETAIN);
     }
     return identifier;
 }

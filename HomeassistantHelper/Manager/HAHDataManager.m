@@ -10,6 +10,7 @@
 #import "HAHEntityParser.h"
 #import "HAHGroupModel.h"
 #import "HAHPageModel.h"
+#import "HAHBackupModel.h"
 #import "HAHConfigurationFile.h"
 #import "HAHGroupFile.h"
 #import <NMSSH/NMSSH.h>
@@ -18,7 +19,7 @@
 
 #define LoadFileFromLocal // 本地开发测试
 
-static NSString * const HAHBackupDirectory = @"HomeassistantHelperBackup";
+static NSString * const HAHBackupFolder = @"HomeassistantHelperBackup";
 
 #ifdef LoadFileFromLocal
 
@@ -86,6 +87,21 @@ static NSString * const HAHHomeassistantPath = @"/home/homeassistant/.homeassist
     [self startFileRequest];
 }
 
+- (void)requestBackupComplete:(void (^)(HAHBackupModel *))completeBlock
+{
+    dispatch_async(self.sshQueue, ^{
+
+        NSString *result = [self execute:@"ls", @"-t", [NSString stringWithFormat:@"%@%@", HAHHomeassistantPath, HAHBackupFolder], nil];
+        HAHBackupModel *backupModel = [[HAHBackupModel alloc] init];
+        backupModel.backupFolders = [[result stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]] componentsSeparatedByString:@"\n"];
+        if (completeBlock) {
+            dispatch_async(dispatch_get_main_queue(), ^{
+                completeBlock(backupModel);
+            });
+        }
+    });
+}
+
 - (void)saveFile:(HAHFile *)file
 {
     // 多次保存同一个文件，只保存一次
@@ -99,14 +115,30 @@ static NSString * const HAHHomeassistantPath = @"/home/homeassistant/.homeassist
 
             if (self.filesToSave.count) {
 
-                [self backupFile:file.name];
-
                 HAHFile *file = self.filesToSave.anyObject;
-                [self execute:@"echo", [NSString stringWithFormat:@"\"%@\" > %@%@", file.text, HAHHomeassistantPath, file.name], nil];
+
+                if ([self backupFile:file.name]) {
+                    [self execute:@"echo", [NSString stringWithFormat:@"\"%@\" > %@%@", file.text, HAHHomeassistantPath, file.name], nil];
+                }
+
                 [self.filesToSave removeObject:file];
             }
 
         });
+    });
+}
+
+- (void)restoreBackupWithFolder:(NSString *)folder complete:(void (^)(NSString *))completeBlock
+{
+    dispatch_async(self.sshQueue, ^{
+
+        NSString *result = [self execute:@"cp", [NSString stringWithFormat:@"%@%@/%@/*", HAHHomeassistantPath, HAHBackupFolder, folder], HAHHomeassistantPath, nil];
+
+        if (completeBlock) {
+            dispatch_async(dispatch_get_main_queue(), ^{
+                completeBlock(result);
+            });
+        }
     });
 }
 
@@ -265,29 +297,44 @@ static NSString * const HAHHomeassistantPath = @"/home/homeassistant/.homeassist
     return [self execute:@"cat", [NSString stringWithFormat:@"%@%@", HAHHomeassistantPath, fileName], nil];
 }
 
-- (BOOL)makeDirectoryWithPath:(NSString *)path directory:(NSString *)directory
+- (BOOL)createFolderWithPath:(NSString *)path folderName:(NSString *)folderName
 {
     NSString *result = [self execute:@"ls", path, nil];
-    if (![result containsString:directory]) {
-        [self execute:@"mkdir", [NSString stringWithFormat:@"%@%@%@", path, [path hasSuffix:@"/"] ? @"" : @"/", directory], nil];
+    if (![result containsString:folderName]) {
+        NSString *fullPath = [NSString stringWithFormat:@"%@%@%@", path, [path hasSuffix:@"/"] ? @"" : @"/", folderName];
+        NSString *result = [self execute:@"mkdir", fullPath, nil];
+        if (!result.length) {
+            HAHLOG(@"Create folder error %@ \n%@\n %s", fullPath, result,  __PRETTY_FUNCTION__);
+            return NO;
+        }
         return YES;
     }
-    return NO;
+    return YES;
 }
 
-- (void)backupFile:(NSString *)fileName
+- (BOOL)backupFile:(NSString *)fileName
 {
-    [self makeDirectoryWithPath:HAHHomeassistantPath directory:HAHBackupDirectory];
+    if ([self createFolderWithPath:HAHHomeassistantPath folderName:HAHBackupFolder])
+    {
+        NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
+        dateFormatter.dateFormat = @"yyyyMMdd";
+        dateFormatter.locale = [[NSLocale alloc] initWithLocaleIdentifier:@"zh_CN"];
+        NSString *today = [dateFormatter stringFromDate:[NSDate date]];
 
-    NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
-    dateFormatter.dateFormat = @"yyyyMMdd";
-    dateFormatter.locale = [[NSLocale alloc] initWithLocaleIdentifier:@"zh_CN"];
-    NSString *today = [dateFormatter stringFromDate:[NSDate date]];
+        NSString *backupPath = [NSString stringWithFormat:@"%@%@/", HAHHomeassistantPath, HAHBackupFolder];
 
-    NSString *backupPath = [NSString stringWithFormat:@"%@%@/", HAHHomeassistantPath, HAHBackupDirectory];
-    [self makeDirectoryWithPath:backupPath directory:today];
-
-    [self execute:@"cp", @"-n", [NSString stringWithFormat:@"%@%@", HAHHomeassistantPath, fileName], [NSString stringWithFormat:@"%@%@/%@", backupPath, today, fileName], nil];
+        if ([self createFolderWithPath:backupPath folderName:today])
+        {
+            NSString *result = [self execute:@"cp", @"-n", [NSString stringWithFormat:@"%@%@", HAHHomeassistantPath, fileName], [NSString stringWithFormat:@"%@%@/%@", backupPath, today, fileName], nil];
+            if (!result.length) {
+                HAHLOG(@"Back %@ up error! \n%@\n %s", fileName, result,  __PRETTY_FUNCTION__);
+                return NO;
+            }
+            return YES;
+        }
+        return NO;
+    }
+    return NO;
 }
 
 #pragma mark - WKNavigationDelegate

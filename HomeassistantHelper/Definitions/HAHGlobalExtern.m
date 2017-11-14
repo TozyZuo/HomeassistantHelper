@@ -18,6 +18,7 @@ NSString * const HAHUDKeepPasswordKey = @"HAHUDKeepPasswordKey";
 NSString * const HAHUDMainWindowFrameKey = @"HAHUDMainWindowFrameKey";
 NSString * const HAHUDBrowserWindowFrameKey = @"HAHUDBrowserWindowFrameKey";
 NSString * const HAHUDConsoleWindowFrameKey = @"HAHUDConsoleWindowFrameKey";
+NSString * const HAHUDBackupWindowFrameKey = @"HAHUDBackupWindowFrameKey";
 
 NSString * const HAHUDConsoleFontSizeKey = @"HAHUDConsoleFontSizeKey";
 
@@ -74,6 +75,10 @@ NSString *HAHTrimAllWhiteSpaceWithText(NSString *text)
 #pragma mark - Global
 
 CGFloat const HAHModelConfigViewWidth = 235;
+
+#pragma mark - Notification
+
+NSString * const HAHRestorBackupNotification = @"HAHRestorBackupNotification";
 
 #pragma mark - String
 

@@ -103,39 +103,9 @@
 
 @implementation HAHConsoleManagerController
 
-- (instancetype)initWithCoder:(NSCoder *)coder
+- (Class)managerClass
 {
-    self = [super initWithCoder:coder];
-    if (self) {
-        self.objectClass = [HAHConsoleManager class];
-        self.content = [HAHConsoleManager sharedManager];
-    }
-    return self;
-}
-
-- (BOOL)canAdd
-{
-    return NO;
-}
-
-- (BOOL)canRemove
-{
-    return NO;
-}
-
-- (void)addObject:(id)object
-{
-
-}
-
-- (void)removeObject:(id)object
-{
-
-}
-
-- (id)newObject
-{
-    return [HAHConsoleManager sharedManager];
+    return [HAHConsoleManager class];
 }
 
 @end

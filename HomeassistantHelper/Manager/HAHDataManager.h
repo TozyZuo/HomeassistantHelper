@@ -8,13 +8,15 @@
 
 #import "HAHManager.h"
 
-@class HAHEntityModel, HAHPageModel, HAHFile;
+@class HAHEntityModel, HAHPageModel, HAHBackupModel, HAHFile;
 
 @interface HAHDataManager : HAHManager
 
 - (void)requestDataWithURL:(NSString *)url user:(NSString *)user password:(NSString *)password complete:(void (^)(NSArray<HAHEntityModel *> *ungroupedEntities, NSArray<HAHPageModel *> *pages))completeBlock;
+- (void)requestBackupComplete:(void (^)(HAHBackupModel *backup))completeBlock;
 
 - (void)saveFile:(HAHFile *)file;
+- (void)restoreBackupWithFolder:(NSString *)folder complete:(void (^)(NSString *result))completeBlock;
 // 同步，阻塞进程
 - (NSString *)requestFile:(NSString *)fileName;
 

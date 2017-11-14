@@ -7,6 +7,11 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		BA05CDF11FBADC5100C495B7 /* HAHBackupModel.m in Sources */ = {isa = PBXBuildFile; fileRef = BA05CDF01FBADC5100C495B7 /* HAHBackupModel.m */; };
+		BA05CDF61FBAE74900C495B7 /* HAHBackupManager.m in Sources */ = {isa = PBXBuildFile; fileRef = BA05CDF41FBAE74900C495B7 /* HAHBackupManager.m */; };
+		BA05CDF71FBAE74900C495B7 /* HAHBackupManager.xib in Resources */ = {isa = PBXBuildFile; fileRef = BA05CDF51FBAE74900C495B7 /* HAHBackupManager.xib */; };
+		BA05CDFA1FBAE79C00C495B7 /* HAHBackupCell.m in Sources */ = {isa = PBXBuildFile; fileRef = BA05CDF91FBAE79C00C495B7 /* HAHBackupCell.m */; };
+		BA05CDFC1FBAE7C400C495B7 /* HAHBackupCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = BA05CDFB1FBAE7C400C495B7 /* HAHBackupCell.xib */; };
 		BA23DB2D1F1356E300939AA8 /* HAHGlobalExtern.m in Sources */ = {isa = PBXBuildFile; fileRef = BA23DB2C1F1356E300939AA8 /* HAHGlobalExtern.m */; };
 		BA23DB361F136E4100939AA8 /* GDataXMLNode.m in Sources */ = {isa = PBXBuildFile; fileRef = BA23DB311F136E4100939AA8 /* GDataXMLNode.m */; };
 		BA6AFD171F2DBCAF0020BCDD /* HAHCustomizeParser.m in Sources */ = {isa = PBXBuildFile; fileRef = BA6AFD161F2DBCAF0020BCDD /* HAHCustomizeParser.m */; };
@@ -77,6 +82,14 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		BA05CDEF1FBADC5100C495B7 /* HAHBackupModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HAHBackupModel.h; sourceTree = "<group>"; };
+		BA05CDF01FBADC5100C495B7 /* HAHBackupModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HAHBackupModel.m; sourceTree = "<group>"; };
+		BA05CDF31FBAE74900C495B7 /* HAHBackupManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HAHBackupManager.h; sourceTree = "<group>"; };
+		BA05CDF41FBAE74900C495B7 /* HAHBackupManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HAHBackupManager.m; sourceTree = "<group>"; };
+		BA05CDF51FBAE74900C495B7 /* HAHBackupManager.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = HAHBackupManager.xib; sourceTree = "<group>"; };
+		BA05CDF81FBAE79C00C495B7 /* HAHBackupCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HAHBackupCell.h; sourceTree = "<group>"; };
+		BA05CDF91FBAE79C00C495B7 /* HAHBackupCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HAHBackupCell.m; sourceTree = "<group>"; };
+		BA05CDFB1FBAE7C400C495B7 /* HAHBackupCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = HAHBackupCell.xib; sourceTree = "<group>"; };
 		BA23DB2B1F1356E300939AA8 /* HAHGlobalExtern.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HAHGlobalExtern.h; sourceTree = "<group>"; };
 		BA23DB2C1F1356E300939AA8 /* HAHGlobalExtern.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HAHGlobalExtern.m; sourceTree = "<group>"; };
 		BA23DB301F136E4100939AA8 /* GDataXMLNode.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GDataXMLNode.h; sourceTree = "<group>"; };
@@ -186,6 +199,19 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		BA05CDF21FBAE74900C495B7 /* HAHBackupManager */ = {
+			isa = PBXGroup;
+			children = (
+				BA05CDF31FBAE74900C495B7 /* HAHBackupManager.h */,
+				BA05CDF41FBAE74900C495B7 /* HAHBackupManager.m */,
+				BA05CDF51FBAE74900C495B7 /* HAHBackupManager.xib */,
+				BA05CDF81FBAE79C00C495B7 /* HAHBackupCell.h */,
+				BA05CDF91FBAE79C00C495B7 /* HAHBackupCell.m */,
+				BA05CDFB1FBAE7C400C495B7 /* HAHBackupCell.xib */,
+			);
+			path = HAHBackupManager;
+			sourceTree = "<group>";
+		};
 		BA23DB2E1F136E4100939AA8 /* OpenSource */ = {
 			isa = PBXGroup;
 			children = (
@@ -387,6 +413,8 @@
 				BAEECA851F14AD4B0099000C /* HAHGroupModel.m */,
 				BAEECA871F14AD6B0099000C /* HAHPageModel.h */,
 				BAEECA881F14AD6B0099000C /* HAHPageModel.m */,
+				BA05CDEF1FBADC5100C495B7 /* HAHBackupModel.h */,
+				BA05CDF01FBADC5100C495B7 /* HAHBackupModel.m */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -420,6 +448,7 @@
 				BA7BE3441F1A191300451762 /* HAHBrowserManager.h */,
 				BA7BE3451F1A191300451762 /* HAHBrowserManager.m */,
 				BA7BE3461F1A191300451762 /* HAHBrowserManager.xib */,
+				BA05CDF21FBAE74900C495B7 /* HAHBackupManager */,
 			);
 			path = Manager;
 			sourceTree = "<group>";
@@ -585,12 +614,14 @@
 			buildActionMask = 2147483647;
 			files = (
 				BA8F98E51F11BDF700D16523 /* Assets.xcassets in Resources */,
+				BA05CDFC1FBAE7C400C495B7 /* HAHBackupCell.xib in Resources */,
 				BA74317F1F3072AD00713EA6 /* HAHTableViewCell.xib in Resources */,
 				BAEECA821F146D740099000C /* HAHConsoleManager.xib in Resources */,
 				BAD6BEF61F52FD3400C34C4F /* modelConfigMap.plist in Resources */,
 				BA7BE3481F1A191300451762 /* HAHBrowserManager.xib in Resources */,
 				BA8F98E81F11BDF700D16523 /* Main.storyboard in Resources */,
 				BA7BE36D1F1BB65900451762 /* HAHPageCollectionViewItem.xib in Resources */,
+				BA05CDF71FBAE74900C495B7 /* HAHBackupManager.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -626,13 +657,16 @@
 				BA7BE3621F1B23E000451762 /* HAHView.m in Sources */,
 				BA7BE36C1F1BB65900451762 /* HAHPageCollectionViewItem.m in Sources */,
 				BA23DB2D1F1356E300939AA8 /* HAHGlobalExtern.m in Sources */,
+				BA05CDF61FBAE74900C495B7 /* HAHBackupManager.m in Sources */,
 				BAEECA911F14C50F0099000C /* HAHParser.m in Sources */,
 				BAD6BEF01F52F35D00C34C4F /* HAHConfigManager.m in Sources */,
+				BA05CDF11FBADC5100C495B7 /* HAHBackupModel.m in Sources */,
 				BA7BE3651F1B240100451762 /* HAHModelConfigView.m in Sources */,
 				BA8F98DD1F11BDF700D16523 /* AppDelegate.m in Sources */,
 				BA6AFD1E1F2DF22C0020BCDD /* HAHTableColumn.m in Sources */,
 				BAD86E4F1F9878B800D19966 /* Aspects.m in Sources */,
 				BAB76ADD1FB4579A0069F670 /* HAHGroupFile.m in Sources */,
+				BA05CDFA1FBAE79C00C495B7 /* HAHBackupCell.m in Sources */,
 				BA6AFD171F2DBCAF0020BCDD /* HAHCustomizeParser.m in Sources */,
 				BAEECA9A1F14C7920099000C /* HAHConfigParser.m in Sources */,
 				BA8038001F18FE7C00EE7A36 /* NSView+Extensions.m in Sources */,
