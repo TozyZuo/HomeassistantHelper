@@ -13,11 +13,12 @@
 @interface HAHTableViewCell ()
 @property (nonatomic, strong) HAHEntityModel    *entity;
 // HAHUsedForEdit
-@property (nonatomic, assign) BOOL              editing;
+@property (nonatomic, assign) BOOL              isCopied;
 @property (nonatomic, assign) NSUInteger        pageIndex;
 @property (nonatomic, assign) NSUInteger        groupIndex;
 @property (nonatomic, assign) NSUInteger        entityIndex;
 @property (nonatomic, assign) NSPoint           startOrigin;
+@property (nonatomic,  weak ) HAHTableViewCell  *associatedCell;
 @end
 
 @implementation HAHTableViewCell
@@ -38,6 +39,18 @@
         identifier = [NSString stringWithFormat:@"%@ID", NSStringFromClass(self)];
     }
     return identifier;
+}
+
+- (void)setSelected:(BOOL)selected
+{
+    if (_selected != selected) {
+        _selected = selected;
+        if (selected) {
+            self.layer.borderColor = [NSColor tableViewCellSelectedBorderColor];
+        } else {
+            self.layer.borderColor = [NSColor tableViewCellBorderColor];
+        }
+    }
 }
 
 - (void)bindEntityModel:(HAHEntityModel *)entityModel
@@ -68,9 +81,14 @@
 
 #pragma mark - HAHUsedForEdit
 
-- (void)setEditing:(BOOL)editing
+- (void)setIsCopied:(BOOL)isCopied
 {
-    _editing = editing;
+    _isCopied = isCopied;
+    if (isCopied) {
+        self.alphaValue = 1;
+    } else {
+        self.alphaValue = .5;
+    }
 }
 
 @end

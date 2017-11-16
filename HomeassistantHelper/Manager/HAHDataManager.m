@@ -303,7 +303,7 @@ static NSString * const HAHHomeassistantPath = @"/home/homeassistant/.homeassist
     if (![result containsString:folderName]) {
         NSString *fullPath = [NSString stringWithFormat:@"%@%@%@", path, [path hasSuffix:@"/"] ? @"" : @"/", folderName];
         NSString *result = [self execute:@"mkdir", fullPath, nil];
-        if (!result.length) {
+        if (result.length) {
             HAHLOG(@"Create folder error %@ \n%@\n %s", fullPath, result,  __PRETTY_FUNCTION__);
             return NO;
         }
@@ -326,7 +326,7 @@ static NSString * const HAHHomeassistantPath = @"/home/homeassistant/.homeassist
         if ([self createFolderWithPath:backupPath folderName:today])
         {
             NSString *result = [self execute:@"cp", @"-n", [NSString stringWithFormat:@"%@%@", HAHHomeassistantPath, fileName], [NSString stringWithFormat:@"%@%@/%@", backupPath, today, fileName], nil];
-            if (!result.length) {
+            if (result.length) {
                 HAHLOG(@"Back %@ up error! \n%@\n %s", fileName, result,  __PRETTY_FUNCTION__);
                 return NO;
             }

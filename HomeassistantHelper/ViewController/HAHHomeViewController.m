@@ -55,17 +55,6 @@
     self.keepPasswordButton.state = [[userDefaults objectForKey:HAHUDKeepPasswordKey] boolValue];
 }
 
-- (void)viewDidAppear
-{
-    [super viewDidAppear];
-
-}
-
-- (BOOL)performKeyEquivalent:(NSEvent *)event
-{
-    return [super performKeyEquivalent:event];
-}
-
 #pragma mark - Action
 
 - (IBAction)readInfoButtonAction:(NSButton *)sender

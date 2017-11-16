@@ -41,4 +41,9 @@ NSColor *NSColorWithRGBColor(unsigned char r, unsigned char g, unsigned char b)
     return NSColorWithRGBColor(197, 197, 197).CGColor;
 }
 
++ (CGColorRef)tableViewCellSelectedBorderColor
+{
+    return [NSColor blueColor].CGColor;
+}
+
 @end

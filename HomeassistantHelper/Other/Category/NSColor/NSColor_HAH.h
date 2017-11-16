@@ -18,5 +18,6 @@ FOUNDATION_EXPORT NSColor *NSColorWithRGBColor(unsigned char r, unsigned char g,
 + (CGColorRef)pageCollectionViewItemLineColor;
 
 + (CGColorRef)tableViewCellBorderColor;
++ (CGColorRef)tableViewCellSelectedBorderColor;
 
 @end

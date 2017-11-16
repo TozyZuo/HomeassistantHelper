@@ -763,7 +763,7 @@
                             <textField verticalHuggingPriority="750" fixedFrame="YES" allowsCharacterPickerTouchBarItem="NO" translatesAutoresizingMaskIntoConstraints="NO" id="4zL-cB-5MS">
                                 <rect key="frame" x="75" y="342" width="115" height="22"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" alignment="left" placeholderString="pi" drawsBackground="YES" usesSingleLineMode="YES" id="mlb-3c-fwP">
+                                <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" state="on" borderStyle="bezel" alignment="left" placeholderString="pi" drawsBackground="YES" usesSingleLineMode="YES" id="mlb-3c-fwP">
                                     <font key="font" metaFont="system"/>
                                     <color key="textColor" name="textColor" catalog="System" colorSpace="catalog"/>
                                     <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
@@ -884,7 +884,7 @@
                                             <rect key="frame" x="1" y="0.0" width="516" height="368"/>
                                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                             <subviews>
-                                                <tableView verticalHuggingPriority="750" allowsExpansionToolTips="YES" columnAutoresizingStyle="lastColumnOnly" selectionHighlightStyle="none" columnSelection="YES" multipleSelection="NO" autosaveColumns="NO" rowSizeStyle="automatic" headerView="xJ7-FA-1Ex" viewBased="YES" id="Vyt-Ht-82b">
+                                                <tableView verticalHuggingPriority="750" allowsExpansionToolTips="YES" columnAutoresizingStyle="none" selectionHighlightStyle="none" columnSelection="YES" multipleSelection="NO" autosaveColumns="NO" rowSizeStyle="automatic" headerView="xJ7-FA-1Ex" viewBased="YES" id="Vyt-Ht-82b">
                                                     <rect key="frame" x="0.0" y="0.0" width="516" height="345"/>
                                                     <autoresizingMask key="autoresizingMask"/>
                                                     <size key="intercellSpacing" width="3" height="2"/>
@@ -1050,7 +1050,7 @@
                             <constraint firstItem="QNO-Ef-W1v" firstAttribute="leading" secondItem="ddL-0n-Taq" secondAttribute="leading" id="tYh-tc-ZS7"/>
                         </constraints>
                         <gestureRecognizers>
-                            <panGestureRecognizer delaysPrimaryMouseButtonEvents="YES" id="ZSq-i3-2KK">
+                            <panGestureRecognizer delaysPrimaryMouseButtonEvents="YES" delaysKeyEvents="YES" id="ZSq-i3-2KK" customClass="HAHPanEditingGestureRecognizer">
                                 <connections>
                                     <action selector="editPanAction:" target="hdG-d1-Tbl" id="bs7-1U-C9L"/>
                                     <outlet property="delegate" destination="hdG-d1-Tbl" id="ibT-yR-omK"/>

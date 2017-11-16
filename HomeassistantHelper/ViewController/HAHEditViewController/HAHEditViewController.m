@@ -40,8 +40,10 @@ typedef struct HAHEditIndex {
 @property (weak) IBOutlet NSTableView           *tableView;
 
 @property (nonatomic, strong) HAHTableViewCell  *movingCell;
+@property (nonatomic,  weak ) HAHTableViewCell  *selectedCell;
 @property (nonatomic, strong) NSView            *groupIndicatorView;
 @property (nonatomic, strong) NSArray<HAHPageModel *> *pages;
+@property (nonatomic, assign) BOOL              isCommandKeyDown;
 
 @property (nonatomic, readonly) NSInteger       pageIndex;
 
@@ -79,6 +81,9 @@ typedef struct HAHEditIndex {
 
 - (void)clickCellAction:(NSClickGestureRecognizer *)click
 {
+    self.selectedCell.selected = NO;
+    self.selectedCell = (HAHTableViewCell *)click.view;
+    self.selectedCell.selected = YES;
     [self.configView reloadWithModel:((HAHTableViewCell *)click.view).entity];
 }
 
@@ -107,6 +112,8 @@ typedef struct HAHEditIndex {
             movingCell.groupIndex = column;
             movingCell.entityIndex = row;
             movingCell.startOrigin = movingCell.origin;
+            movingCell.isCopied = self.isCommandKeyDown;
+            cell.isCopied = self.isCommandKeyDown;
             self.movingCell = movingCell;
             self.groupIndicatorView.width = movingCell.width;
         }
@@ -155,24 +162,28 @@ typedef struct HAHEditIndex {
 
             if (index.column >= 0) {
 
-                // 清理
                 HAHPageModel *page = self.pages[self.movingCell.pageIndex];
                 HAHGroupModel *srcGroup = page.groups[self.movingCell.groupIndex];
-                [srcGroup.entities removeObject:self.movingCell.entity];
+
+                if (!self.movingCell.isCopied) {
+                    // 清理
+                    [srcGroup.entities removeObjectAtIndex:self.movingCell.entityIndex];
+                }
 
                 // 添加
                 page = self.pages[self.pageIndex];
                 HAHGroupModel *dstGroup = page.groups[index.column];
                 if (dstGroup == srcGroup &&
-                    index.row > self.movingCell.entityIndex)
+                    index.row > self.movingCell.entityIndex &&
+                    !self.movingCell.isCopied)
                 {
                     index.row--;
                 }
                 [dstGroup.entities insertObject:self.movingCell.entity atIndex:index.row];
-                
-                [self reloadTableView];
+
             }
 
+            [self reloadTableView];
             [self.groupIndicatorView removeFromSuperview];
             [self.movingCell removeFromSuperview];
             self.movingCell = nil;
@@ -180,6 +191,7 @@ typedef struct HAHEditIndex {
             break;
         case NSGestureRecognizerStateCancelled:
         {
+            [self reloadTableView];
             [self.groupIndicatorView removeFromSuperview];
             [self.movingCell removeFromSuperview];
             self.movingCell = nil;
@@ -187,6 +199,49 @@ typedef struct HAHEditIndex {
             break;
         default:
             break;
+    }
+}
+
+- (void)flagsChanged:(NSEvent *)event
+{
+    if (!self.pages.count) {
+        return;
+    }
+
+    BOOL hasCommandKey = (event.modifierFlags & NSEventModifierFlagCommand) > 0;
+    if (hasCommandKey && !self.isCommandKeyDown)
+    {
+        self.isCommandKeyDown = YES;
+        if (self.movingCell) {
+            self.movingCell.isCopied = YES;
+            if (self.movingCell.pageIndex == self.pageIndex) {
+                HAHTableViewCell *cell = [self.tableView viewAtColumn:self.movingCell.groupIndex row:self.movingCell.entityIndex makeIfNecessary:NO];
+                cell.isCopied = YES;
+            }
+        }
+    }
+    else if (!hasCommandKey && self.isCommandKeyDown)
+    {
+        self.isCommandKeyDown = NO;
+        if (self.movingCell) {
+            self.movingCell.isCopied = NO;
+            if (self.movingCell.pageIndex == self.pageIndex) {
+                HAHTableViewCell *cell = [self.tableView viewAtColumn:self.movingCell.groupIndex row:self.movingCell.entityIndex makeIfNecessary:NO];
+                cell.isCopied = NO;
+            }
+        }
+    }
+}
+
+- (void)keyUp:(NSEvent *)event
+{
+    unichar key = [event.charactersIgnoringModifiers characterAtIndex:0];
+    if (key == NSDeleteCharacter)
+    {
+        if (self.selectedCell && !self.configView.isEditing) {
+            [self.pages[self.pageIndex].groups[[self.tableView columnForView:self.selectedCell]].entities removeObjectAtIndex:[self.tableView rowForView:self.selectedCell]];
+            [self reloadTableView];
+        }
     }
 }
 
@@ -236,6 +291,9 @@ typedef struct HAHEditIndex {
 
 - (void)reloadTableView
 {
+    self.selectedCell.selected = NO;
+    self.selectedCell = nil;
+
     // TODO 复用NSTableColumn
     NSArray *columns = self.tableView.tableColumns.copy;
     for (NSTableColumn *column in columns) {
@@ -385,9 +443,19 @@ typedef struct HAHEditIndex {
     }
 
     if (row < tableColumn.group.entities.count) {
+        HAHEntityModel *entity = tableColumn.group.entities[row];
         HAHTableViewCell *cell = [tableView makeViewWithIdentifier:[HAHTableViewCell identifier] owner:nil];
-        [cell bindEntityModel:tableColumn.group.entities[row]];
+        [cell bindEntityModel:entity];
         [cell addGestureRecognizer:[[NSClickGestureRecognizer alloc] initWithTarget:self action:@selector(clickCellAction:)]];
+
+        if (self.movingCell &&
+            self.movingCell.entityIndex == row &&
+            self.movingCell.pageIndex == self.pageIndex &&
+            self.movingCell.groupIndex == [tableView.tableColumns indexOfObject:tableColumn])
+        {
+            cell.isCopied = self.movingCell.isCopied;
+        }
+
         return cell;
     } else {
         return nil;

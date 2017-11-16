@@ -325,10 +325,12 @@ static void aspect_cleanupHookedClassAndSelector(NSObject *self, SEL selector) {
         // Figure out how the class was modified to undo the changes.
         NSString *className = NSStringFromClass(klass);
         if ([className hasSuffix:AspectsSubclassSuffix]) {
-            Class originalClass = NSClassFromString([className stringByReplacingOccurrencesOfString:AspectsSubclassSuffix withString:@""]);
-            NSCAssert(originalClass != nil, @"Original class must exist");
-            object_setClass(self, originalClass);
-            AspectLog(@"Aspects: %@ has been restored.", NSStringFromClass(originalClass));
+            if (![className hasPrefix:@"NSKVONotifying_"]) {
+                Class originalClass = NSClassFromString([className stringByReplacingOccurrencesOfString:AspectsSubclassSuffix withString:@""]);
+                NSCAssert(originalClass != nil, @"Original class must exist");
+                object_setClass(self, originalClass);
+                AspectLog(@"Aspects: %@ has been restored.", NSStringFromClass(originalClass));
+            }
 
             // We can only dispose the class pair if we can ensure that no instances exist using our subclass.
             // Since we don't globally track this, we can't ensure this - but there's also not much overhead in keeping it around.

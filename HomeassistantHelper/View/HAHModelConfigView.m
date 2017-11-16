@@ -20,9 +20,11 @@ CGFloat HAHModelConfigViewVerticalSpace = 5;
 
 
 @interface HAHModelConfigView ()
+<NSTextFieldDelegate>
 @property (nonatomic, readonly) NSArray         *disabledProperties;
 @property (nonatomic,  strong ) HAHModel        *model;
 @property (nonatomic, readonly) NSDictionary    *dispatchDictionary;
+@property (nonatomic,  assign ) BOOL isEditing;
 @end
 
 @implementation HAHModelConfigView
@@ -99,6 +101,7 @@ CGFloat HAHModelConfigViewVerticalSpace = 5;
     [view addSubview:title];
 
     NSTextField *value = [[NSTextField alloc] initWithFrame:NSMakeRect(HAHModelConfigViewLeftMargin, title.bottom + HAHModelConfigViewVerticalSpace, width, 22)];
+    value.delegate = self;
     [value bind:NSValueBinding toObject:self.model withKeyPath:property options:nil];
     if ([self.disabledProperties containsObject:property]) {
         value.enabled = NO;
@@ -113,6 +116,20 @@ CGFloat HAHModelConfigViewVerticalSpace = 5;
 - (NSView *)viewWithBOOLProperty:(NSString *)property
 {
     return nil;
+}
+
+#pragma mark - NSTextFieldDelegate
+
+- (BOOL)control:(NSControl *)control textShouldBeginEditing:(NSText *)fieldEditor
+{
+    self.isEditing = YES;
+    return YES;
+}
+
+- (BOOL)control:(NSControl *)control textShouldEndEditing:(NSText *)fieldEditor
+{
+    self.isEditing = NO;
+    return YES;
 }
 
 @end

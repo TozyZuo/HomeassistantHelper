@@ -13,8 +13,9 @@
 @interface HAHTableViewCell : NSTableCellView
 <NSCopying>
 
-@property (nonatomic, readonly) HAHEntityModel   *entity;
-@property (  class  , readonly) NSString         *identifier;
+@property (  class  , readonly) NSString        *identifier;
+@property (nonatomic, readonly) HAHEntityModel  *entity;
+@property (nonatomic,  assign ) BOOL            selected;
 
 - (void)bindEntityModel:(HAHEntityModel *)entityModel;
 
@@ -22,7 +23,7 @@
 
 
 @interface HAHTableViewCell (HAHUsedForEdit)
-@property (nonatomic, assign) BOOL              editing;
+@property (nonatomic, assign) BOOL              isCopied;
 @property (nonatomic, assign) NSUInteger        pageIndex;
 @property (nonatomic, assign) NSUInteger        groupIndex;
 @property (nonatomic, assign) NSUInteger        entityIndex;

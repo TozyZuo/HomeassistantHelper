@@ -12,6 +12,7 @@
 		BA05CDF71FBAE74900C495B7 /* HAHBackupManager.xib in Resources */ = {isa = PBXBuildFile; fileRef = BA05CDF51FBAE74900C495B7 /* HAHBackupManager.xib */; };
 		BA05CDFA1FBAE79C00C495B7 /* HAHBackupCell.m in Sources */ = {isa = PBXBuildFile; fileRef = BA05CDF91FBAE79C00C495B7 /* HAHBackupCell.m */; };
 		BA05CDFC1FBAE7C400C495B7 /* HAHBackupCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = BA05CDFB1FBAE7C400C495B7 /* HAHBackupCell.xib */; };
+		BA05CE021FBC302B00C495B7 /* HAHPanEditingGestureRecognizer.m in Sources */ = {isa = PBXBuildFile; fileRef = BA05CE011FBC302B00C495B7 /* HAHPanEditingGestureRecognizer.m */; };
 		BA23DB2D1F1356E300939AA8 /* HAHGlobalExtern.m in Sources */ = {isa = PBXBuildFile; fileRef = BA23DB2C1F1356E300939AA8 /* HAHGlobalExtern.m */; };
 		BA23DB361F136E4100939AA8 /* GDataXMLNode.m in Sources */ = {isa = PBXBuildFile; fileRef = BA23DB311F136E4100939AA8 /* GDataXMLNode.m */; };
 		BA6AFD171F2DBCAF0020BCDD /* HAHCustomizeParser.m in Sources */ = {isa = PBXBuildFile; fileRef = BA6AFD161F2DBCAF0020BCDD /* HAHCustomizeParser.m */; };
@@ -90,6 +91,8 @@
 		BA05CDF81FBAE79C00C495B7 /* HAHBackupCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HAHBackupCell.h; sourceTree = "<group>"; };
 		BA05CDF91FBAE79C00C495B7 /* HAHBackupCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HAHBackupCell.m; sourceTree = "<group>"; };
 		BA05CDFB1FBAE7C400C495B7 /* HAHBackupCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = HAHBackupCell.xib; sourceTree = "<group>"; };
+		BA05CE001FBC302B00C495B7 /* HAHPanEditingGestureRecognizer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HAHPanEditingGestureRecognizer.h; sourceTree = "<group>"; };
+		BA05CE011FBC302B00C495B7 /* HAHPanEditingGestureRecognizer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HAHPanEditingGestureRecognizer.m; sourceTree = "<group>"; };
 		BA23DB2B1F1356E300939AA8 /* HAHGlobalExtern.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HAHGlobalExtern.h; sourceTree = "<group>"; };
 		BA23DB2C1F1356E300939AA8 /* HAHGlobalExtern.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HAHGlobalExtern.m; sourceTree = "<group>"; };
 		BA23DB301F136E4100939AA8 /* GDataXMLNode.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GDataXMLNode.h; sourceTree = "<group>"; };
@@ -249,6 +252,8 @@
 				BA6AFD1F1F2E08D00020BCDD /* HAHTableViewCell.h */,
 				BA6AFD201F2E08D00020BCDD /* HAHTableViewCell.m */,
 				BA74317E1F3072AD00713EA6 /* HAHTableViewCell.xib */,
+				BA05CE001FBC302B00C495B7 /* HAHPanEditingGestureRecognizer.h */,
+				BA05CE011FBC302B00C495B7 /* HAHPanEditingGestureRecognizer.m */,
 			);
 			path = HAHEditViewController;
 			sourceTree = "<group>";
@@ -661,6 +666,7 @@
 				BAEECA911F14C50F0099000C /* HAHParser.m in Sources */,
 				BAD6BEF01F52F35D00C34C4F /* HAHConfigManager.m in Sources */,
 				BA05CDF11FBADC5100C495B7 /* HAHBackupModel.m in Sources */,
+				BA05CE021FBC302B00C495B7 /* HAHPanEditingGestureRecognizer.m in Sources */,
 				BA7BE3651F1B240100451762 /* HAHModelConfigView.m in Sources */,
 				BA8F98DD1F11BDF700D16523 /* AppDelegate.m in Sources */,
 				BA6AFD1E1F2DF22C0020BCDD /* HAHTableColumn.m in Sources */,
