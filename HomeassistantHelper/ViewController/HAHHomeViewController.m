@@ -18,6 +18,7 @@
 @interface HAHHomeViewController ()
 
 @property (weak) IBOutlet NSButton          *readInfoButton;
+@property (weak) IBOutlet NSButton          *restartServiceButton;
 @property (weak) IBOutlet NSTextField       *addressTextField;
 @property (weak) IBOutlet NSTextField       *userNameTextField;
 @property (weak) IBOutlet NSSecureTextField *passwordTextField;
@@ -67,14 +68,10 @@
         return;
     }
 
-    self.addressTextField.enabled = NO;
-    self.userNameTextField.enabled = NO;
-    self.passwordTextField.enabled = NO;
-
+    [self disableUI];
     [self.editViewController reset];
 
     sender.title = @"获取中";
-    sender.enabled = NO;
 
     NSString *url = self.addressTextField.stringValue;
     NSString *user = self.userNameTextField.stringValue.length ? self.userNameTextField.stringValue : self.userNameTextField.placeholderString;
@@ -85,10 +82,7 @@
     {
 //        HAHLOG(@"%@", pages);
         sender.title = @"获取";
-        sender.enabled = YES;
-        weakSelf.addressTextField.enabled = YES;
-        weakSelf.userNameTextField.enabled = YES;
-        weakSelf.passwordTextField.enabled = YES;
+        [weakSelf enableUI];
 
         // 记录用户配置
         [[NSUserDefaults standardUserDefaults] setObject:url forKey:HAHUDAdressKey];
@@ -119,6 +113,20 @@
     [[NSUserDefaults standardUserDefaults] synchronize];
 }
 
+- (IBAction)restartHomeassistantService:(NSButton *)sender
+{
+    [self disableUI];
+
+    __weak typeof(self) weakSelf = self;
+    [[HAHDataManager sharedManager] restartHomeassistantServiceWithComplete:^(NSString *result)
+    {
+        [weakSelf enableUI];
+        if (result.length) {
+            HAHLOG(@"重启服务失败 %@", result);
+        }
+    }];
+}
+
 #pragma mark - Notification
 
 - (void)restoreBackupNotification:(NSNotification *)notification
@@ -127,5 +135,25 @@
 }
 
 #pragma mark - Private
+
+- (void)disableUI
+{
+    self.addressTextField.enabled = NO;
+    self.userNameTextField.enabled = NO;
+    self.passwordTextField.enabled = NO;
+    self.readInfoButton.enabled = NO;
+    self.restartServiceButton.enabled = NO;
+    self.keepPasswordButton.enabled = NO;
+}
+
+- (void)enableUI
+{
+    self.addressTextField.enabled = YES;
+    self.userNameTextField.enabled = YES;
+    self.passwordTextField.enabled = YES;
+    self.readInfoButton.enabled = YES;
+    self.restartServiceButton.enabled = YES;
+    self.keepPasswordButton.enabled = YES;
+}
 
 @end

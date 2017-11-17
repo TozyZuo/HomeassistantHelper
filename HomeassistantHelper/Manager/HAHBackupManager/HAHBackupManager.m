@@ -32,7 +32,7 @@
     [self.tableView addSubview:indicator];
 
     __weak typeof(self) weakSelf = self;
-    [[HAHDataManager sharedManager] requestBackupComplete:^(HAHBackupModel *backup)
+    [[HAHDataManager sharedManager] requestBackupWithComplete:^(HAHBackupModel *backup)
     {
         [indicator removeFromSuperview];
 

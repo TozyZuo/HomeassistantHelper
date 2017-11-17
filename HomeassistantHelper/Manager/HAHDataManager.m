@@ -87,7 +87,7 @@ static NSString * const HAHHomeassistantPath = @"/home/homeassistant/.homeassist
     [self startFileRequest];
 }
 
-- (void)requestBackupComplete:(void (^)(HAHBackupModel *))completeBlock
+- (void)requestBackupWithComplete:(void (^)(HAHBackupModel *))completeBlock
 {
     dispatch_async(self.sshQueue, ^{
 
@@ -134,6 +134,19 @@ static NSString * const HAHHomeassistantPath = @"/home/homeassistant/.homeassist
 
         NSString *result = [self execute:@"cp", [NSString stringWithFormat:@"%@%@/%@/*", HAHHomeassistantPath, HAHBackupFolder, folder], HAHHomeassistantPath, nil];
 
+        if (completeBlock) {
+            dispatch_async(dispatch_get_main_queue(), ^{
+                completeBlock(result);
+            });
+        }
+    });
+}
+
+- (void)restartHomeassistantServiceWithComplete:(void (^)(NSString *))completeBlock
+{
+    HAHLOG(@"重启服务");
+    dispatch_async(self.sshQueue, ^{
+        NSString *result = [self execute:@"systemctl restart home-assistant@homeassistant.service", nil];
         if (completeBlock) {
             dispatch_async(dispatch_get_main_queue(), ^{
                 completeBlock(result);
@@ -281,7 +294,6 @@ static NSString * const HAHHomeassistantPath = @"/home/homeassistant/.homeassist
 
 #else
 
-    [arguments insertObject:command atIndex:0];
     [arguments insertObject:@"sudo" atIndex:0];
 
     NSError *error;

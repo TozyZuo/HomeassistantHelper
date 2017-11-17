@@ -807,8 +807,19 @@
                                     <segue destination="hdG-d1-Tbl" kind="embed" id="8Ul-Mk-Lwh"/>
                                 </connections>
                             </containerView>
+                            <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="tQk-Cb-nvT">
+                                <rect key="frame" x="659" y="336" width="94" height="32"/>
+                                <buttonCell key="cell" type="push" title="重启服务" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="sjI-ks-Abu">
+                                    <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                                    <font key="font" metaFont="system"/>
+                                </buttonCell>
+                                <connections>
+                                    <action selector="restartHomeassistantService:" target="XfG-lQ-9wD" id="adr-CF-v9v"/>
+                                </connections>
+                            </button>
                         </subviews>
                         <constraints>
+                            <constraint firstItem="tQk-Cb-nvT" firstAttribute="trailing" secondItem="nMV-IL-tkw" secondAttribute="trailing" id="2aw-kE-Iio"/>
                             <constraint firstItem="s5y-hl-gfY" firstAttribute="trailing" secondItem="nMV-IL-tkw" secondAttribute="trailing" id="6l3-kS-1P9"/>
                             <constraint firstItem="nMV-IL-tkw" firstAttribute="leading" secondItem="TTa-yu-h82" secondAttribute="trailing" constant="8" id="8m7-d3-0gR"/>
                             <constraint firstItem="TTa-yu-h82" firstAttribute="leading" secondItem="utn-V0-an7" secondAttribute="trailing" constant="-2" id="HTo-KX-kqx"/>
@@ -820,6 +831,7 @@
                             <constraint firstItem="s5y-hl-gfY" firstAttribute="leading" secondItem="utn-V0-an7" secondAttribute="leading" id="gp5-Jy-Woc"/>
                             <constraint firstItem="utn-V0-an7" firstAttribute="top" secondItem="m2S-Jp-Qdl" secondAttribute="top" constant="20" symbolic="YES" id="l7o-UB-rRt"/>
                             <constraint firstAttribute="trailing" secondItem="nMV-IL-tkw" secondAttribute="trailing" constant="27" id="lRl-l3-VMY"/>
+                            <constraint firstItem="tQk-Cb-nvT" firstAttribute="top" secondItem="nMV-IL-tkw" secondAttribute="bottom" constant="19" id="saK-ca-NOj"/>
                         </constraints>
                     </view>
                     <connections>
@@ -827,6 +839,7 @@
                         <outlet property="keepPasswordButton" destination="tzl-k5-p8O" id="aBL-Uo-UZw"/>
                         <outlet property="passwordTextField" destination="8Z3-7U-vZH" id="hTX-AF-MiV"/>
                         <outlet property="readInfoButton" destination="nMV-IL-tkw" id="0mO-pN-o49"/>
+                        <outlet property="restartServiceButton" destination="tQk-Cb-nvT" id="Iib-69-UKc"/>
                         <outlet property="userNameTextField" destination="4zL-cB-5MS" id="bvK-14-n2R"/>
                     </connections>
                 </viewController>

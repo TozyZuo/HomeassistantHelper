@@ -84,12 +84,9 @@
              [[HAHDataManager sharedManager] saveFile:weakSelf.groupFile];
          }];
 
-        __weak typeof(pageModel) weakPage = pageModel;
         [pageModel removeObserver:self];
         [pageModel addObserver:self selector:@selector(setName:) postprocessor:^(id info, NSString *name)
          {
-             weakSelf.customizeFile[weakPage.id] = name;
-             [[HAHDataManager sharedManager] saveFile:weakSelf.customizeFile];
              [[HAHDataManager sharedManager] saveFile:weakSelf.groupFile];
          }];
         for (HAHGroupModel *groupModel in pageModel.groups) {
