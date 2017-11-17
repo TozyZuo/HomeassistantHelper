@@ -17,7 +17,7 @@
 #import <WebKit/WebKit.h>
 
 
-#define LoadFileFromLocal // 本地开发测试
+//#define LoadFileFromLocal // 本地开发测试
 
 static NSString * const HAHBackupFolder = @"HomeassistantHelperBackup";
 
