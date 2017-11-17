@@ -24,6 +24,11 @@
 
     self.tableView.doubleAction = @selector(doubleClickTableViewAction:);
     [self.tableView registerNib:[[NSNib alloc] initWithNibNamed:@"HAHBackupCell" bundle:nil] forIdentifier:[HAHBackupCell identifier]];
+}
+
+- (void)showWindow:(id)sender
+{
+    [super showWindow:sender];
 
     NSProgressIndicator *indicator = [[NSProgressIndicator alloc] initWithFrame:CGRectMake(0, 0, 50, 50)];
     indicator.style = NSProgressIndicatorSpinningStyle;
@@ -33,12 +38,12 @@
 
     __weak typeof(self) weakSelf = self;
     [[HAHDataManager sharedManager] requestBackupWithComplete:^(HAHBackupModel *backup)
-    {
-        [indicator removeFromSuperview];
+     {
+         [indicator removeFromSuperview];
 
-        weakSelf.backupModel = backup;
-        [weakSelf.tableView reloadData];
-    }];
+         weakSelf.backupModel = backup;
+         [weakSelf.tableView reloadData];
+     }];
 }
 
 - (NSString *)windowFrameKey
