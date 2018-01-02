@@ -7,10 +7,10 @@
 //
 
 #import "HAHConsoleManager.h"
-
+#import <NMSSH/NMSSHLogger.h>
 
 @interface HAHConsoleManager ()
-@property (weak) IBOutlet NSTextView *textView;
+@property (assign) IBOutlet NSTextView *textView;
 @end
 
 @implementation HAHConsoleManager
@@ -40,6 +40,10 @@
     clearButton.centerY = zoomButton.centerY;
     clearButton.left = zoomButton.right + 6;
     [zoomButton.superview addSubview:clearButton];
+
+    [NMSSHLogger sharedLogger].logBlock = ^(NMSSHLogLevel level, NSString *format) {
+        HAHLOG(@"%@", format);
+    };
 }
 
 - (BOOL)performKeyEquivalent:(NSEvent *)event

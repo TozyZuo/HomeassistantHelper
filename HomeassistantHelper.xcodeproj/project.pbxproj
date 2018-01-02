@@ -13,6 +13,7 @@
 		BA05CDFA1FBAE79C00C495B7 /* HAHBackupCell.m in Sources */ = {isa = PBXBuildFile; fileRef = BA05CDF91FBAE79C00C495B7 /* HAHBackupCell.m */; };
 		BA05CDFC1FBAE7C400C495B7 /* HAHBackupCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = BA05CDFB1FBAE7C400C495B7 /* HAHBackupCell.xib */; };
 		BA05CE021FBC302B00C495B7 /* HAHPanEditingGestureRecognizer.m in Sources */ = {isa = PBXBuildFile; fileRef = BA05CE011FBC302B00C495B7 /* HAHPanEditingGestureRecognizer.m */; };
+		BA22B3501FFB6B74003BEDC5 /* HAHBrowserManager.xib in Resources */ = {isa = PBXBuildFile; fileRef = BA22B34F1FFB6B74003BEDC5 /* HAHBrowserManager.xib */; };
 		BA23DB2D1F1356E300939AA8 /* HAHGlobalExtern.m in Sources */ = {isa = PBXBuildFile; fileRef = BA23DB2C1F1356E300939AA8 /* HAHGlobalExtern.m */; };
 		BA23DB361F136E4100939AA8 /* GDataXMLNode.m in Sources */ = {isa = PBXBuildFile; fileRef = BA23DB311F136E4100939AA8 /* GDataXMLNode.m */; };
 		BA6AFD171F2DBCAF0020BCDD /* HAHCustomizeParser.m in Sources */ = {isa = PBXBuildFile; fileRef = BA6AFD161F2DBCAF0020BCDD /* HAHCustomizeParser.m */; };
@@ -23,7 +24,6 @@
 		BA74317D1F3058C500713EA6 /* NSColor_HAH.m in Sources */ = {isa = PBXBuildFile; fileRef = BA74317C1F3058C500713EA6 /* NSColor_HAH.m */; };
 		BA74317F1F3072AD00713EA6 /* HAHTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = BA74317E1F3072AD00713EA6 /* HAHTableViewCell.xib */; };
 		BA7BE3471F1A191300451762 /* HAHBrowserManager.m in Sources */ = {isa = PBXBuildFile; fileRef = BA7BE3451F1A191300451762 /* HAHBrowserManager.m */; };
-		BA7BE3481F1A191300451762 /* HAHBrowserManager.xib in Resources */ = {isa = PBXBuildFile; fileRef = BA7BE3461F1A191300451762 /* HAHBrowserManager.xib */; };
 		BA7BE34B1F1A295400451762 /* HAHWindowControllerManager.m in Sources */ = {isa = PBXBuildFile; fileRef = BA7BE34A1F1A295400451762 /* HAHWindowControllerManager.m */; };
 		BA7BE3541F1A4B6400451762 /* NSView_HAH.m in Sources */ = {isa = PBXBuildFile; fileRef = BA7BE3531F1A4B6400451762 /* NSView_HAH.m */; };
 		BA7BE3571F1A4E0900451762 /* NSWindow_HAH.m in Sources */ = {isa = PBXBuildFile; fileRef = BA7BE3561F1A4E0900451762 /* NSWindow_HAH.m */; };
@@ -115,6 +115,7 @@
 		BA05CDFB1FBAE7C400C495B7 /* HAHBackupCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = HAHBackupCell.xib; sourceTree = "<group>"; };
 		BA05CE001FBC302B00C495B7 /* HAHPanEditingGestureRecognizer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HAHPanEditingGestureRecognizer.h; sourceTree = "<group>"; };
 		BA05CE011FBC302B00C495B7 /* HAHPanEditingGestureRecognizer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HAHPanEditingGestureRecognizer.m; sourceTree = "<group>"; };
+		BA22B34F1FFB6B74003BEDC5 /* HAHBrowserManager.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = HAHBrowserManager.xib; sourceTree = "<group>"; };
 		BA23DB2B1F1356E300939AA8 /* HAHGlobalExtern.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HAHGlobalExtern.h; sourceTree = "<group>"; };
 		BA23DB2C1F1356E300939AA8 /* HAHGlobalExtern.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HAHGlobalExtern.m; sourceTree = "<group>"; };
 		BA23DB301F136E4100939AA8 /* GDataXMLNode.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GDataXMLNode.h; sourceTree = "<group>"; };
@@ -132,7 +133,6 @@
 		BA74317E1F3072AD00713EA6 /* HAHTableViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = HAHTableViewCell.xib; sourceTree = "<group>"; };
 		BA7BE3441F1A191300451762 /* HAHBrowserManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HAHBrowserManager.h; sourceTree = "<group>"; };
 		BA7BE3451F1A191300451762 /* HAHBrowserManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HAHBrowserManager.m; sourceTree = "<group>"; };
-		BA7BE3461F1A191300451762 /* HAHBrowserManager.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = HAHBrowserManager.xib; sourceTree = "<group>"; };
 		BA7BE3491F1A295400451762 /* HAHWindowControllerManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HAHWindowControllerManager.h; sourceTree = "<group>"; };
 		BA7BE34A1F1A295400451762 /* HAHWindowControllerManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HAHWindowControllerManager.m; sourceTree = "<group>"; };
 		BA7BE34E1F1A4B2300451762 /* Foundation_Log.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Foundation_Log.m; sourceTree = "<group>"; };
@@ -474,7 +474,7 @@
 				BAEECA801F146D740099000C /* HAHConsoleManager.xib */,
 				BA7BE3441F1A191300451762 /* HAHBrowserManager.h */,
 				BA7BE3451F1A191300451762 /* HAHBrowserManager.m */,
-				BA7BE3461F1A191300451762 /* HAHBrowserManager.xib */,
+				BA22B34F1FFB6B74003BEDC5 /* HAHBrowserManager.xib */,
 				BA05CDF21FBAE74900C495B7 /* HAHBackupManager */,
 			);
 			path = Manager;
@@ -646,8 +646,8 @@
 				BA05CDFC1FBAE7C400C495B7 /* HAHBackupCell.xib in Resources */,
 				BA74317F1F3072AD00713EA6 /* HAHTableViewCell.xib in Resources */,
 				BAEECA821F146D740099000C /* HAHConsoleManager.xib in Resources */,
+				BA22B3501FFB6B74003BEDC5 /* HAHBrowserManager.xib in Resources */,
 				BAD6BEF61F52FD3400C34C4F /* modelConfigMap.plist in Resources */,
-				BA7BE3481F1A191300451762 /* HAHBrowserManager.xib in Resources */,
 				BA8F98E81F11BDF700D16523 /* Main.storyboard in Resources */,
 				BA7BE36D1F1BB65900451762 /* HAHPageCollectionViewItem.xib in Resources */,
 				BA05CDF71FBAE74900C495B7 /* HAHBackupManager.xib in Resources */,
@@ -782,7 +782,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				MACOSX_DEPLOYMENT_TARGET = 10.12;
+				MACOSX_DEPLOYMENT_TARGET = 10.10;
 				MTL_ENABLE_DEBUG_INFO = YES;
 				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = macosx;
@@ -830,7 +830,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				MACOSX_DEPLOYMENT_TARGET = 10.12;
+				MACOSX_DEPLOYMENT_TARGET = 10.10;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				SDKROOT = macosx;
 			};

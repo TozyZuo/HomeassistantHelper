@@ -28,7 +28,7 @@ FOUNDATION_EXPORT BOOL HAHDebug;
 
 #pragma mark - Function
 
-FOUNDATION_EXPORT void HAHExecuteBlockOnMainThread(void (^block)());
+FOUNDATION_EXPORT void HAHExecuteBlockOnMainThread(void (^block)(void));
 
 FOUNDATION_EXPORT NSString  *HAHFilterCommentsAndEmptyLineWithText(NSString *text);
 FOUNDATION_EXPORT NSArray   *HAHSeparateTextToLinesAndFilterCommentsAndEmptyLine(NSString *text);

@@ -16,6 +16,11 @@
 
 - (instancetype)initWithText:(NSString *)text
 {
+    if (!text.length) {
+        HAHLOG(@"文件内容为空");
+        return nil;
+    }
+
     if (self = [super init]) {
         self.initialText = text;
     }

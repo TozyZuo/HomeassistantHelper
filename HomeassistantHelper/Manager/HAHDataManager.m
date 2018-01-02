@@ -159,7 +159,7 @@ static NSString * const HAHHomeassistantPath = @"/home/homeassistant/.homeassist
 
 - (void)initializeSSHWithURL:(NSString *)url user:(NSString *)user password:(NSString *)password
 {
-    if (self.session) {
+    if (self.session && self.session.isAuthorized) {
         return;
     }
 
@@ -172,7 +172,13 @@ static NSString * const HAHHomeassistantPath = @"/home/homeassistant/.homeassist
 
             if (self.session.isAuthorized) {
                 HAHLOG(@"SSH通道建立");
+            } else {
+                HAHLOG(@"SSH连接失败，请检查用户名密码是否正确");
+                [self callBackFailure];
             }
+        } else {
+            HAHLOG(@"SSH连接失败，请检查IP和端口是否正确");
+            [self callBackFailure];
         }
     });
 }
@@ -208,6 +214,7 @@ static NSString * const HAHHomeassistantPath = @"/home/homeassistant/.homeassist
         [view addSubview:self.webView];
     }
 
+    HAHLOG(@"请求设备信息[1.加载首页]");
     NSURLRequest *request = [NSURLRequest requestWithURL:[NSURL URLWithString:url]];
     self.homeNavigation = [self.webView loadRequest:request];
 
@@ -227,11 +234,18 @@ static NSString * const HAHHomeassistantPath = @"/home/homeassistant/.homeassist
 
         if (self.session.isAuthorized) {
 
+            HAHLOG(@"请求配置文件数据");
             self.configurationFile = [[HAHConfigurationFile alloc] initWithText:[self requestFile:(NSString *)HAHSConfigurationFileName]];
 
-            dispatch_async(dispatch_get_main_queue(), ^{
-                [self tryToCallBack];
-            });
+            if (self.configurationFile) {
+                HAHLOG(@"配置文件请求成功");
+                dispatch_async(dispatch_get_main_queue(), ^{
+                    [self tryToCallBack];
+                });
+            } else {
+                HAHLOG(@"配置文件请求失败，请点击\"获取\"按钮重试");
+            }
+
         }
     });
 
@@ -245,6 +259,16 @@ static NSString * const HAHHomeassistantPath = @"/home/homeassistant/.homeassist
         [self.configurationFile mergeInfomationWithEntities:self.entities];
         self.requestDataCompleteBlock([self filterUngroupedEntitiesWithAllEntities:self.entities pages:self.configurationFile.groupFile.pages], self.configurationFile.groupFile.pages);
         self.requestDataCompleteBlock = nil;
+    }
+}
+
+- (void)callBackFailure
+{
+    if (self.requestDataCompleteBlock) {
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [self.webView stopLoading];
+            self.requestDataCompleteBlock(nil, nil);
+        });
     }
 }
 
@@ -354,18 +378,23 @@ static NSString * const HAHHomeassistantPath = @"/home/homeassistant/.homeassist
 - (void)webView:(WKWebView *)webView didFinishNavigation:(null_unspecified WKNavigation *)navigation
 {
     if ([navigation isEqual:self.homeNavigation]) {
+        HAHLOG(@"请求设备信息[2.首页加载完毕]");
         dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(self.delayTime * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+            HAHLOG(@"请求设备信息[3.模拟点击\"< >\"按钮]");
             // 模拟点击bar上"<>"按钮
             [self.webView evaluateJavaScript:@"document.querySelector(\"paper-icon-button[data-panel=dev-state]\").click()" completionHandler:^(id _Nullable obj, NSError * _Nullable error) {
                 dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(self.delayTime * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+                    HAHLOG(@"请求设备信息[4.读取已有设备信息(不包含虚拟设备)]");
                     // 取出设备数据
                     [self.webView evaluateJavaScript:@"document.querySelector(\".entities\").innerHTML" completionHandler:^(id _Nullable obj, NSError * _Nullable error) {
                         if (obj) {
                             [self.webView removeFromSuperview];
                             self.webView = nil;
                             self.entities = [[[HAHEntityParser alloc] init] parse:obj];
+                            HAHLOG(@"请求设备信息[5.读取设备信息成功]");
                             [self tryToCallBack];
                         } else {
+                            HAHLOG(@"请求设备信息[5.读取设备信息失败，重试(超时时间%ld秒)]", self.delayTime);
                             self.delayTime += 1;
                             [self startEntitiesRequestWithURL:self.URL];
                         }
@@ -378,8 +407,15 @@ static NSString * const HAHHomeassistantPath = @"/home/homeassistant/.homeassist
 
 - (void)webView:(WKWebView *)webView didFailNavigation:(WKNavigation *)navigation withError:(NSError *)error
 {
-    // TODO 错误处理
+    HAHLOG(@"请求设备信息[1.加载首页失败，重试(原因:%@)]", error.localizedFailureReason ?: error.localizedDescription);
     [self startEntitiesRequestWithURL:self.URL];
 }
+
+- (void)webView:(WKWebView *)webView didFailProvisionalNavigation:(null_unspecified WKNavigation *)navigation withError:(NSError *)error
+{
+    HAHLOG(@"请求设备信息[1.加载首页失败，重试(原因:%@)]", error.localizedFailureReason ?: error.localizedDescription);
+    [self startEntitiesRequestWithURL:self.URL];
+}
+
 
 @end

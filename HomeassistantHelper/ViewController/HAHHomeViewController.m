@@ -84,18 +84,20 @@
         sender.title = @"获取";
         [weakSelf enableUI];
 
-        // 记录用户配置
-        [[NSUserDefaults standardUserDefaults] setObject:url forKey:HAHUDAdressKey];
-        if (weakSelf.userNameTextField.stringValue.length) {
-            [[NSUserDefaults standardUserDefaults] setObject:user forKey:HAHUDUserNameKey];
-        }
-        if (weakSelf.passwordTextField.stringValue.length &&
-            weakSelf.keepPasswordButton.state) {
-            [[NSUserDefaults standardUserDefaults] setObject:password forKey:HAHUDPasswordKey];
-        }
-        [[NSUserDefaults standardUserDefaults] synchronize];
+        if (pages.count) { // 获取成功
+            // 记录用户配置
+            [[NSUserDefaults standardUserDefaults] setObject:url forKey:HAHUDAdressKey];
+            if (weakSelf.userNameTextField.stringValue.length) {
+                [[NSUserDefaults standardUserDefaults] setObject:user forKey:HAHUDUserNameKey];
+            }
+            if (weakSelf.passwordTextField.stringValue.length &&
+                weakSelf.keepPasswordButton.state) {
+                [[NSUserDefaults standardUserDefaults] setObject:password forKey:HAHUDPasswordKey];
+            }
+            [[NSUserDefaults standardUserDefaults] synchronize];
 
-        [weakSelf.editViewController reloadWithPages:pages ungroupedEntities:ungroupedEntities];
+            [weakSelf.editViewController reloadWithPages:pages ungroupedEntities:ungroupedEntities];
+        }
     }];
 
     [[HAHBrowserManager sharedManager] loadWithURL:url];

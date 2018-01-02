@@ -1,15 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="12118" systemVersion="16G29" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" customObjectInstantitationMethod="direct">
+<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="13196" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" customObjectInstantitationMethod="direct">
     <dependencies>
         <deployment identifier="macosx"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="12118"/>
-        <plugIn identifier="com.apple.WebKit2IBPlugin" version="12118"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="13196"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
         <customObject id="-2" userLabel="File's Owner" customClass="HAHBrowserManager">
             <connections>
-                <outlet property="webView" destination="JjT-yY-aVq" id="eeE-lC-LSU"/>
                 <outlet property="window" destination="F0z-JX-Cv5" id="gIp-Ho-8D9"/>
             </connections>
         </customObject>
@@ -23,21 +21,6 @@
             <view key="contentView" wantsLayer="YES" id="se5-gp-TjO">
                 <rect key="frame" x="0.0" y="0.0" width="480" height="270"/>
                 <autoresizingMask key="autoresizingMask"/>
-                <subviews>
-                    <wkWebView wantsLayer="YES" translatesAutoresizingMaskIntoConstraints="NO" id="JjT-yY-aVq">
-                        <rect key="frame" x="0.0" y="0.0" width="480" height="270"/>
-                        <wkWebViewConfiguration key="configuration">
-                            <audiovisualMediaTypes key="mediaTypesRequiringUserActionForPlayback" none="YES"/>
-                            <wkPreferences key="preferences"/>
-                        </wkWebViewConfiguration>
-                    </wkWebView>
-                </subviews>
-                <constraints>
-                    <constraint firstAttribute="trailing" secondItem="JjT-yY-aVq" secondAttribute="trailing" id="Dof-Nj-aaM"/>
-                    <constraint firstItem="JjT-yY-aVq" firstAttribute="top" secondItem="se5-gp-TjO" secondAttribute="top" id="QuV-Tv-K7e"/>
-                    <constraint firstAttribute="bottom" secondItem="JjT-yY-aVq" secondAttribute="bottom" id="jvB-Ip-85H"/>
-                    <constraint firstItem="JjT-yY-aVq" firstAttribute="leading" secondItem="se5-gp-TjO" secondAttribute="leading" id="zax-Zm-BDh"/>
-                </constraints>
             </view>
             <connections>
                 <outlet property="delegate" destination="-2" id="0bl-1N-AYu"/>
