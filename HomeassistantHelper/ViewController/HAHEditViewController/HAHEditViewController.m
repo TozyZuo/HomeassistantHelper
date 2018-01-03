@@ -392,23 +392,23 @@ typedef struct HAHEditIndex {
 
 #pragma mark - NSCollectionViewDelegateFlowLayout
 
-- (NSSize)collectionView:(NSCollectionView *)collectionView layout:(NSCollectionViewLayout*)collectionViewLayout sizeForItemAtIndexPath:(NSIndexPath *)indexPath
+- (NSSize)collectionView:(NSCollectionView *)collectionView layout:(NSCollectionViewLayout *)collectionViewLayout sizeForItemAtIndexPath:(NSIndexPath *)indexPath
 {
     HAHPageModel *page = self.pages[indexPath.item];
     if (page.name.length) {
         return NSMakeSize([HAHPageCollectionViewItem widthWithText:page.name], collectionView.height);
-    } else if (page.id) {
+    } else if (page.id.length) {
         return NSMakeSize([HAHPageCollectionViewItem widthWithText:page.id], collectionView.height);
     }
     return NSMakeSize(30, 30);
 }
 
-- (CGFloat)collectionView:(NSCollectionView *)collectionView layout:(NSCollectionViewLayout*)collectionViewLayout minimumLineSpacingForSectionAtIndex:(NSInteger)section
+- (CGFloat)collectionView:(NSCollectionView *)collectionView layout:(NSCollectionViewLayout *)collectionViewLayout minimumLineSpacingForSectionAtIndex:(NSInteger)section
 {
     return 0;
 }
 
-- (CGFloat)collectionView:(NSCollectionView *)collectionView layout:(NSCollectionViewLayout*)collectionViewLayout minimumInteritemSpacingForSectionAtIndex:(NSInteger)section
+- (CGFloat)collectionView:(NSCollectionView *)collectionView layout:(NSCollectionViewLayout *)collectionViewLayout minimumInteritemSpacingForSectionAtIndex:(NSInteger)section
 {
     return 0;
 }

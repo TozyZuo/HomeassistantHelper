@@ -867,7 +867,7 @@
                                                 <collectionView selectable="YES" allowsEmptySelection="NO" id="1Gk-SD-nHg">
                                                     <rect key="frame" x="0.0" y="0.0" width="516" height="28"/>
                                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                                                    <collectionViewFlowLayout key="collectionViewLayout" minimumInteritemSpacing="10" minimumLineSpacing="10" id="MnA-K1-SAY">
+                                                    <collectionViewFlowLayout key="collectionViewLayout" minimumInteritemSpacing="10" minimumLineSpacing="10" scrollDirection="horizontal" id="MnA-K1-SAY">
                                                         <size key="itemSize" width="50" height="50"/>
                                                     </collectionViewFlowLayout>
                                                     <color key="primaryBackgroundColor" name="controlBackgroundColor" catalog="System" colorSpace="catalog"/>
