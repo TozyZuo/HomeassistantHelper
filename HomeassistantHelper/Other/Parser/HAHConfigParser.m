@@ -39,7 +39,7 @@
         NSString *fileName = [[line componentsSeparatedByString:@"!include"].lastObject stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
         return [[HAHDataManager sharedManager] requestFile:fileName];
     } else {
-        HAHLOG(@"暂不支持在configuration.yaml中解析%@", key);
+        HAHLOG(@"暂不支持在configuration.yaml中解析%@，请将%@抽离为单独的%@.yaml后再试", key, key, key);
     }
 
     return @"";

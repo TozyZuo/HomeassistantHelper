@@ -49,6 +49,7 @@
             [text appendFormat:@"       - %@\n", groupModel.id];
 
             [groups appendFormat:@"%@:\n", groupModel.shortID];
+            [groups appendFormat:@"   name: %@\n", groupModel.name];
             [groups appendString:@"   view: no\n"];
             [groups appendString:@"   entities:\n"];
 

@@ -10,7 +10,10 @@
 
 @interface HAHCustomizeParser : HAHParser
 /**
- @return @{id: friendly_name}
+ @return @{id: @{friendly_name: NSString,
+                 ...
+                 }
+          }
  */
-- (NSMutableDictionary *)parse:(NSString *)text;
+- (NSMutableDictionary<NSString */*id*/, NSMutableDictionary<NSString */*property*/, NSString */*value*/> *> *)parse:(NSString *)text;
 @end

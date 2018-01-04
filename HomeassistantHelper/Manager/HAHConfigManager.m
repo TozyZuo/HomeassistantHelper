@@ -30,18 +30,22 @@
 
         [[[NSURLSession sharedSession] dataTaskWithURL:[NSURL URLWithString:@"https://raw.githubusercontent.com/TozyZuo/HomeassistantHelper/master/HomeassistantHelper/Resource/modelConfigMap.plist"] completionHandler:^(NSData * _Nullable data, NSURLResponse * _Nullable response, NSError * _Nullable error)
           {
+              if (error) {
+                  HAHLOG(@"更新配置文件失败，原因：%@", error.localizedFailureReason ?: error.localizedDescription);
+              }
               if (data && !error) {
                   NSDictionary *modelConfigMap = (__bridge_transfer NSDictionary *)CFPropertyListCreateWithData(kCFAllocatorDefault, (__bridge CFDataRef)data, kCFPropertyListImmutable, NULL, NULL);
                   if (![modelConfigMap isEqualToDictionary:weakSelf.modelConfigMap]) {
                       weakSelf.modelConfigMap = modelConfigMap;
                       NSString *path = [[NSBundle mainBundle] pathForResource:@"modelConfigMap" ofType:@"plist"];
-                      if (![modelConfigMap writeToFile:path atomically:NO]) {
+                      if ([modelConfigMap writeToFile:path atomically:NO]) {
+                          HAHLOG(@"更新配置文件成功");
+                      } else {
                           HAHLOG(@"更新配置文件失败");
                       }
                   }
               }
           }] resume];
-
     });
 }
 

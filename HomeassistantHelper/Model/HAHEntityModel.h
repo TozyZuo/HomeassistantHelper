@@ -12,3 +12,8 @@
 @property (nonatomic, strong) NSString *id;
 @property (nonatomic, strong) NSString *name;
 @end
+
+
+@interface HAHEntityModel (HAHRuntimeProperties)
+@property (nonatomic, strong) NSMutableDictionary *extensions;
+@end

@@ -43,18 +43,20 @@
                 if ([text containsString:@"!include"]) {
                     text = [[HAHDataManager sharedManager] requestFile:[[text stringByReplacingOccurrencesOfString:@"!include" withString:@""] stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]]];
                 }
-                // TODO text = nil
-                [self setValue:[[[fileMap[key] alloc] init] initWithText:text] forKey:[key stringByAppendingString:@"File"]];
+                id file = [[[fileMap[key] alloc] init] initWithText:text];
+                if (file) {
+                    [self setValue:file forKey:[key stringByAppendingString:@"File"]];
+                }
             }
         }
 
-        // 更新汉化
+        // 整合customizeFile
         for (HAHPageModel *pageModel in self.groupFile.pages) {
-            pageModel.name = self.customizeFile[pageModel.id] ?: pageModel.name ?: pageModel.id;
+            [self entityModel:pageModel updateWithExtensions:self.customizeFile[pageModel.id]];
             for (HAHGroupModel *groupModel in pageModel.groups) {
-                groupModel.name = self.customizeFile[groupModel.id] ?: groupModel.name ?: groupModel.id;
+                [self entityModel:groupModel updateWithExtensions:self.customizeFile[groupModel.id]];
                 for (HAHEntityModel *entity in groupModel.entities) {
-                    entity.name = self.customizeFile[entity.id] ?: entity.name ?: entity.id;
+                    [self entityModel:entity updateWithExtensions:self.customizeFile[entity.id]];
                 }
             }
         }
@@ -62,10 +64,50 @@
     return self;
 }
 
+- (void)entityModel:(HAHEntityModel *)entityModel updateWithExtensions:(NSMutableDictionary *)extensions
+{
+    entityModel.name = extensions[HAHSFriendlyName] ?: entityModel.name ?: entityModel.id;
+    entityModel.extensions = extensions;
+    for (NSString *property in [extensions.allKeys sortedArrayUsingSelector:@selector(compare:)].reverseObjectEnumerator)
+    {
+        if ([property isEqualToString:HAHSFriendlyName]) {
+            continue;
+        }
+        [entityModel.infomation addProperty:property classString:[self classStringInferredFromValue:extensions[property]]];
+    }
+
+    __weak typeof(self) weakSelf = self;
+    static id block;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        block = ^(id info) {
+            [[HAHDataManager sharedManager] saveFile:weakSelf.customizeFile];
+        };
+    });
+    [entityModel.extensions removeObserver:self];
+    [entityModel.extensions addObserver:self selector:@selector(setObject:forKey:) postprocessor:block];
+    // TODO 【extensions添加属性动作】的监听
+}
+
+- (NSString *)classStringInferredFromValue:(NSString *)value
+{
+    static NSArray *BOOLValue;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        BOOLValue = @[@"true", @"false"];
+    });
+    if ([BOOLValue containsObject:value.lowercaseString]) {
+        return @"BOOL";
+    }
+
+    return @"NSString";
+}
+
 - (void)mergeInfomationWithEntities:(NSArray<HAHEntityModel *> *)entities
 {
     __weak typeof(self) weakSelf = self;
     // 顺便添加监听
+    // TODO 优化监听代码
     for (HAHPageModel *pageModel in self.groupFile.pages) {
 
         [pageModel.groups removeObserver:self];
@@ -111,7 +153,7 @@
             [groupModel removeObserver:self];
             [groupModel addObserver:self selector:@selector(setName:) postprocessor:^(id info, NSString *name)
              {
-                 weakSelf.customizeFile[weakGroup.id] = name;
+                 weakSelf.customizeFile[weakGroup.id][HAHSFriendlyName] = name;
                  [[HAHDataManager sharedManager] saveFile:weakSelf.customizeFile];
                  [[HAHDataManager sharedManager] saveFile:weakSelf.groupFile];
              }];
@@ -136,7 +178,7 @@
                 [entity removeObserver:self];
                 [entity addObserver:self selector:@selector(setName:) postprocessor:^(id info, NSString *name)
                  {
-                     weakSelf.customizeFile[weakEntity.id] = name;
+                     weakSelf.customizeFile[weakEntity.id][HAHSFriendlyName] = name;
                      [[HAHDataManager sharedManager] saveFile:weakSelf.customizeFile];
                  }];
             }

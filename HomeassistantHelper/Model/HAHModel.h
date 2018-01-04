@@ -11,9 +11,11 @@
 @interface HAHModelInformation : NSObject
 @property (nonatomic, readonly) NSArray *propertyNames;
 - (NSString *)classStringForProperty:(NSString *)property;
+- (void)addProperty:(NSString *)property classString:(NSString *)classString;
 @end
 
 @interface HAHModel : NSObject
 <NSCoding>
-@property (readonly, class) HAHModelInformation *infomation;
+@property (readonly) HAHModelInformation *infomation;
+@property (readonly) NSArray *ignoreProperties;
 @end

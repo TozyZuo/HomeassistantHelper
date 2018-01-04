@@ -10,7 +10,7 @@
 #import "HAHCustomizeParser.h"
 
 @interface HAHCustomizeFile ()
-@property (nonatomic, strong) NSMutableDictionary *internal;
+@property (nonatomic, strong) NSMutableDictionary<NSString */*id*/, NSMutableDictionary<NSString */*property*/, NSString */*value*/> *> *internal;
 @end
 
 @implementation HAHCustomizeFile
@@ -23,24 +23,21 @@
     return self;
 }
 
-- (NSString *)objectForKeyedSubscript:(NSString *)key
+- (NSMutableDictionary<NSString */*property*/, NSString */*value*/> *)objectForKeyedSubscript:(NSString *)key
 {
     return self.internal[key];
-}
-
-- (void)setObject:(NSString *)obj forKeyedSubscript:(NSString *)key
-{
-    self.internal[key] = obj;
 }
 
 - (NSString *)text
 {
     NSMutableString *text = [[NSMutableString alloc] initWithString:@""];
 
-    [self.internal enumerateKeysAndObjectsUsingBlock:^(id  _Nonnull identifier, id  _Nonnull name, BOOL * _Nonnull stop)
+    [self.internal enumerateKeysAndObjectsUsingBlock:^(id  _Nonnull identifier, NSMutableDictionary<NSString *, NSString *> *properties, BOOL * _Nonnull stop)
     {
         [text appendFormat:@"%@:\n", identifier];
-        [text appendFormat:@"   friendly_name: %@\n", name];
+        [properties enumerateKeysAndObjectsUsingBlock:^(NSString * _Nonnull key, NSString * _Nonnull obj, BOOL * _Nonnull stop) {
+            [text appendFormat:@"\t%@: %@\n", key, obj];
+        }];
     }];
 
     return text;

@@ -7,7 +7,10 @@
 //
 
 #import "HAHEntityModel.h"
-#import <objc/runtime.h>
+
+@interface HAHEntityModel ()
+@property (nonatomic, strong) NSMutableDictionary *extensions;
+@end
 
 @implementation HAHEntityModel
 
@@ -29,6 +32,34 @@
         [self.id isEqualToString:[object id]];
     }
     return NO;
+}
+
+- (NSArray *)ignoreProperties
+{
+    static NSArray *ignoreProperties;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        ignoreProperties = [@[@"extensions"] arrayByAddingObjectsFromArray:super.ignoreProperties];
+    });
+    return ignoreProperties;
+}
+
+- (id)valueForUndefinedKey:(NSString *)key
+{
+    id value = self.extensions[key];
+    if ([[self.infomation classStringForProperty:key] isEqualToString:@"BOOL"]) {
+        return @([value boolValue]);
+    }
+    return value;
+}
+
+- (void)setValue:(id)value forUndefinedKey:(NSString *)key
+{
+    if ([[self.infomation classStringForProperty:key] isEqualToString:@"BOOL"]) {
+        self.extensions[key] = [value boolValue] ? @"true" : @"false";
+    } else {
+        self.extensions[key] = value;
+    }
 }
 
 @end

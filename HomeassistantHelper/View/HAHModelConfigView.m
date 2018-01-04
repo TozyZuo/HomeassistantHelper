@@ -68,7 +68,7 @@ CGFloat HAHModelConfigViewVerticalSpace = 5;
 
     [self clear];
 
-    HAHModelInformation *information = [model.class infomation];
+    HAHModelInformation *information = model.infomation;
 
     for (NSString *property in information.propertyNames) {
         NSString *selectorString = self.dispatchDictionary[[information classStringForProperty:property]];
@@ -115,7 +115,22 @@ CGFloat HAHModelConfigViewVerticalSpace = 5;
 
 - (NSView *)viewWithBOOLProperty:(NSString *)property
 {
-    return nil;
+    NSView *view = [[HAHView alloc] initWithFrame:NSZeroRect];
+    view.width = HAHModelConfigViewWidth;
+
+    CGFloat width = HAHModelConfigViewWidth - HAHModelConfigViewLeftMargin - HAHModelConfigViewRightMargin;
+
+    NSButton *button = [NSButton checkboxWithTitle:[HAHConfigManager sharedManager].modelConfigMap[property] ?: property target:nil action:NULL];
+    button.font = [NSFont systemFontOfSize:13];
+    button.frame = NSMakeRect(HAHModelConfigViewLeftMargin, HAHModelConfigViewTopMargin, width, 20);
+    button.width = width;
+    
+    [button bind:NSValueBinding toObject:self.model withKeyPath:property options:nil];
+    [view addSubview:button];
+
+    view.height = button.bottom;
+
+    return view;
 }
 
 #pragma mark - NSTextFieldDelegate

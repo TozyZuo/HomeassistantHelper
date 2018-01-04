@@ -10,13 +10,13 @@
 
 @implementation HAHCustomizeParser
 
-- (NSMutableDictionary *)parse:(NSString *)text
+- (NSMutableDictionary<NSString *,NSMutableDictionary<NSString *,NSString *> *> *)parse:(NSString *)text
 {
     text = HAHTrimAllWhiteSpaceWithText(HAHFilterCommentsAndEmptyLineWithText(text));
 
     NSMutableDictionary *parseResult = [[NSMutableDictionary alloc] init];
     NSError *error;
-    NSString *pattern = @".*:(\\n.*\\:.*)?";
+    NSString *pattern = @".*:(\\n.+\\:.+)+";
 
     NSRegularExpression *rex = [NSRegularExpression regularExpressionWithPattern:pattern options:NSRegularExpressionCaseInsensitive|NSRegularExpressionAllowCommentsAndWhitespace error:&error];
     if (error) {
@@ -33,20 +33,19 @@
              NSString *identifier = [lines.firstObject componentsSeparatedByString:@":"].firstObject;
              // 移除第一行id
              [lines removeObjectAtIndex:0];
-             // 只用到了HAHSFriendlyName，不知道会不会有别的
-             parseResult[identifier] = [self propertiesWithLines:lines][HAHSFriendlyName];
+             parseResult[identifier] = [self propertiesWithLines:lines];
          }
      }];
 
     return parseResult;
 }
 
-- (NSDictionary *)propertiesWithLines:(NSArray *)lines
+- (NSMutableDictionary *)propertiesWithLines:(NSArray *)lines
 {
     NSMutableDictionary *properties = [[NSMutableDictionary alloc] init];
     for (NSString *line in lines) {
         NSArray<NSString *> *keyValue = [line componentsSeparatedByString:@":"];
-        properties[keyValue.firstObject] = keyValue.lastObject;
+        properties[[keyValue.firstObject stringByTrimmingCharactersInSet:[NSCharacterSet characterSetWithCharactersInString:@"\t"]]] = keyValue.lastObject;
     }
     return properties;
 }
