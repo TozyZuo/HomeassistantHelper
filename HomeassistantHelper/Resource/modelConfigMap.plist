@@ -6,6 +6,10 @@
 	<string>标识</string>
 	<key>name</key>
 	<string>名称</string>
+	<key>homebridge_hidden</key>
+	<string>是否在Homebridge中显示</string>
+	<key>homebridge_name</key>
+	<string>Homebridge中显示的名称</string>
 	<key>shortID</key>
 	<string>短标识</string>
 </dict>
