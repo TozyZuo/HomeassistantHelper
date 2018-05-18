@@ -23,11 +23,19 @@ CGFloat HAHModelConfigViewVerticalSpace = 5;
 <NSTextFieldDelegate>
 @property (nonatomic, readonly) NSArray         *disabledProperties;
 @property (nonatomic,  strong ) HAHModel        *model;
+@property (nonatomic,  strong ) NSMutableArray  *controlViews;
 @property (nonatomic, readonly) NSDictionary    *dispatchDictionary;
 @property (nonatomic,  assign ) BOOL isEditing;
 @end
 
 @implementation HAHModelConfigView
+
+- (void)initialize
+{
+    [super initialize];
+    self.controlViews = [[NSMutableArray alloc] init];
+    _enabled = YES;
+}
 
 - (NSArray *)disabledProperties
 {
@@ -56,8 +64,19 @@ CGFloat HAHModelConfigViewVerticalSpace = 5;
     return dispatchDictionary;
 }
 
+- (void)setEnabled:(BOOL)enabled
+{
+    if (_enabled != enabled) {
+        _enabled = enabled;
+        for (NSControl *control in self.controlViews) {
+            control.enabled = enabled;
+        }
+    }
+}
+
 - (void)clear
 {
+    [self.controlViews removeAllObjects];
     [self.subviews makeObjectsPerformSelector:@selector(removeFromSuperview)];
     self.height = self.superview.height;
 }
@@ -105,6 +124,8 @@ CGFloat HAHModelConfigViewVerticalSpace = 5;
     [value bind:NSValueBinding toObject:self.model withKeyPath:property options:nil];
     if ([self.disabledProperties containsObject:property]) {
         value.enabled = NO;
+    } else {
+        [self.controlViews addObject:value];
     }
     [view addSubview:value];
 
@@ -124,9 +145,9 @@ CGFloat HAHModelConfigViewVerticalSpace = 5;
     button.font = [NSFont systemFontOfSize:13];
     button.frame = NSMakeRect(HAHModelConfigViewLeftMargin, HAHModelConfigViewTopMargin, width, 20);
     button.width = width;
-    
     [button bind:NSValueBinding toObject:self.model withKeyPath:property options:nil];
     [view addSubview:button];
+    [self.controlViews addObject:button];
 
     view.height = button.bottom;
 

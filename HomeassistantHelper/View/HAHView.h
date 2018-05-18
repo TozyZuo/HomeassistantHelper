@@ -10,6 +10,9 @@
 
 @interface HAHView : NSView
 
+@property (readwrite) NSInteger tag;
+@property (nonatomic, strong) NSColor *backgroundColor;
+
 - (void)initialize NS_REQUIRES_SUPER;
 
 @end

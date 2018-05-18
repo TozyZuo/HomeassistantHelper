@@ -43,35 +43,6 @@ void HAHExecuteBlockOnMainThread(void (^block)(void))
     }
 }
 
-NSString *HAHFilterCommentsAndEmptyLineWithText(NSString *text)
-{
-    return [HAHSeparateTextToLinesAndFilterCommentsAndEmptyLine(text) componentsJoinedByString:@"\n"];
-}
-
-NSArray *HAHSeparateTextToLinesAndFilterCommentsAndEmptyLine(NSString *text)
-{
-    NSMutableArray *lines = [text componentsSeparatedByCharactersInSet:[NSCharacterSet newlineCharacterSet]].mutableCopy;
-
-    NSUInteger i = 0;
-    while (i < lines.count) {
-        NSString *line = [lines[i] stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
-        if ([line hasPrefix:@"#"] ||
-            !line.length)
-        {
-            [lines removeObjectAtIndex:i];
-            continue;
-        }
-        i++;
-    }
-
-    return lines;
-}
-
-NSString *HAHTrimAllWhiteSpaceWithText(NSString *text)
-{
-    return [text stringByReplacingOccurrencesOfString:@" " withString:@""];
-}
-
 #pragma mark - Global
 
 CGFloat const HAHModelConfigViewWidth = 235;

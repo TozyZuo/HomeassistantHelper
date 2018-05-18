@@ -13,19 +13,178 @@
 static NSMutableCharacterSet *HAHEntityParseCharacterSet;
 
 @interface HAHPageParser ()
-@property (nonatomic, strong) NSMutableDictionary *allGroups;
-@property (nonatomic, strong) NSMutableDictionary *allEntities;
+@property (nonatomic, class) NSMutableDictionary *allGroups;
+@property (nonatomic, class) NSMutableDictionary *allEntities;
 @end
 
 @implementation HAHPageParser
 
-+ (void)load
+static id _allGroups;
++ (NSMutableDictionary *)allGroups
 {
-    HAHEntityParseCharacterSet = [NSMutableCharacterSet whitespaceCharacterSet];
-    [HAHEntityParseCharacterSet addCharactersInString:@"-"];
+    return _allGroups;
 }
 
-- (NSMutableArray<HAHPageModel *> *)parse:(NSString *)text
++ (void)setAllGroups:(NSMutableDictionary *)allGroups
+{
+    if (![_allGroups isEqual:allGroups]) {
+        _allGroups = allGroups;
+    }
+}
+
+static id _allEntities;
++ (NSMutableDictionary *)allEntities
+{
+    return _allEntities;
+}
+
++ (void)setAllEntities:(NSMutableDictionary *)allEntities
+{
+    if (![_allEntities isEqual:allEntities]) {
+        _allEntities = allEntities;
+    }
+}
+
++ (NSMutableArray<HAHPageModel *> *)parse:(NSDictionary *)dictionary
+{
+    self.allGroups = [[NSMutableDictionary alloc] init];
+    self.allEntities = [[NSMutableDictionary alloc] init];
+
+    NSMutableArray<HAHPageModel *> *pageModels = [[NSMutableArray alloc] init];
+    NSMutableDictionary<NSString *, HAHGroupModel *> *groupModels = [[NSMutableDictionary alloc] init];
+
+    for (NSString *key in dictionary) {
+        NSDictionary *value = dictionary[key];
+        NSAssert([value isKindOfClass:[NSDictionary class]], @"value should be a NSDictionary");
+
+        if ([value[@"view"] boolValue]) {
+            [pageModels addObject:[self pageModelFromDictionary:value identifier:key]];
+        } else {
+            HAHGroupModel *groupModel = [self groupModelFromDictionary:value shortID:key];
+            groupModels[groupModel.id] = groupModel;
+        }
+    }
+
+    // 防止用户写错写漏
+    NSMutableDictionary *nonpagedGroups = groupModels.mutableCopy;
+    for (HAHPageModel *pageModel in pageModels) {
+        for (HAHGroupModel *groupModel in pageModel.groups) {
+            if (groupModels[groupModel.id]) {
+                nonpagedGroups[groupModel.id] = nil;
+            } else {
+                HAHLOG(@"未找到组 %@", groupModel);
+            }
+        }
+    }
+
+    if (nonpagedGroups.count) {
+        HAHLOG(@"以下组未找到对应页面 %@", nonpagedGroups.allValues);
+    }
+
+    self.allGroups = nil;
+    self.allEntities = nil;
+
+    return pageModels;
+}
+
++ (HAHPageModel *)pageModelFromDictionary:(NSDictionary *)dictionary identifier:(NSString *)identifier
+{
+    HAHPageModel *pageModel = [[HAHPageModel alloc] init];
+    pageModel.id = identifier;
+    pageModel.name = dictionary[@"name"];
+
+    for (NSString *groupID in dictionary[@"entities"]) {
+        [pageModel.groups addObject:[self groupModelWithIdentifier:groupID]];
+    }
+
+    return pageModel;
+}
+
++ (HAHGroupModel *)groupModelFromDictionary:(NSDictionary *)dictionary shortID:(NSString *)shortID
+{
+    HAHGroupModel *groupModel = self.allGroups[shortID];
+    if (!groupModel) {
+        groupModel = [[HAHGroupModel alloc] init];
+        groupModel.shortID = shortID;
+        self.allGroups[shortID] = groupModel;
+        self.allGroups[groupModel.id] = groupModel;
+    }
+
+    groupModel.name = dictionary[@"name"];
+
+    for (NSString *entityID in dictionary[@"entities"]) {
+        [groupModel.entities addObject:[self entityModelWithIdentifier:entityID]];
+    }
+
+    return groupModel;
+}
+
++ (HAHGroupModel *)groupModelWithIdentifier:(NSString *)identifier
+{
+    HAHGroupModel *groupModel = self.allGroups[identifier];
+    if (!groupModel) {
+        groupModel = [[HAHGroupModel alloc] init];
+        groupModel.id = identifier;
+        self.allGroups[identifier] = groupModel;
+        self.allGroups[groupModel.shortID] = groupModel;
+    }
+    return groupModel;
+}
+
++ (HAHEntityModel *)entityModelWithIdentifier:(NSString *)identifier
+{
+    HAHEntityModel *entityModel = self.allEntities[identifier];
+    if (!entityModel) {
+        entityModel = [[HAHEntityModel alloc] init];
+        entityModel.id = identifier;
+        self.allEntities[identifier] = entityModel;
+    }
+    return entityModel;
+}
+
++ (NSDictionary *)transformPageModel:(HAHPageModel *)pageModel
+{
+    NSMutableDictionary *result = [[NSMutableDictionary alloc] init];
+
+    NSMutableArray *groupEntities = [[NSMutableArray alloc] init];
+
+    for (HAHGroupModel *groupModel in pageModel.groups) {
+        [groupEntities addObject:groupModel.id];
+
+        NSMutableArray *entities = [[NSMutableArray alloc] init];
+        for (HAHEntityModel *entityModel in groupModel.entities) {
+            [entities addObject:entityModel.id];
+        }
+
+        NSMutableDictionary *basicData = @{
+                                           @"name": groupModel.name,
+                                           @"view": @"no",
+                                           @"entities": entities,
+                                           }.mutableCopy;
+//        [basicData addEntriesFromDictionary:groupModel.extensions];
+        result[groupModel.shortID] = basicData;
+    }
+
+    NSMutableDictionary *basicData = @{
+                                       @"name": pageModel.name,
+                                       @"view": @"yes",
+                                       @"entities": groupEntities,
+                                       }.mutableCopy;
+//    [basicData addEntriesFromDictionary:pageModel.extensions];
+    result[pageModel.id] = basicData;
+
+    return result;
+}
+
+/*
+
+ + (void)load
+ {
+ HAHEntityParseCharacterSet = [NSMutableCharacterSet whitespaceCharacterSet];
+ [HAHEntityParseCharacterSet addCharactersInString:@"-"];
+ }
+
+- (NSMutableArray<HAHPageModel *> *)parse:(NSDictionary *)dictionary
 {
     self.allGroups = [[NSMutableDictionary alloc] init];
     self.allEntities = [[NSMutableDictionary alloc] init];
@@ -42,17 +201,17 @@ static NSMutableCharacterSet *HAHEntityParseCharacterSet;
     HAHLogError(error);
 
     [rex enumerateMatchesInString:text options:NSMatchingReportCompletion range:NSMakeRange(0, text.length) usingBlock:^(NSTextCheckingResult * _Nullable result, NSMatchingFlags flags, BOOL * _Nonnull stop)
-    {
-        if (result.range.length) {
-            NSString *textBlock = [text substringWithRange:result.range];
-            if ([self isPageFromTextBlock:textBlock]) {
-                [pageModels addObject:[self pageModelWithTextBlock:textBlock]];
-            } else {
-                HAHGroupModel *groupModel = [self groupModelWithTextBlock:textBlock];
-                groupModels[groupModel.id] = groupModel;
-            }
-        }
-    }];
+     {
+         if (result.range.length) {
+             NSString *textBlock = [text substringWithRange:result.range];
+             if ([self isPageFromTextBlock:textBlock]) {
+                 [pageModels addObject:[self pageModelWithTextBlock:textBlock]];
+             } else {
+                 HAHGroupModel *groupModel = [self groupModelWithTextBlock:textBlock];
+                 groupModels[groupModel.id] = groupModel;
+             }
+         }
+     }];
 
     // 防止用户写错写漏
     NSMutableDictionary *nonpagedGroups = groupModels.mutableCopy;
@@ -182,5 +341,5 @@ static NSMutableCharacterSet *HAHEntityParseCharacterSet;
     }
     return entityModel;
 }
-
+*/
 @end

@@ -9,5 +9,7 @@
 #import <Foundation/Foundation.h>
 
 @interface HAHParser : NSObject
-- (id)parse:(NSString *)text;
++ (id)parse:(id)object;
++ (id)parseYAML:(NSString *)text;
++ (NSString *)YAMLFromObject:(id)object;
 @end

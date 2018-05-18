@@ -12,6 +12,10 @@
 
 @interface HAHDataManager : HAHManager
 
+@property (nonatomic, readonly) NSString *URL;
+@property (nonatomic, readonly) NSString *user;
+@property (nonatomic, readonly) NSString *password;
+
 - (void)requestDataWithURL:(NSString *)url user:(NSString *)user password:(NSString *)password complete:(void (^)(NSArray<HAHEntityModel *> *ungroupedEntities, NSArray<HAHPageModel *> *pages))completeBlock;
 
 - (void)requestBackupWithComplete:(void (^)(HAHBackupModel *backup))completeBlock;

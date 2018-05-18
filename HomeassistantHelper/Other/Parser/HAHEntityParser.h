@@ -11,5 +11,5 @@
 @class HAHEntityModel;
 
 @interface HAHEntityParser : HAHParser
-- (NSArray<HAHEntityModel *> *)parse:(NSString *)text;
++ (NSArray<HAHEntityModel *> *)parse:(NSArray *)array;
 @end

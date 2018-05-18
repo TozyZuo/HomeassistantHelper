@@ -14,6 +14,6 @@
 @property (readonly) HAHGroupFile       *groupFile;
 @property (readonly) HAHCustomizeFile   *customizeFile;
 
-- (void)mergeInfomationWithEntities:(NSArray<HAHEntityModel *> *)entities;
+- (NSArray<HAHEntityModel *> */*ungroupedEntities*/)mergeInfomationWithEntities:(NSArray<HAHEntityModel *> *)entities;
 
 @end

@@ -16,13 +16,14 @@
 		BA22B3501FFB6B74003BEDC5 /* HAHBrowserManager.xib in Resources */ = {isa = PBXBuildFile; fileRef = BA22B34F1FFB6B74003BEDC5 /* HAHBrowserManager.xib */; };
 		BA23DB2D1F1356E300939AA8 /* HAHGlobalExtern.m in Sources */ = {isa = PBXBuildFile; fileRef = BA23DB2C1F1356E300939AA8 /* HAHGlobalExtern.m */; };
 		BA23DB361F136E4100939AA8 /* GDataXMLNode.m in Sources */ = {isa = PBXBuildFile; fileRef = BA23DB311F136E4100939AA8 /* GDataXMLNode.m */; };
-		BA6AFD171F2DBCAF0020BCDD /* HAHCustomizeParser.m in Sources */ = {isa = PBXBuildFile; fileRef = BA6AFD161F2DBCAF0020BCDD /* HAHCustomizeParser.m */; };
+		BA373D1220AC1D2700F50746 /* HAHRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = BA373D1120AC1D2700F50746 /* HAHRequest.m */; };
 		BA6AFD1B1F2DF2160020BCDD /* HAHEditViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = BA6AFD1A1F2DF2160020BCDD /* HAHEditViewController.m */; };
 		BA6AFD1E1F2DF22C0020BCDD /* HAHTableColumn.m in Sources */ = {isa = PBXBuildFile; fileRef = BA6AFD1D1F2DF22C0020BCDD /* HAHTableColumn.m */; };
 		BA6AFD211F2E08D00020BCDD /* HAHTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = BA6AFD201F2E08D00020BCDD /* HAHTableViewCell.m */; };
 		BA6D7EE81FBEDCB1000FC721 /* NMSSH.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = BAEECA7A1F137D3C0099000C /* NMSSH.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		BA74317D1F3058C500713EA6 /* NSColor_HAH.m in Sources */ = {isa = PBXBuildFile; fileRef = BA74317C1F3058C500713EA6 /* NSColor_HAH.m */; };
 		BA74317F1F3072AD00713EA6 /* HAHTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = BA74317E1F3072AD00713EA6 /* HAHTableViewCell.xib */; };
+		BA7AEC0820AACB3100015B52 /* YAML.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BA7AEC0320AACB2000015B52 /* YAML.framework */; };
 		BA7BE3471F1A191300451762 /* HAHBrowserManager.m in Sources */ = {isa = PBXBuildFile; fileRef = BA7BE3451F1A191300451762 /* HAHBrowserManager.m */; };
 		BA7BE34B1F1A295400451762 /* HAHWindowControllerManager.m in Sources */ = {isa = PBXBuildFile; fileRef = BA7BE34A1F1A295400451762 /* HAHWindowControllerManager.m */; };
 		BA7BE3541F1A4B6400451762 /* NSView_HAH.m in Sources */ = {isa = PBXBuildFile; fileRef = BA7BE3531F1A4B6400451762 /* NSView_HAH.m */; };
@@ -74,6 +75,27 @@
 			remoteGlobalIDString = E4E96D83158E10FD002E6E0A;
 			remoteInfo = NMSSH;
 		};
+		BA7AEC0220AACB2000015B52 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = BA7AEBFD20AACB2000015B52 /* YAML.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 8DC2EF5B0486A6940098B216;
+			remoteInfo = YAML;
+		};
+		BA7AEC0420AACB2000015B52 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = BA7AEBFD20AACB2000015B52 /* YAML.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = B6A432A11C27CE40007FB63C;
+			remoteInfo = "YAML iOS";
+		};
+		BA7AEC0620AACB2A00015B52 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = BA7AEBFD20AACB2000015B52 /* YAML.xcodeproj */;
+			proxyType = 1;
+			remoteGlobalIDString = 8DC2EF4F0486A6940098B216;
+			remoteInfo = YAML;
+		};
 		BAEECA791F137D3C0099000C /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = BAEECA751F137D3C0099000C /* NMSSH.xcodeproj */;
@@ -120,8 +142,8 @@
 		BA23DB2C1F1356E300939AA8 /* HAHGlobalExtern.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HAHGlobalExtern.m; sourceTree = "<group>"; };
 		BA23DB301F136E4100939AA8 /* GDataXMLNode.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GDataXMLNode.h; sourceTree = "<group>"; };
 		BA23DB311F136E4100939AA8 /* GDataXMLNode.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GDataXMLNode.m; sourceTree = "<group>"; };
-		BA6AFD151F2DBCAF0020BCDD /* HAHCustomizeParser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HAHCustomizeParser.h; sourceTree = "<group>"; };
-		BA6AFD161F2DBCAF0020BCDD /* HAHCustomizeParser.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HAHCustomizeParser.m; sourceTree = "<group>"; };
+		BA373D1020AC1D2700F50746 /* HAHRequest.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = HAHRequest.h; sourceTree = "<group>"; };
+		BA373D1120AC1D2700F50746 /* HAHRequest.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = HAHRequest.m; sourceTree = "<group>"; };
 		BA6AFD191F2DF2160020BCDD /* HAHEditViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HAHEditViewController.h; sourceTree = "<group>"; };
 		BA6AFD1A1F2DF2160020BCDD /* HAHEditViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HAHEditViewController.m; sourceTree = "<group>"; };
 		BA6AFD1C1F2DF22C0020BCDD /* HAHTableColumn.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HAHTableColumn.h; sourceTree = "<group>"; };
@@ -131,6 +153,7 @@
 		BA74317B1F3058C500713EA6 /* NSColor_HAH.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NSColor_HAH.h; sourceTree = "<group>"; };
 		BA74317C1F3058C500713EA6 /* NSColor_HAH.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NSColor_HAH.m; sourceTree = "<group>"; };
 		BA74317E1F3072AD00713EA6 /* HAHTableViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = HAHTableViewCell.xib; sourceTree = "<group>"; };
+		BA7AEBFD20AACB2000015B52 /* YAML.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = YAML.xcodeproj; path = YAML/YAML.xcodeproj; sourceTree = "<group>"; };
 		BA7BE3441F1A191300451762 /* HAHBrowserManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HAHBrowserManager.h; sourceTree = "<group>"; };
 		BA7BE3451F1A191300451762 /* HAHBrowserManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HAHBrowserManager.m; sourceTree = "<group>"; };
 		BA7BE3491F1A295400451762 /* HAHWindowControllerManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HAHWindowControllerManager.h; sourceTree = "<group>"; };
@@ -215,6 +238,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				BA7AEC0820AACB3100015B52 /* YAML.framework in Frameworks */,
 				BA8038021F190F3A00EE7A36 /* Carbon.framework in Frameworks */,
 				BAEECA7D1F137D4A0099000C /* NMSSH.framework in Frameworks */,
 				BA8F98FD1F1245DC00D16523 /* libxml2.tbd in Frameworks */,
@@ -240,6 +264,7 @@
 		BA23DB2E1F136E4100939AA8 /* OpenSource */ = {
 			isa = PBXGroup;
 			children = (
+				BA7AEBFD20AACB2000015B52 /* YAML.xcodeproj */,
 				BAD86E4C1F9878B800D19966 /* Aspects */,
 				BA8037FD1F18FE7C00EE7A36 /* NSViewExtensions */,
 				BAEECA751F137D3C0099000C /* NMSSH.xcodeproj */,
@@ -255,6 +280,15 @@
 				BA23DB311F136E4100939AA8 /* GDataXMLNode.m */,
 			);
 			path = GDataXML;
+			sourceTree = "<group>";
+		};
+		BA373D0F20AC1D0900F50746 /* Request */ = {
+			isa = PBXGroup;
+			children = (
+				BA373D1020AC1D2700F50746 /* HAHRequest.h */,
+				BA373D1120AC1D2700F50746 /* HAHRequest.m */,
+			);
+			path = Request;
 			sourceTree = "<group>";
 		};
 		BA50253D1F735BD800254C21 /* NSArray */ = {
@@ -287,6 +321,15 @@
 				BA74317C1F3058C500713EA6 /* NSColor_HAH.m */,
 			);
 			path = NSColor;
+			sourceTree = "<group>";
+		};
+		BA7AEBFE20AACB2000015B52 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				BA7AEC0320AACB2000015B52 /* YAML.framework */,
+				BA7AEC0520AACB2000015B52 /* YAML.framework */,
+			);
+			name = Products;
 			sourceTree = "<group>";
 		};
 		BA7BE34C1F1A4B2300451762 /* Category */ = {
@@ -395,6 +438,7 @@
 				BA8F991A1F12766500D16523 /* Definitions */,
 				BA8F99041F12688A00D16523 /* Model */,
 				BAB76AD11FB4579A0069F670 /* File */,
+				BA373D0F20AC1D0900F50746 /* Request */,
 				BA8F99161F126EE300D16523 /* Manager */,
 				BA7BE3581F1A5B6A00451762 /* View */,
 				BA8F99071F12688A00D16523 /* ViewController */,
@@ -559,8 +603,6 @@
 				BAEECA961F14C7830099000C /* HAHPageParser.m */,
 				BAEECA981F14C7920099000C /* HAHConfigParser.h */,
 				BAEECA991F14C7920099000C /* HAHConfigParser.m */,
-				BA6AFD151F2DBCAF0020BCDD /* HAHCustomizeParser.h */,
-				BA6AFD161F2DBCAF0020BCDD /* HAHCustomizeParser.m */,
 			);
 			path = Parser;
 			sourceTree = "<group>";
@@ -580,6 +622,7 @@
 			buildRules = (
 			);
 			dependencies = (
+				BA7AEC0720AACB2A00015B52 /* PBXTargetDependency */,
 				BAEECA7C1F137D450099000C /* PBXTargetDependency */,
 				BA6D7EEA1FBEDCB1000FC721 /* PBXTargetDependency */,
 			);
@@ -594,7 +637,7 @@
 		BA8F98D01F11BDF700D16523 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastUpgradeCheck = 0900;
+				LastUpgradeCheck = 0930;
 				ORGANIZATIONNAME = TozyZuo;
 				TargetAttributes = {
 					BA8F98D71F11BDF700D16523 = {
@@ -619,6 +662,10 @@
 					ProductGroup = BAEECA761F137D3C0099000C /* Products */;
 					ProjectRef = BAEECA751F137D3C0099000C /* NMSSH.xcodeproj */;
 				},
+				{
+					ProductGroup = BA7AEBFE20AACB2000015B52 /* Products */;
+					ProjectRef = BA7AEBFD20AACB2000015B52 /* YAML.xcodeproj */;
+				},
 			);
 			projectRoot = "";
 			targets = (
@@ -628,6 +675,20 @@
 /* End PBXProject section */
 
 /* Begin PBXReferenceProxy section */
+		BA7AEC0320AACB2000015B52 /* YAML.framework */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.framework;
+			path = YAML.framework;
+			remoteRef = BA7AEC0220AACB2000015B52 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		BA7AEC0520AACB2000015B52 /* YAML.framework */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.framework;
+			path = YAML.framework;
+			remoteRef = BA7AEC0420AACB2000015B52 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
 		BAEECA7A1F137D3C0099000C /* NMSSH.framework */ = {
 			isa = PBXReferenceProxy;
 			fileType = wrapper.framework;
@@ -670,6 +731,7 @@
 				BA8F99111F12690500D16523 /* HAHViewController.m in Sources */,
 				BAEECA8C1F14AD7C0099000C /* HAHModel.m in Sources */,
 				BAEECA971F14C7830099000C /* HAHPageParser.m in Sources */,
+				BA373D1220AC1D2700F50746 /* HAHRequest.m in Sources */,
 				BA7BE3471F1A191300451762 /* HAHBrowserManager.m in Sources */,
 				BAEECA941F14C5960099000C /* HAHEntityParser.m in Sources */,
 				BAD86E541F99C1E300D19966 /* Foundation_Log.m in Sources */,
@@ -697,7 +759,6 @@
 				BAD86E4F1F9878B800D19966 /* Aspects.m in Sources */,
 				BAB76ADD1FB4579A0069F670 /* HAHGroupFile.m in Sources */,
 				BA05CDFA1FBAE79C00C495B7 /* HAHBackupCell.m in Sources */,
-				BA6AFD171F2DBCAF0020BCDD /* HAHCustomizeParser.m in Sources */,
 				BAEECA9A1F14C7920099000C /* HAHConfigParser.m in Sources */,
 				BA8038001F18FE7C00EE7A36 /* NSView+Extensions.m in Sources */,
 				BAD6BEF31F52F57A00C34C4F /* HAHManager.m in Sources */,
@@ -715,6 +776,11 @@
 			isa = PBXTargetDependency;
 			name = NMSSH;
 			targetProxy = BA6D7EE91FBEDCB1000FC721 /* PBXContainerItemProxy */;
+		};
+		BA7AEC0720AACB2A00015B52 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = YAML;
+			targetProxy = BA7AEC0620AACB2A00015B52 /* PBXContainerItemProxy */;
 		};
 		BAEECA7C1F137D450099000C /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
@@ -749,6 +815,7 @@
 				CLANG_WARN_BOOL_CONVERSION = YES;
 				CLANG_WARN_COMMA = YES;
 				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
 				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
 				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
 				CLANG_WARN_EMPTY_BODY = YES;
@@ -756,6 +823,7 @@
 				CLANG_WARN_INFINITE_RECURSION = YES;
 				CLANG_WARN_INT_CONVERSION = YES;
 				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
 				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
 				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
@@ -803,6 +871,7 @@
 				CLANG_WARN_BOOL_CONVERSION = YES;
 				CLANG_WARN_COMMA = YES;
 				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
 				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
 				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
 				CLANG_WARN_EMPTY_BODY = YES;
@@ -810,6 +879,7 @@
 				CLANG_WARN_INFINITE_RECURSION = YES;
 				CLANG_WARN_INT_CONVERSION = YES;
 				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
 				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
 				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;

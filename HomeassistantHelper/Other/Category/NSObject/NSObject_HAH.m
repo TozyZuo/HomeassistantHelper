@@ -34,13 +34,13 @@
 - (HAHObserverMap *(^)(NSObject *observer))observer
 {
     return ^(NSObject *observer){
-        if (!_transmition) {
+        if (!self->_transmition) {
             NSMutableDictionary *selectorDictionary = [self.mapTable objectForKey:observer];
             if (!selectorDictionary) {
                 selectorDictionary = [[NSMutableDictionary alloc] init];
                 [self.mapTable setObject:selectorDictionary forKey:observer];
             }
-            _transmition = selectorDictionary;
+            self->_transmition = selectorDictionary;
         }
         return self;
     };
@@ -56,15 +56,15 @@
 - (HAHObserverMap *(^)(SEL selector))selector
 {
     return ^(SEL selector){
-        if ([_transmition isKindOfClass:[NSMutableDictionary class]]) {
-            NSMutableDictionary *selectorDictionary = _transmition;
+        if ([self->_transmition isKindOfClass:[NSMutableDictionary class]]) {
+            NSMutableDictionary *selectorDictionary = self->_transmition;
             NSString *selectorKey = NSStringFromSelector(selector);
             NSMutableArray *aspects = selectorDictionary[selectorKey];
             if (!aspects) {
                 aspects = [[NSMutableArray alloc] init];
                 selectorDictionary[selectorKey] = aspects;
             }
-            _transmition = aspects;
+            self->_transmition = aspects;
         }
         return self;
     };
@@ -74,8 +74,8 @@
 {
     return ^(AspectOptions option){
         NSHashTable *ret;
-        if ([_transmition isKindOfClass:[NSMutableArray class]]) {
-            NSMutableArray *aspects = _transmition;
+        if ([self->_transmition isKindOfClass:[NSMutableArray class]]) {
+            NSMutableArray *aspects = self->_transmition;
             if (!aspects.count) {
                 [aspects addObject:[NSHashTable weakObjectsHashTable]];
                 [aspects addObject:[NSHashTable weakObjectsHashTable]];
@@ -90,7 +90,7 @@
                 default:
                     break;
             }
-            _transmition = nil;
+            self->_transmition = nil;
         }
         return ret;
     };

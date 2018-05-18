@@ -9,6 +9,7 @@
 #import "HAHView.h"
 
 @implementation HAHView
+@synthesize tag = _tag;
 
 - (instancetype)initWithFrame:(NSRect)frame
 {
@@ -42,6 +43,12 @@
     [super drawRect:dirtyRect];
     
     // Drawing code here.
+}
+
+- (void)setBackgroundColor:(NSColor *)backgroundColor
+{
+    self.wantsLayer = YES;
+    self.layer.backgroundColor = backgroundColor.CGColor;
 }
 
 @end

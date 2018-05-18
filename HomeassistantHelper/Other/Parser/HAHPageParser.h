@@ -11,5 +11,6 @@
 @class HAHPageModel;
 
 @interface HAHPageParser : HAHParser
-- (NSMutableArray<HAHPageModel *> *)parse:(NSString *)text;
++ (NSMutableArray<HAHPageModel *> *)parse:(NSDictionary *)dictionary;
++ (NSDictionary *)transformPageModel:(HAHPageModel *)pageModel;
 @end

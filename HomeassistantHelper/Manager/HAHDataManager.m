@@ -13,8 +13,9 @@
 #import "HAHBackupModel.h"
 #import "HAHConfigurationFile.h"
 #import "HAHGroupFile.h"
+#import "HAHRequest.h"
+#import "HAHParser.h"
 #import <NMSSH/NMSSH.h>
-#import <WebKit/WebKit.h>
 
 
 //#define LoadFileFromLocal // 本地开发测试
@@ -33,11 +34,13 @@ static NSString * const HAHHomeassistantPath = @"/home/homeassistant/.homeassist
 
 
 @interface HAHDataManager ()
-<WKNavigationDelegate>
-@property (nonatomic, strong) WKWebView             *webView;
-@property (nonatomic, strong) WKNavigation          *homeNavigation;
-@property (nonatomic, assign) NSInteger             delayTime;
+
+// public
 @property (nonatomic, strong) NSString              *URL;
+@property (nonatomic, strong) NSString              *user;
+@property (nonatomic, strong) NSString              *password;
+
+// private
 @property (nonatomic, strong) NSMutableSet          *filesToSave;
 @property (nonatomic, strong) dispatch_queue_t      sshQueue;
 @property (nonatomic, strong) NMSSHSession          *session;
@@ -73,11 +76,12 @@ static NSString * const HAHHomeassistantPath = @"/home/homeassistant/.homeassist
 
 - (void)requestDataWithURL:(NSString *)url user:(NSString *)user password:(NSString *)password complete:(void (^)(NSArray<HAHEntityModel *> *, NSArray<HAHPageModel *> *))completeBlock
 {
-    self.delayTime = 1;
-    self.URL = url;
     self.requestDataCompleteBlock = completeBlock;
     self.entities = nil;
     self.configurationFile = nil;
+    self.URL = url;
+    self.user = user;
+    self.password = password;
 
 #ifndef LoadFileFromLocal
     [self initializeSSHWithURL:url user:user password:password];
@@ -190,33 +194,21 @@ static NSString * const HAHHomeassistantPath = @"/home/homeassistant/.homeassist
     self.entities = [NSKeyedUnarchiver unarchiveObjectWithFile:[NSString stringWithFormat:@"%@entities", HAHHomeassistantPath]];
     [self tryToCallBack];
 
-    // FIXME 删掉这行会崩溃，编译器bug？？？，暂时不找根本原因
-    if (self.webView) {
-        [WKWebView class];
-    }
-
 #else
+    HAHLOG(@"请求设备信息");
 
-    if (!self.webView) {
-        WKWebViewConfiguration * config = [[WKWebViewConfiguration alloc] init];
-        //The minimum font size in points default is 0;
-        config.preferences.minimumFontSize = 10;
-        //是否支持JavaScript
-        config.preferences.javaScriptEnabled = YES;
-        //不通过用户交互，是否可以打开窗口
-        config.preferences.javaScriptCanOpenWindowsAutomatically = NO;
-        self.webView = [[WKWebView alloc] initWithFrame:CGRectZero configuration:config];
-        self.webView.navigationDelegate = self;
-
-        NSView *view = NSApp.mainWindow.contentView;
-        self.webView.left = view.right;
-        self.webView.size = [NSScreen mainScreen].visibleFrame.size;
-        [view addSubview:self.webView];
-    }
-
-    HAHLOG(@"请求设备信息[1.加载首页]");
-    NSURLRequest *request = [NSURLRequest requestWithURL:[NSURL URLWithString:url]];
-    self.homeNavigation = [self.webView loadRequest:request];
+    HAHStatesRequest.GET.completion(^(id data, NSURLResponse *response, NSError *error) {
+        if (error) {
+            HAHLOG(@"设备信息请求失败 %@", error);
+            [self callBackFailure];
+        } else {
+            HAHLOG(@"设备信息请求成功");
+            self.entities = [HAHEntityParser parse:data];
+            dispatch_async(dispatch_get_main_queue(), ^{
+                [self tryToCallBack];
+            });
+        }
+    });
 
 #endif
 }
@@ -225,7 +217,7 @@ static NSString * const HAHHomeassistantPath = @"/home/homeassistant/.homeassist
 {
 #ifdef LoadFileFromLocal
 
-    self.configurationFile = [[HAHConfigurationFile alloc] initWithText:[self requestFile:(NSString *)HAHSConfigurationFileName]];
+    self.configurationFile = [[HAHConfigurationFile alloc] initWithDictionary:[HAHParser parseYAML:[self requestFile:(NSString *)HAHSConfigurationFileName]]];
     [self tryToCallBack];
 
 #else
@@ -235,7 +227,7 @@ static NSString * const HAHHomeassistantPath = @"/home/homeassistant/.homeassist
         if (self.session.isAuthorized) {
 
             HAHLOG(@"请求配置文件数据");
-            self.configurationFile = [[HAHConfigurationFile alloc] initWithText:[self requestFile:(NSString *)HAHSConfigurationFileName]];
+            self.configurationFile = [[HAHConfigurationFile alloc] initWithDictionary:[HAHParser parseYAML:[self requestFile:(NSString *)HAHSConfigurationFileName]]];
 
             if (self.configurationFile) {
                 HAHLOG(@"配置文件请求成功");
@@ -256,8 +248,8 @@ static NSString * const HAHHomeassistantPath = @"/home/homeassistant/.homeassist
 {
     if (self.requestDataCompleteBlock && self.entities && self.configurationFile)
     {
-        [self.configurationFile mergeInfomationWithEntities:self.entities];
-        self.requestDataCompleteBlock([self filterUngroupedEntitiesWithAllEntities:self.entities pages:self.configurationFile.groupFile.pages], self.configurationFile.groupFile.pages);
+        NSArray *ungroupedEntities = [self.configurationFile mergeInfomationWithEntities:self.entities];
+        self.requestDataCompleteBlock(ungroupedEntities, self.configurationFile.groupFile.pages);
         self.requestDataCompleteBlock = nil;
     }
 }
@@ -266,23 +258,9 @@ static NSString * const HAHHomeassistantPath = @"/home/homeassistant/.homeassist
 {
     if (self.requestDataCompleteBlock) {
         dispatch_async(dispatch_get_main_queue(), ^{
-            [self.webView stopLoading];
             self.requestDataCompleteBlock(nil, nil);
         });
     }
-}
-
-- (NSArray<HAHEntityModel *> *)filterUngroupedEntitiesWithAllEntities:(NSArray<HAHEntityModel *> *)entities pages:(NSArray<HAHPageModel *> *)pages
-{
-    NSMutableArray<HAHEntityModel *> *allEntities = entities.mutableCopy;
-
-    for (HAHPageModel *pageModels in pages) {
-        for (HAHGroupModel *groupModels in pageModels.groups) {
-            [allEntities removeObjectsInArray:groupModels.entities];
-        }
-    }
-
-    return allEntities.copy;
 }
 
 #pragma mark SSH
@@ -371,50 +349,6 @@ static NSString * const HAHHomeassistantPath = @"/home/homeassistant/.homeassist
         return NO;
     }
     return NO;
-}
-
-#pragma mark - WKNavigationDelegate
-
-- (void)webView:(WKWebView *)webView didFinishNavigation:(null_unspecified WKNavigation *)navigation
-{
-    if ([navigation isEqual:self.homeNavigation]) {
-        HAHLOG(@"请求设备信息[2.首页加载完毕]");
-        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(self.delayTime * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-            HAHLOG(@"请求设备信息[3.模拟点击\"< >\"按钮]");
-            // 模拟点击bar上"<>"按钮
-            [self.webView evaluateJavaScript:@"document.querySelector(\"paper-icon-button[data-panel=dev-state]\").click()" completionHandler:^(id _Nullable obj, NSError * _Nullable error) {
-                dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(self.delayTime * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-                    HAHLOG(@"请求设备信息[4.读取已有设备信息(不包含虚拟设备)]");
-                    // 取出设备数据
-                    [self.webView evaluateJavaScript:@"document.querySelector(\".entities\").innerHTML" completionHandler:^(id _Nullable obj, NSError * _Nullable error) {
-                        if (obj) {
-                            [self.webView removeFromSuperview];
-                            self.webView = nil;
-                            self.entities = [[[HAHEntityParser alloc] init] parse:obj];
-                            HAHLOG(@"请求设备信息[5.读取设备信息成功]");
-                            [self tryToCallBack];
-                        } else {
-                            HAHLOG(@"请求设备信息[5.读取设备信息失败，重试(超时时间%ld秒)]", self.delayTime);
-                            self.delayTime += 1;
-                            [self startEntitiesRequestWithURL:self.URL];
-                        }
-                    }];
-                });
-            }];
-        });
-    }
-}
-
-- (void)webView:(WKWebView *)webView didFailNavigation:(WKNavigation *)navigation withError:(NSError *)error
-{
-    HAHLOG(@"请求设备信息[1.加载首页失败，重试(原因:%@)]", error.localizedFailureReason ?: error.localizedDescription);
-    [self startEntitiesRequestWithURL:self.URL];
-}
-
-- (void)webView:(WKWebView *)webView didFailProvisionalNavigation:(null_unspecified WKNavigation *)navigation withError:(NSError *)error
-{
-    HAHLOG(@"请求设备信息[1.加载首页失败，重试(原因:%@)]", error.localizedFailureReason ?: error.localizedDescription);
-    [self startEntitiesRequestWithURL:self.URL];
 }
 
 

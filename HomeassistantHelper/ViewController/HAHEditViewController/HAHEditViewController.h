@@ -10,6 +10,7 @@
 
 @class HAHPageModel, HAHEntityModel;
 @interface HAHEditViewController : HAHViewController
+@property (nonatomic, assign) BOOL enabled;
 - (void)reset;
 - (void)reloadWithPages:(NSArray<HAHPageModel *> *)pages ungroupedEntities:(NSArray<HAHEntityModel *> *)ungroupedEntities;
 @end

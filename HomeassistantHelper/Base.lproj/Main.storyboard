@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.Storyboard.XIB" version="3.0" toolsVersion="13196" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" initialViewController="B8D-0N-5wS">
+<document type="com.apple.InterfaceBuilder3.Cocoa.Storyboard.XIB" version="3.0" toolsVersion="14109" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" initialViewController="B8D-0N-5wS">
     <dependencies>
         <deployment identifier="macosx"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="13196"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="14109"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
@@ -866,7 +866,7 @@
                                             <subviews>
                                                 <collectionView selectable="YES" allowsEmptySelection="NO" id="1Gk-SD-nHg">
                                                     <rect key="frame" x="0.0" y="0.0" width="516" height="28"/>
-                                                    <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                                                    <autoresizingMask key="autoresizingMask" heightSizable="YES"/>
                                                     <collectionViewFlowLayout key="collectionViewLayout" minimumInteritemSpacing="10" minimumLineSpacing="10" scrollDirection="horizontal" id="MnA-K1-SAY">
                                                         <size key="itemSize" width="50" height="50"/>
                                                     </collectionViewFlowLayout>
@@ -904,7 +904,7 @@
                                                     <color key="backgroundColor" name="controlBackgroundColor" catalog="System" colorSpace="catalog"/>
                                                     <color key="gridColor" name="gridColor" catalog="System" colorSpace="catalog"/>
                                                     <tableColumns>
-                                                        <tableColumn width="116" minWidth="40" maxWidth="1000" id="euh-Wg-2KR">
+                                                        <tableColumn identifier="" width="116" minWidth="40" maxWidth="1000" id="euh-Wg-2KR">
                                                             <tableHeaderCell key="headerCell" lineBreakMode="truncatingTail" borderStyle="border">
                                                                 <font key="font" metaFont="smallSystem"/>
                                                                 <color key="textColor" name="headerTextColor" catalog="System" colorSpace="catalog"/>
@@ -937,7 +937,7 @@
                                                                 </tableCellView>
                                                             </prototypeCellViews>
                                                         </tableColumn>
-                                                        <tableColumn width="394" minWidth="40" maxWidth="1000" id="XSM-Dg-c2v">
+                                                        <tableColumn identifier="" width="394" minWidth="40" maxWidth="1000" id="XSM-Dg-c2v">
                                                             <tableHeaderCell key="headerCell" lineBreakMode="truncatingTail" borderStyle="border">
                                                                 <font key="font" metaFont="smallSystem"/>
                                                                 <color key="textColor" name="headerTextColor" catalog="System" colorSpace="catalog"/>
@@ -1075,6 +1075,7 @@
                         <outlet property="collectionView" destination="1Gk-SD-nHg" id="bIO-Q9-gkT"/>
                         <outlet property="configView" destination="AXq-p5-29y" id="f01-6J-mfv"/>
                         <outlet property="configViewWidthConstraint" destination="myZ-ai-lGm" id="uGz-4d-Nu9"/>
+                        <outlet property="leftView" destination="QNO-Ef-W1v" id="zgz-4S-Gaz"/>
                         <outlet property="tableView" destination="Vyt-Ht-82b" id="BlM-ph-nhO"/>
                     </connections>
                 </viewController>

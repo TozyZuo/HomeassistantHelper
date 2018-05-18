@@ -18,10 +18,10 @@
 
 @implementation HAHGroupFile
 
-- (instancetype)initWithText:(NSString *)text
+- (instancetype)initWithDictionary:(NSDictionary *)dictionary
 {
-    if (self = [super initWithText:text]) {
-        self.pages = [[[HAHPageParser alloc] init] parse:text];
+    if (self = [super initWithDictionary:dictionary]) {
+        self.pages = [HAHPageParser parse:dictionary];
     }
     return self;
 }
@@ -33,35 +33,13 @@
 
 - (NSString *)text
 {
-    NSMutableString *text = [[NSMutableString alloc] initWithString:@""];
+    NSMutableDictionary *data = [[NSMutableDictionary alloc] init];
 
     for (HAHPageModel *pageModel in self.pages) {
-
-        [text appendFormat:@"%@:\n", pageModel.id];
-        [text appendFormat:@"   name: %@\n", pageModel.name];
-        [text appendString:@"   view: yes\n"];
-        [text appendString:@"   entities:\n"];
-
-        NSMutableString *groups = [[NSMutableString alloc] initWithString:@""];
-
-        for (HAHGroupModel *groupModel in pageModel.groups) {
-
-            [text appendFormat:@"       - %@\n", groupModel.id];
-
-            [groups appendFormat:@"%@:\n", groupModel.shortID];
-            [groups appendFormat:@"   name: %@\n", groupModel.name];
-            [groups appendString:@"   view: no\n"];
-            [groups appendString:@"   entities:\n"];
-
-            for (HAHEntityModel *entity in groupModel.entities) {
-                [groups appendFormat:@"       - %@\n", entity.id];
-            }
-        }
-
-        [text appendString:groups];
+        [data addEntriesFromDictionary:[HAHPageParser transformPageModel:pageModel]];
     }
 
-    return text;
+    return [HAHParser YAMLFromObject:data];
 }
 
 @end

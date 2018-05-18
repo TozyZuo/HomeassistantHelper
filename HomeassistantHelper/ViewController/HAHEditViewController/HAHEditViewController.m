@@ -38,6 +38,7 @@ typedef struct HAHEditIndex {
 @property (weak) IBOutlet HAHModelConfigView    *configView;
 @property (weak) IBOutlet NSCollectionView      *collectionView;
 @property (weak) IBOutlet NSTableView           *tableView;
+@property (weak) IBOutlet HAHView *leftView;
 
 @property (nonatomic, strong) HAHTableViewCell  *movingCell;
 @property (nonatomic,  weak ) HAHTableViewCell  *selectedCell;
@@ -50,10 +51,12 @@ typedef struct HAHEditIndex {
 @end
 
 @implementation HAHEditViewController
+@synthesize enabled = _enabled;
 
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    _enabled = YES;
 
     self.groupIndicatorView = [[NSView alloc] init];
     self.groupIndicatorView.height = 1;
@@ -69,6 +72,24 @@ typedef struct HAHEditIndex {
 - (NSInteger)pageIndex
 {
     return self.collectionView.selectionIndexPaths.anyObject.item;
+}
+
+- (void)setEnabled:(BOOL)enabled
+{
+    if (_enabled != enabled) {
+        _enabled = enabled;
+        if (enabled) {
+            [[self.view viewWithTag:0xface] removeFromSuperview];
+        } else {
+            HAHView *view = [[HAHView alloc] initWithFrame:self.leftView.frame];
+            view.backgroundColor = [[NSColor blackColor] colorWithAlphaComponent:.1];
+            view.tag = 0xface;
+            // TODO
+            [self.view addSubview:view];
+        }
+
+        self.configView.enabled = enabled;
+    }
 }
 
 #pragma mark - Action

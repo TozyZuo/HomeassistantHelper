@@ -146,6 +146,7 @@
     self.readInfoButton.enabled = NO;
     self.restartServiceButton.enabled = NO;
     self.keepPasswordButton.enabled = NO;
+    self.editViewController.enabled = NO;
 }
 
 - (void)enableUI
@@ -156,6 +157,7 @@
     self.readInfoButton.enabled = YES;
     self.restartServiceButton.enabled = YES;
     self.keepPasswordButton.enabled = YES;
+    self.editViewController.enabled = YES;
 }
 
 @end

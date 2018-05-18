@@ -7,12 +7,36 @@
 //
 
 #import "HAHFile.h"
+#import "HAHParser.h"
 
 @interface HAHFile ()
 @property (nonatomic, strong) NSString *initialText;
+@property (nonatomic, strong) NSDictionary *data;
 @end
 
 @implementation HAHFile
+
+- (instancetype)initWithDictionary:(NSDictionary *)dictionary
+{
+    if (self = [super init]) {
+        self.data = dictionary;
+    }
+    return self;
+}
+
+- (NSString *)name
+{
+    return nil;
+}
+
+- (NSString *)text
+{
+    return [HAHParser YAMLFromObject:self.data];
+}
+
+@end
+
+@implementation HAHFile (HAHDeprecated)
 
 - (instancetype)initWithText:(NSString *)text
 {
@@ -21,20 +45,10 @@
         return nil;
     }
 
-    if (self = [super init]) {
+    if (self = [self initWithDictionary:[HAHParser parseYAML:text]]) {
         self.initialText = text;
     }
     return self;
-}
-
-- (NSString *)text
-{
-    return self.initialText;
-}
-
-- (NSString *)name
-{
-    return nil;
 }
 
 @end

@@ -12,6 +12,7 @@
 
 @interface HAHModelConfigView : HAHView
 @property (nonatomic, readonly) BOOL isEditing;
+@property (nonatomic,  assign ) BOOL enabled;
 
 - (void)clear;
 - (void)reloadWithModel:(HAHModel *)model;

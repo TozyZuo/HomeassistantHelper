@@ -27,27 +27,24 @@
     return (NSString *)HAHSConfigurationFileName;
 }
 
-- (instancetype)initWithText:(NSString *)text
+- (instancetype)initWithDictionary:(NSDictionary *)dictionary
 {
-    if (self = [super initWithText:text]) {
+    if (self = [super initWithDictionary:dictionary]) {
 
         NSDictionary *fileMap = @{
             @"group": NSClassFromString(@"HAHGroupFile"),
-            @"customize": NSClassFromString(@"HAHCustomizeFile"),
+            @"homeassistant.customize": NSClassFromString(@"HAHCustomizeFile"),
         };
 
-        NSDictionary *result = [[[HAHConfigParser alloc] init] parse:text];
-        for (NSString *key in result) {
-            @autoreleasepool {
-                NSString *text = result[key];
-                if ([text containsString:@"!include"]) {
-                    text = [[HAHDataManager sharedManager] requestFile:[[text stringByReplacingOccurrencesOfString:@"!include" withString:@""] stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]]];
+        for (NSString *key in fileMap) {
+                id value = [dictionary valueForKeyPath:key];
+                if ([value isKindOfClass:[NSString class]] && [value hasSuffix:@".yaml"]) {
+                    value = [HAHParser parseYAML:[[HAHDataManager sharedManager] requestFile:value]];
                 }
-                id file = [[[fileMap[key] alloc] init] initWithText:text];
+                id file = [[[fileMap[key] alloc] init] initWithDictionary:value];
                 if (file) {
-                    [self setValue:file forKey:[key stringByAppendingString:@"File"]];
+                    [self setValue:file forKey:[[key componentsSeparatedByString:@"."].lastObject stringByAppendingString:@"File"]];
                 }
-            }
         }
 
         // 整合customizeFile
@@ -67,7 +64,7 @@
 - (void)entityModel:(HAHEntityModel *)entityModel updateWithExtensions:(NSMutableDictionary *)extensions
 {
     entityModel.name = extensions[HAHSFriendlyName] ?: entityModel.name ?: entityModel.id;
-    entityModel.extensions = extensions;
+    entityModel.extensions = extensions.mutableCopy;
     for (NSString *property in [extensions.allKeys sortedArrayUsingSelector:@selector(compare:)].reverseObjectEnumerator)
     {
         if ([property isEqualToString:HAHSFriendlyName]) {
@@ -103,8 +100,9 @@
     return @"NSString";
 }
 
-- (void)mergeInfomationWithEntities:(NSArray<HAHEntityModel *> *)entities
+- (NSArray<HAHEntityModel *> *)mergeInfomationWithEntities:(NSArray<HAHEntityModel *> *)entities
 {
+    NSMutableArray<HAHEntityModel *> *allEntities = entities.mutableCopy;
     __weak typeof(self) weakSelf = self;
     // 顺便添加监听
     // TODO 优化监听代码
@@ -131,6 +129,9 @@
          {
              [[HAHDataManager sharedManager] saveFile:weakSelf.groupFile];
          }];
+
+        [allEntities removeObject:pageModel];
+
         for (HAHGroupModel *groupModel in pageModel.groups) {
 
             [groupModel removeObserver:self];
@@ -158,14 +159,17 @@
                  [[HAHDataManager sharedManager] saveFile:weakSelf.groupFile];
              }];
 
+            [allEntities removeObject:groupModel];
+
             for (HAHEntityModel *entity in groupModel.entities) {
+
+                [entity removeObserver:self];
 
                 BOOL notFound = YES;
 
                 for (HAHEntityModel *mergeEntity in entities) {
                     if ([entity.id isEqualToString:mergeEntity.id]) {
-                        // 先以customize为准，理论上是一样的
-//                        entity.name = mergeEntity.name;
+                        entity.name = mergeEntity.name;
                         notFound = NO;
                         break;
                     }
@@ -174,16 +178,32 @@
                 if (notFound) {
                     HAHLOG(@"未找到设备 %@, 请检查是否填写错误", entity.id);
                 }
+
                 __weak typeof(entity) weakEntity = entity;
-                [entity removeObserver:self];
                 [entity addObserver:self selector:@selector(setName:) postprocessor:^(id info, NSString *name)
                  {
                      weakSelf.customizeFile[weakEntity.id][HAHSFriendlyName] = name;
                      [[HAHDataManager sharedManager] saveFile:weakSelf.customizeFile];
                  }];
+                [allEntities removeObject:entity];
             }
         }
     }
+
+    // 未分组设备添加监听
+    for (HAHEntityModel *entity in allEntities) {
+
+        [entity removeObserver:self];
+
+        __weak typeof(entity) weakEntity = entity;
+        [entity addObserver:self selector:@selector(setName:) postprocessor:^(id info, NSString *name)
+         {
+             weakSelf.customizeFile[weakEntity.id][HAHSFriendlyName] = name;
+             [[HAHDataManager sharedManager] saveFile:weakSelf.customizeFile];
+         }];
+    }
+
+    return allEntities;
 }
 
 @end

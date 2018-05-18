@@ -9,12 +9,5 @@
 #import "HAHParser.h"
 
 @interface HAHConfigParser : HAHParser
-/**
- @return @{
-             group: text,
-             customize: text,
-             ...
-          }
- */
-- (NSDictionary *)parse:(NSString *)text;
+// TODO
 @end
