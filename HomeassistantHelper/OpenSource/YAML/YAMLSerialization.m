@@ -187,7 +187,7 @@ __YAMLSerializationObjectWithYAMLDocument (yaml_document_t *document, YAMLReadOp
 }
 
 + (id) objectWithYAMLStream: (NSInputStream *) stream options: (YAMLReadOptions) opt error: (NSError **) error {
-    return [[self objectsWithYAMLStream: stream options: opt error: error] objectAtIndex: 0];
+    return [self objectsWithYAMLStream: stream options: opt error: error].firstObject;
 }
 
 + (NSMutableArray *) objectsWithYAMLData: (NSData *) data
@@ -204,7 +204,7 @@ __YAMLSerializationObjectWithYAMLDocument (yaml_document_t *document, YAMLReadOp
 }
 
 + (id) objectWithYAMLData: (NSData *) data options: (YAMLReadOptions) opt error: (NSError **) error {
-    return [[self objectsWithYAMLData: data options: opt error: error] objectAtIndex: 0];
+    return [self objectsWithYAMLData: data options: opt error: error].firstObject;
 }
 
 + (NSMutableArray *) objectsWithYAMLString: (NSString *) string
@@ -217,7 +217,7 @@ __YAMLSerializationObjectWithYAMLDocument (yaml_document_t *document, YAMLReadOp
 }
 
 + (id) objectWithYAMLString: (NSString *) string options: (YAMLReadOptions) opt error: (NSError **) error {
-    return [[self objectsWithYAMLString: string options: opt error: error] objectAtIndex: 0];
+    return [self objectsWithYAMLString: string options: opt error: error].firstObject;
 }
 
 #pragma mark Writing YAML

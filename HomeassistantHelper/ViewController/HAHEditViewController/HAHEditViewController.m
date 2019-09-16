@@ -38,11 +38,11 @@ typedef struct HAHEditIndex {
 @property (weak) IBOutlet HAHModelConfigView    *configView;
 @property (weak) IBOutlet NSCollectionView      *collectionView;
 @property (weak) IBOutlet NSTableView           *tableView;
-@property (weak) IBOutlet HAHView *leftView;
+@property (weak) IBOutlet HAHView               *leftView;
 
 @property (nonatomic, strong) HAHTableViewCell  *movingCell;
 @property (nonatomic,  weak ) HAHTableViewCell  *selectedCell;
-@property (nonatomic, strong) NSView            *groupIndicatorView;
+@property (nonatomic, strong) HAHView           *groupIndicatorView;
 @property (nonatomic, strong) NSArray<HAHPageModel *> *pages;
 @property (nonatomic, assign) BOOL              isCommandKeyDown;
 
@@ -58,10 +58,9 @@ typedef struct HAHEditIndex {
     [super viewDidLoad];
     _enabled = YES;
 
-    self.groupIndicatorView = [[NSView alloc] init];
+    self.groupIndicatorView = [[HAHView alloc] init];
     self.groupIndicatorView.height = 1;
-    self.groupIndicatorView.wantsLayer = YES;
-    self.groupIndicatorView.layer.backgroundColor = [NSColor blueColor].CGColor;
+    self.groupIndicatorView.backgroundColor = [NSColor blueColor];
 
     [self.collectionView registerClass:[HAHPageCollectionViewItem class] forItemWithIdentifier:HAHPageCollectionViewItemViewIdentifier];
     [self.tableView registerNib:[[NSNib alloc] initWithNibNamed:@"HAHTableViewCell" bundle:nil] forIdentifier:[HAHTableViewCell identifier]];

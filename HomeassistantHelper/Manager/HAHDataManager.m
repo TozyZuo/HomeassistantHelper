@@ -28,7 +28,8 @@ static NSString * const HAHHomeassistantPath = @"/Homeassistant/";
 
 #else
 
-static NSString * const HAHHomeassistantPath = @"/home/homeassistant/.homeassistant/";
+//static NSString * const HAHHomeassistantPath = @"/home/homeassistant/.homeassistant/";
+static NSString * const HAHHomeassistantPath = @"/usr/share/hassio/homeassistant/";
 
 #endif
 

@@ -17,13 +17,14 @@
 		BA23DB2D1F1356E300939AA8 /* HAHGlobalExtern.m in Sources */ = {isa = PBXBuildFile; fileRef = BA23DB2C1F1356E300939AA8 /* HAHGlobalExtern.m */; };
 		BA23DB361F136E4100939AA8 /* GDataXMLNode.m in Sources */ = {isa = PBXBuildFile; fileRef = BA23DB311F136E4100939AA8 /* GDataXMLNode.m */; };
 		BA373D1220AC1D2700F50746 /* HAHRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = BA373D1120AC1D2700F50746 /* HAHRequest.m */; };
+		BA635ED4215F4D150048AB9A /* YAML.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BA7AEC0320AACB2000015B52 /* YAML.framework */; };
+		BA635ED5215F4D150048AB9A /* YAML.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = BA7AEC0320AACB2000015B52 /* YAML.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		BA6AFD1B1F2DF2160020BCDD /* HAHEditViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = BA6AFD1A1F2DF2160020BCDD /* HAHEditViewController.m */; };
 		BA6AFD1E1F2DF22C0020BCDD /* HAHTableColumn.m in Sources */ = {isa = PBXBuildFile; fileRef = BA6AFD1D1F2DF22C0020BCDD /* HAHTableColumn.m */; };
 		BA6AFD211F2E08D00020BCDD /* HAHTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = BA6AFD201F2E08D00020BCDD /* HAHTableViewCell.m */; };
 		BA6D7EE81FBEDCB1000FC721 /* NMSSH.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = BAEECA7A1F137D3C0099000C /* NMSSH.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		BA74317D1F3058C500713EA6 /* NSColor_HAH.m in Sources */ = {isa = PBXBuildFile; fileRef = BA74317C1F3058C500713EA6 /* NSColor_HAH.m */; };
 		BA74317F1F3072AD00713EA6 /* HAHTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = BA74317E1F3072AD00713EA6 /* HAHTableViewCell.xib */; };
-		BA7AEC0820AACB3100015B52 /* YAML.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BA7AEC0320AACB2000015B52 /* YAML.framework */; };
 		BA7BE3471F1A191300451762 /* HAHBrowserManager.m in Sources */ = {isa = PBXBuildFile; fileRef = BA7BE3451F1A191300451762 /* HAHBrowserManager.m */; };
 		BA7BE34B1F1A295400451762 /* HAHWindowControllerManager.m in Sources */ = {isa = PBXBuildFile; fileRef = BA7BE34A1F1A295400451762 /* HAHWindowControllerManager.m */; };
 		BA7BE3541F1A4B6400451762 /* NSView_HAH.m in Sources */ = {isa = PBXBuildFile; fileRef = BA7BE3531F1A4B6400451762 /* NSView_HAH.m */; };
@@ -68,6 +69,13 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
+		BA635ED6215F4D150048AB9A /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = BA7AEBFD20AACB2000015B52 /* YAML.xcodeproj */;
+			proxyType = 1;
+			remoteGlobalIDString = 8DC2EF4F0486A6940098B216;
+			remoteInfo = YAML;
+		};
 		BA6D7EE91FBEDCB1000FC721 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = BAEECA751F137D3C0099000C /* NMSSH.xcodeproj */;
@@ -120,6 +128,7 @@
 			dstSubfolderSpec = 10;
 			files = (
 				BA6D7EE81FBEDCB1000FC721 /* NMSSH.framework in Embed Frameworks */,
+				BA635ED5215F4D150048AB9A /* YAML.framework in Embed Frameworks */,
 			);
 			name = "Embed Frameworks";
 			runOnlyForDeploymentPostprocessing = 0;
@@ -238,9 +247,9 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				BA7AEC0820AACB3100015B52 /* YAML.framework in Frameworks */,
 				BA8038021F190F3A00EE7A36 /* Carbon.framework in Frameworks */,
 				BAEECA7D1F137D4A0099000C /* NMSSH.framework in Frameworks */,
+				BA635ED4215F4D150048AB9A /* YAML.framework in Frameworks */,
 				BA8F98FD1F1245DC00D16523 /* libxml2.tbd in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -625,6 +634,7 @@
 				BA7AEC0720AACB2A00015B52 /* PBXTargetDependency */,
 				BAEECA7C1F137D450099000C /* PBXTargetDependency */,
 				BA6D7EEA1FBEDCB1000FC721 /* PBXTargetDependency */,
+				BA635ED7215F4D150048AB9A /* PBXTargetDependency */,
 			);
 			name = HomeassistantHelper;
 			productName = HomeassistantHelper;
@@ -772,6 +782,11 @@
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
+		BA635ED7215F4D150048AB9A /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = YAML;
+			targetProxy = BA635ED6215F4D150048AB9A /* PBXContainerItemProxy */;
+		};
 		BA6D7EEA1FBEDCB1000FC721 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			name = NMSSH;
