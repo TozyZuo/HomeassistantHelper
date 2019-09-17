@@ -818,6 +818,28 @@
                                     <action selector="restartHomeassistantService:" target="XfG-lQ-9wD" id="adr-CF-v9v"/>
                                 </connections>
                             </button>
+                            <button verticalHuggingPriority="750" fixedFrame="YES" tag="10" translatesAutoresizingMaskIntoConstraints="NO" id="BXH-ZH-NoC">
+                                <rect key="frame" x="465" y="343" width="78" height="18"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                <buttonCell key="cell" type="radio" title="Hassbian" bezelStyle="regularSquare" imagePosition="left" alignment="left" inset="2" id="gB8-5x-AYL">
+                                    <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
+                                    <font key="font" metaFont="system"/>
+                                </buttonCell>
+                                <connections>
+                                    <action selector="homeassistantTypeAction:" target="XfG-lQ-9wD" id="sCY-qX-PdH"/>
+                                </connections>
+                            </button>
+                            <button verticalHuggingPriority="750" fixedFrame="YES" tag="11" translatesAutoresizingMaskIntoConstraints="NO" id="hSs-ok-fPi">
+                                <rect key="frame" x="548" y="343" width="63" height="18"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                <buttonCell key="cell" type="radio" title="Hassio" bezelStyle="regularSquare" imagePosition="left" alignment="left" inset="2" id="x4U-AB-f1h">
+                                    <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
+                                    <font key="font" metaFont="system"/>
+                                </buttonCell>
+                                <connections>
+                                    <action selector="homeassistantTypeAction:" target="XfG-lQ-9wD" id="klv-GB-E7B"/>
+                                </connections>
+                            </button>
                         </subviews>
                         <constraints>
                             <constraint firstItem="tQk-Cb-nvT" firstAttribute="trailing" secondItem="nMV-IL-tkw" secondAttribute="trailing" id="2aw-kE-Iio"/>

@@ -18,6 +18,10 @@
 
 - (instancetype)initWithDictionary:(NSDictionary *)dictionary
 {
+    if (!dictionary) {
+        return nil;
+    }
+    
     if (self = [super init]) {
         self.data = dictionary;
     }

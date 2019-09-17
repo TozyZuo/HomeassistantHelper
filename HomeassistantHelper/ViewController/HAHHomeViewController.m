@@ -24,7 +24,8 @@
 @property (weak) IBOutlet NSSecureTextField *passwordTextField;
 @property (weak) IBOutlet NSButton          *keepPasswordButton;
 
-@property (nonatomic, strong) HAHEditViewController     *editViewController;
+@property (nonatomic, strong) HAHEditViewController *editViewController;
+@property (nonatomic, assign) HAHType               type;
 
 @end
 
@@ -54,6 +55,10 @@
     self.userNameTextField.stringValue = [userDefaults objectForKey:HAHUDUserNameKey] ?: @"";
     self.passwordTextField.stringValue = [userDefaults objectForKey:HAHUDPasswordKey] ?: @"";
     self.keepPasswordButton.state = [[userDefaults objectForKey:HAHUDKeepPasswordKey] boolValue];
+    
+    NSInteger typeTag = [[userDefaults objectForKey:HAHUDHATypeKey] integerValue] ?: 10;
+    ((NSButton *)[self.view viewWithTag:typeTag]).state = NSControlStateValueOn;
+    self.type = typeTag - 10;
 }
 
 #pragma mark - Action
@@ -77,25 +82,25 @@
     NSString *user = self.userNameTextField.stringValue.length ? self.userNameTextField.stringValue : self.userNameTextField.placeholderString;
     NSString *password = self.passwordTextField.stringValue.length ? self.passwordTextField.stringValue : self.passwordTextField.placeholderString;
     __weak typeof(self) weakSelf = self;
+    
+    // 记录用户配置
+    [[NSUserDefaults standardUserDefaults] setObject:url forKey:HAHUDAdressKey];
+    if (self.userNameTextField.stringValue.length) {
+        [[NSUserDefaults standardUserDefaults] setObject:user forKey:HAHUDUserNameKey];
+    }
+    if (self.passwordTextField.stringValue.length &&
+        self.keepPasswordButton.state) {
+        [[NSUserDefaults standardUserDefaults] setObject:password forKey:HAHUDPasswordKey];
+    }
+    [[NSUserDefaults standardUserDefaults] synchronize];
 
-    [[HAHDataManager sharedManager] requestDataWithURL:url user:user password:password complete:^(NSArray<HAHEntityModel *> *ungroupedEntities, NSArray<HAHPageModel *> *pages)
+    [[HAHDataManager sharedManager] requestDataWithURL:url user:user password:password type:self.type complete:^(NSArray<HAHEntityModel *> *ungroupedEntities, NSArray<HAHPageModel *> *pages)
     {
 //        HAHLOG(@"%@", pages);
         sender.title = @"获取";
         [weakSelf enableUI];
 
         if (pages.count) { // 获取成功
-            // 记录用户配置
-            [[NSUserDefaults standardUserDefaults] setObject:url forKey:HAHUDAdressKey];
-            if (weakSelf.userNameTextField.stringValue.length) {
-                [[NSUserDefaults standardUserDefaults] setObject:user forKey:HAHUDUserNameKey];
-            }
-            if (weakSelf.passwordTextField.stringValue.length &&
-                weakSelf.keepPasswordButton.state) {
-                [[NSUserDefaults standardUserDefaults] setObject:password forKey:HAHUDPasswordKey];
-            }
-            [[NSUserDefaults standardUserDefaults] synchronize];
-
             [weakSelf.editViewController reloadWithPages:pages ungroupedEntities:ungroupedEntities];
         }
     }];
@@ -112,6 +117,13 @@
         [[NSUserDefaults standardUserDefaults] removeObjectForKey:HAHUDPasswordKey];
         [[NSUserDefaults standardUserDefaults] removeObjectForKey:HAHUDKeepPasswordKey];
     }
+    [[NSUserDefaults standardUserDefaults] synchronize];
+}
+
+- (IBAction)homeassistantTypeAction:(NSButton *)sender
+{
+    self.type = sender.tag - 10;
+    [[NSUserDefaults standardUserDefaults] setObject:@(sender.tag) forKey:HAHUDHATypeKey];
     [[NSUserDefaults standardUserDefaults] synchronize];
 }
 

@@ -14,6 +14,7 @@ FOUNDATION_EXPORT NSString * const HAHUDAdressKey;
 FOUNDATION_EXPORT NSString * const HAHUDUserNameKey;
 FOUNDATION_EXPORT NSString * const HAHUDPasswordKey;
 FOUNDATION_EXPORT NSString * const HAHUDKeepPasswordKey;
+FOUNDATION_EXPORT NSString * const HAHUDHATypeKey;
 
 FOUNDATION_EXPORT NSString * const HAHUDMainWindowFrameKey;
 FOUNDATION_EXPORT NSString * const HAHUDBrowserWindowFrameKey;

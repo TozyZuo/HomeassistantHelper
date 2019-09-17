@@ -22,16 +22,7 @@
 
 static NSString * const HAHBackupFolder = @"HomeassistantHelperBackup";
 
-#ifdef LoadFileFromLocal
-
-static NSString * const HAHHomeassistantPath = @"/Homeassistant/";
-
-#else
-
-//static NSString * const HAHHomeassistantPath = @"/home/homeassistant/.homeassistant/";
-static NSString * const HAHHomeassistantPath = @"/usr/share/hassio/homeassistant/";
-
-#endif
+NSString *HAHHomeassistantPath(void);
 
 
 @interface HAHDataManager ()
@@ -42,6 +33,7 @@ static NSString * const HAHHomeassistantPath = @"/usr/share/hassio/homeassistant
 @property (nonatomic, strong) NSString              *password;
 
 // private
+@property (nonatomic, assign) HAHType               type;
 @property (nonatomic, strong) NSMutableSet          *filesToSave;
 @property (nonatomic, strong) dispatch_queue_t      sshQueue;
 @property (nonatomic, strong) NMSSHSession          *session;
@@ -75,7 +67,7 @@ static NSString * const HAHHomeassistantPath = @"/usr/share/hassio/homeassistant
 
 #pragma mark - Public
 
-- (void)requestDataWithURL:(NSString *)url user:(NSString *)user password:(NSString *)password complete:(void (^)(NSArray<HAHEntityModel *> *, NSArray<HAHPageModel *> *))completeBlock
+- (void)requestDataWithURL:(NSString *)url user:(NSString *)user password:(NSString *)password type:(HAHType)type complete:(void (^)(NSArray<HAHEntityModel *> *, NSArray<HAHPageModel *> *))completeBlock
 {
     self.requestDataCompleteBlock = completeBlock;
     self.entities = nil;
@@ -83,6 +75,7 @@ static NSString * const HAHHomeassistantPath = @"/usr/share/hassio/homeassistant
     self.URL = url;
     self.user = user;
     self.password = password;
+    self.type = type;
 
 #ifndef LoadFileFromLocal
     [self initializeSSHWithURL:url user:user password:password];
@@ -96,7 +89,7 @@ static NSString * const HAHHomeassistantPath = @"/usr/share/hassio/homeassistant
 {
     dispatch_async(self.sshQueue, ^{
 
-        NSString *result = [self execute:@"ls", @"-t", [NSString stringWithFormat:@"%@%@", HAHHomeassistantPath, HAHBackupFolder], nil];
+        NSString *result = [self execute:@"ls", @"-t", [NSString stringWithFormat:@"%@%@", HAHHomeassistantPath(), HAHBackupFolder], nil];
         HAHBackupModel *backupModel = [[HAHBackupModel alloc] init];
         backupModel.backupFolders = [[result stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]] componentsSeparatedByString:@"\n"];
         if (completeBlock) {
@@ -123,7 +116,7 @@ static NSString * const HAHHomeassistantPath = @"/usr/share/hassio/homeassistant
                 HAHFile *file = self.filesToSave.anyObject;
 
                 if ([self backupFile:file.name]) {
-                    [self execute:@"echo", [NSString stringWithFormat:@"\"%@\" > %@%@", file.text, HAHHomeassistantPath, file.name], nil];
+                    [self execute:@"echo", [NSString stringWithFormat:@"\"%@\" > %@%@", file.text, HAHHomeassistantPath(), file.name], nil];
                 }
 
                 [self.filesToSave removeObject:file];
@@ -137,7 +130,7 @@ static NSString * const HAHHomeassistantPath = @"/usr/share/hassio/homeassistant
 {
     dispatch_async(self.sshQueue, ^{
 
-        NSString *result = [self execute:@"cp", [NSString stringWithFormat:@"%@%@/%@/*", HAHHomeassistantPath, HAHBackupFolder, folder], HAHHomeassistantPath, nil];
+        NSString *result = [self execute:@"cp", [NSString stringWithFormat:@"%@%@/%@/*", HAHHomeassistantPath(), HAHBackupFolder, folder], HAHHomeassistantPath(), nil];
 
         if (completeBlock) {
             dispatch_async(dispatch_get_main_queue(), ^{
@@ -192,7 +185,7 @@ static NSString * const HAHHomeassistantPath = @"/usr/share/hassio/homeassistant
 {
 #ifdef LoadFileFromLocal
 
-    self.entities = [NSKeyedUnarchiver unarchiveObjectWithFile:[NSString stringWithFormat:@"%@entities", HAHHomeassistantPath]];
+    self.entities = [NSKeyedUnarchiver unarchiveObjectWithFile:[NSString stringWithFormat:@"%@entities", HAHHomeassistantPath()]];
     [self tryToCallBack];
 
 #else
@@ -237,6 +230,7 @@ static NSString * const HAHHomeassistantPath = @"/usr/share/hassio/homeassistant
                 });
             } else {
                 HAHLOG(@"配置文件请求失败，请点击\"获取\"按钮重试");
+                [self callBackFailure];
             }
 
         }
@@ -284,7 +278,7 @@ static NSString * const HAHHomeassistantPath = @"/usr/share/hassio/homeassistant
     NSTask *task = [[NSTask alloc] init];
     task.launchPath = @"/bin/bash";
     task.arguments = @[@"-c", [arguments componentsJoinedByString:@" "]];
-    task.currentDirectoryPath = HAHHomeassistantPath;
+    task.currentDirectoryPath = HAHHomeassistantPath();
 
     NSPipe *pipe = [NSPipe pipe];
     task.standardOutput = pipe;
@@ -309,7 +303,7 @@ static NSString * const HAHHomeassistantPath = @"/usr/share/hassio/homeassistant
 
 - (NSString *)requestFile:(NSString *)fileName
 {
-    return [self execute:@"cat", [NSString stringWithFormat:@"%@%@", HAHHomeassistantPath, fileName], nil];
+    return [self execute:@"cat", [NSString stringWithFormat:@"%@%@", HAHHomeassistantPath(), fileName], nil];
 }
 
 - (BOOL)createFolderWithPath:(NSString *)path folderName:(NSString *)folderName
@@ -329,18 +323,18 @@ static NSString * const HAHHomeassistantPath = @"/usr/share/hassio/homeassistant
 
 - (BOOL)backupFile:(NSString *)fileName
 {
-    if ([self createFolderWithPath:HAHHomeassistantPath folderName:HAHBackupFolder])
+    if ([self createFolderWithPath:HAHHomeassistantPath() folderName:HAHBackupFolder])
     {
         NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
         dateFormatter.dateFormat = @"yyyyMMdd";
         dateFormatter.locale = [[NSLocale alloc] initWithLocaleIdentifier:@"zh_CN"];
         NSString *today = [dateFormatter stringFromDate:[NSDate date]];
 
-        NSString *backupPath = [NSString stringWithFormat:@"%@%@/", HAHHomeassistantPath, HAHBackupFolder];
+        NSString *backupPath = [NSString stringWithFormat:@"%@%@/", HAHHomeassistantPath(), HAHBackupFolder];
 
         if ([self createFolderWithPath:backupPath folderName:today])
         {
-            NSString *result = [self execute:@"cp", @"-n", [NSString stringWithFormat:@"%@%@", HAHHomeassistantPath, fileName], [NSString stringWithFormat:@"%@%@/%@", backupPath, today, fileName], nil];
+            NSString *result = [self execute:@"cp", @"-n", [NSString stringWithFormat:@"%@%@", HAHHomeassistantPath(), fileName], [NSString stringWithFormat:@"%@%@/%@", backupPath, today, fileName], nil];
             if (result.length) {
                 HAHLOG(@"Back %@ up error! \n%@\n %s", fileName, result,  __PRETTY_FUNCTION__);
                 return NO;
@@ -354,3 +348,20 @@ static NSString * const HAHHomeassistantPath = @"/usr/share/hassio/homeassistant
 
 
 @end
+
+
+NSString *HAHHomeassistantPath()
+{
+#ifdef LoadFileFromLocal
+    
+    return @"/Homeassistant/";
+    
+#else
+    switch (HAHDataManager.sharedManager.type) {
+        case HAHTypeHassio:
+            return @"/usr/share/hassio/homeassistant/";
+        default:
+            return @"/home/homeassistant/.homeassistant/";
+    }
+#endif
+}

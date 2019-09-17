@@ -14,6 +14,7 @@ NSString * const HAHUDAdressKey = @"HAHUDAdressKey";
 NSString * const HAHUDUserNameKey = @"HAHUDUserNameKey";
 NSString * const HAHUDPasswordKey = @"HAHUDPasswordKey";
 NSString * const HAHUDKeepPasswordKey = @"HAHUDKeepPasswordKey";
+NSString * const HAHUDHATypeKey = @"HAHUDHATypeKey";
 
 NSString * const HAHUDMainWindowFrameKey = @"HAHUDMainWindowFrameKey";
 NSString * const HAHUDBrowserWindowFrameKey = @"HAHUDBrowserWindowFrameKey";
